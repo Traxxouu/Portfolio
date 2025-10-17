@@ -1,26 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&display=swap');
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+* {
+  font-family: 'Cormorant Garamond', serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -60px) scale(1.1); }
+  50% { transform: translate(-40px, 40px) scale(0.9); }
+  75% { transform: translate(60px, 30px) scale(1.05); }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 12s infinite ease-in-out;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.animation-delay-6000 {
+  animation-delay: 6s;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 1s ease-out forwards;
+  opacity: 0;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1000ms;
+}
+
+@keyframes glitch-screen {
+  0% { 
+    opacity: 0;
+    transform: translate(0); 
+  }
+  10% { 
+    opacity: 1;
+    transform: translate(-10px, 5px); 
+  }
+  20% { 
+    transform: translate(10px, -5px); 
+  }
+  30% { 
+    transform: translate(-5px, 10px); 
+  }
+  40% { 
+    transform: translate(5px, -10px); 
+  }
+  50% { 
+    transform: translate(-8px, 3px); 
+  }
+  60% { 
+    transform: translate(8px, -3px); 
+  }
+  70% { 
+    transform: translate(-3px, 8px); 
+  }
+  80% { 
+    transform: translate(3px, -8px); 
+  }
+  90% { 
+    transform: translate(-2px, 2px); 
+  }
+  100% { 
+    opacity: 1;
+    transform: translate(0); 
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-glitch-screen {
+  animation: glitch-screen 0.8s ease-in-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-in;
 }
