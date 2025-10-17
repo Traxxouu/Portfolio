@@ -10,9 +10,7 @@ export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [relativeMousePosition, setRelativeMousePosition] = useState({ x: 0, y: 0 });
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [showLoading, setShowLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState<'home' | 'about'>('home');
-  const [loadingLines, setLoadingLines] = useState<string[]>([]);
   const titleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,87 +44,36 @@ export default function Home() {
   };
 
   const handlePageTransition = (page: 'about' | 'home') => {
-    // Phase 1: Effet glitch - inversion des couleurs
     setIsTransitioning(true);
     
     setTimeout(() => {
-      // Phase 2: Chargement terminal
-      setShowLoading(true);
-      
-      const lines = [
-        'Starting system boot sequence...',
-        'Initializing kernel modules...',
-        'Loading display drivers...',
-        'Mounting filesystems...',
-        'Starting network services...',
-        'Loading user interface...',
-        'Initializing graphics renderer...',
-        'Starting window manager...',
-        'Loading desktop environment...',
-        'Mounting user directories...',
-        'Starting background services...',
-        'Initializing audio system...',
-        'Loading system fonts...',
-        'Starting clipboard manager...',
-        'Initializing input devices...',
-        'Loading configuration files...',
-        'Starting session manager...',
-        'Initializing theme engine...',
-        'Loading application launcher...',
-        'Starting notification daemon...',
-        'Initializing power management...',
-        'Loading icon cache...',
-        'Starting file indexer...',
-        'Initializing compositor...',
-        `System ready - Navigation to ${page} complete.`
-      ];
-      
-      // Afficher les lignes progressivement avec auto-scroll
-      lines.forEach((line, index) => {
-        setTimeout(() => {
-          setLoadingLines(prev => {
-            const newLines = [...prev, line];
-            // Auto-scroll
-            setTimeout(() => {
-              const terminal = document.getElementById('terminal-output');
-              if (terminal) {
-                terminal.scrollTop = terminal.scrollHeight;
-              }
-            }, 10);
-            return newLines;
-          });
-        }, index * 80);
-      });
-      
-      // Afficher la page après toutes les lignes
+      setCurrentPage(page);
       setTimeout(() => {
-        setCurrentPage(page);
-        setShowLoading(false);
         setIsTransitioning(false);
-        setLoadingLines([]);
-      }, lines.length * 80 + 300);
-      
-    }, 800); // Durée du glitch
+      }, 600); // Laisser le temps pour l'animation d'entrée
+    }, 1200); // Durée de la transition
   };
 
   return (
-    <div className={`fixed inset-0 overflow-hidden ${isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'} transition-colors duration-1000 cursor-none`}>
+    <div className={`fixed inset-0 overflow-hidden ${isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'} transition-colors duration-1000 ${currentPage === 'home' ? 'cursor-none' : ''}`}>
       
-      {/* Curseur personnalisé */}
-      <div 
-        className="fixed w-8 h-8 rounded-full pointer-events-none z-[100] border-2"
-        style={{
-          left: `${mousePosition.x}px`,
-          top: `${mousePosition.y}px`,
-          transform: 'translate(-50%, -50%)',
-          transition: 'width 0.2s, height 0.2s',
-          backgroundColor: isDark ? 'white' : 'black',
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.8)',
-          boxShadow: isDark 
-            ? '0 0 20px rgba(255, 255, 255, 0.3)' 
-            : '0 0 20px rgba(0, 0, 0, 0.3)'
-        }}
-      ></div>
+      {/* Curseur personnalisé - seulement sur la page home */}
+      {currentPage === 'home' && (
+        <div 
+          className="fixed w-8 h-8 rounded-full pointer-events-none z-[100] border-2"
+          style={{
+            left: `${mousePosition.x}px`,
+            top: `${mousePosition.y}px`,
+            transform: 'translate(-50%, -50%)',
+            transition: 'width 0.2s, height 0.2s',
+            backgroundColor: isDark ? 'white' : 'black',
+            borderColor: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.8)',
+            boxShadow: isDark 
+              ? '0 0 20px rgba(255, 255, 255, 0.3)' 
+              : '0 0 20px rgba(0, 0, 0, 0.3)'
+          }}
+        ></div>
+      )}
       
       <div className="absolute inset-0 overflow-hidden">
         {isDark ? (
@@ -283,35 +230,68 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Écran de transition glitch - Inversion des couleurs du site */}
-      {isTransitioning && !showLoading && (
-        <div className="fixed inset-0 z-[200] pointer-events-none animate-glitch-screen">
-          <div className="absolute inset-0 mix-blend-difference bg-white"></div>
-        </div>
-      )}
-
-      {/* Écran de chargement terminal */}
-      {showLoading && (
-        <div 
-          id="terminal-output"
-          className="fixed inset-0 z-[200] bg-black text-white font-mono text-sm p-8 overflow-y-auto"
-          style={{ 
-            scrollBehavior: 'smooth',
-            fontFamily: 'monospace'
-          }}
-        >
-          <div className="max-w-full">
-            {loadingLines.map((line, index) => (
-              <div key={index} className="mb-1 animate-fade-in flex items-start">
-                <span className="text-green-500 font-bold mr-2">[ OK ]</span>
-                <span className="text-white">{line}</span>
-              </div>
-            ))}
-            {loadingLines.length > 0 && (
-              <div className="inline-block w-2 h-4 bg-white animate-pulse ml-1 mt-1"></div>
-            )}
+      {/* Transition liquide morphing */}
+      {isTransitioning && (
+        <>
+          {/* Vagues liquides qui montent */}
+          <div className="fixed inset-0 z-[200] pointer-events-none">
+            <div className={`absolute inset-0 ${
+              isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
+            } animate-liquid-rise`}>
+              <svg className="absolute bottom-0 w-full h-full" viewBox="0 0 1440 800" preserveAspectRatio="none">
+                <path
+                  className={`${isDark ? 'fill-blue-500' : 'fill-orange-400'} animate-wave-1`}
+                  d="M0,800 C360,700 720,750 1440,800 L1440,800 L0,800 Z"
+                  opacity="0.3"
+                />
+                <path
+                  className={`${isDark ? 'fill-purple-500' : 'fill-rose-400'} animate-wave-2`}
+                  d="M0,800 C360,720 720,770 1440,800 L1440,800 L0,800 Z"
+                  opacity="0.4"
+                />
+                <path
+                  className={`${isDark ? 'fill-slate-800' : 'fill-white'} animate-wave-3`}
+                  d="M0,800 C360,740 720,790 1440,800 L1440,800 L0,800 Z"
+                  opacity="0.6"
+                />
+              </svg>
+            </div>
           </div>
-        </div>
+          
+          <style jsx>{`
+            @keyframes liquid-rise {
+              0% { clip-path: circle(0% at 50% 100%); }
+              100% { clip-path: circle(150% at 50% 100%); }
+            }
+            @keyframes wave-1 {
+              0% { d: path("M0,800 C360,700 720,750 1440,800 L1440,800 L0,800 Z"); }
+              50% { d: path("M0,600 C360,500 720,550 1440,600 L1440,800 L0,800 Z"); }
+              100% { d: path("M0,0 C360,0 720,0 1440,0 L1440,800 L0,800 Z"); }
+            }
+            @keyframes wave-2 {
+              0% { d: path("M0,800 C360,720 720,770 1440,800 L1440,800 L0,800 Z"); }
+              50% { d: path("M0,550 C360,450 720,500 1440,550 L1440,800 L0,800 Z"); }
+              100% { d: path("M0,0 C360,0 720,0 1440,0 L1440,800 L0,800 Z"); }
+            }
+            @keyframes wave-3 {
+              0% { d: path("M0,800 C360,740 720,790 1440,800 L1440,800 L0,800 Z"); }
+              50% { d: path("M0,500 C360,400 720,450 1440,500 L1440,800 L0,800 Z"); }
+              100% { d: path("M0,0 C360,0 720,0 1440,0 L1440,800 L0,800 Z"); }
+            }
+            .animate-liquid-rise {
+              animation: liquid-rise 1.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            }
+            .animate-wave-1 {
+              animation: wave-1 1.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            }
+            .animate-wave-2 {
+              animation: wave-2 1.2s cubic-bezier(0.65, 0, 0.35, 1) 0.1s forwards;
+            }
+            .animate-wave-3 {
+              animation: wave-3 1.2s cubic-bezier(0.65, 0, 0.35, 1) 0.2s forwards;
+            }
+          `}</style>
+        </>
       )}
 
       {/* Page About */}
