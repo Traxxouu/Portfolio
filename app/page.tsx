@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Github, Linkedin, Moon, Sun, Cloud, ExternalLink } from 'lucide-react';
+import { Github, Linkedin, Moon, Sun, Cloud, ExternalLink, Instagram, Send, Mail } from 'lucide-react';
 import Image from 'next/image';
 import { 
   SiOpenjdk, SiPython, SiJavascript, SiTypescript, SiPhp, SiMysql,
   SiReact, SiVuedotjs, SiNodedotjs, SiHtml5, SiCss3,
-  SiDocker, SiGithub, SiMongodb, SiMariadb, SiSalesforce
+  SiDocker, SiGithub, SiMongodb, SiMariadb, SiSalesforce, SiTwitch
 } from 'react-icons/si';
 import { getProjects, type Project } from '@/lib/sanity.client';
 
@@ -16,10 +16,16 @@ export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [relativeMousePosition, setRelativeMousePosition] = useState({ x: 0, y: 0 });
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [currentPage, setCurrentPage] = useState<'home' | 'about' | 'projects'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'about' | 'projects' | 'contact'>('home');
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const titleRef = useRef<HTMLDivElement>(null);
+  
+  // États pour le formulaire de contact
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [formMessage, setFormMessage] = useState('');
+
 
   useEffect(() => {
     if (!manualToggle) {
@@ -68,7 +74,40 @@ export default function Home() {
     setIsDark(!isDark);
   };
 
-  const handlePageTransition = (page: 'about' | 'home' | 'projects') => {
+  const handleSubmitContact = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormStatus('sending');
+    setFormMessage('');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setFormStatus('success');
+        setFormMessage('Message envoyé avec succès ! Je te répondrai très vite 🚀');
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => {
+          setFormStatus('idle');
+          setFormMessage('');
+        }, 5000);
+      } else {
+        setFormStatus('error');
+        setFormMessage(data.error || 'Une erreur est survenue');
+      }
+    } catch (error) {
+      setFormStatus('error');
+      setFormMessage('Erreur lors de l\'envoi du message');
+      console.error(error);
+    }
+  };
+
+  const handlePageTransition = (page: 'about' | 'home' | 'projects' | 'contact') => {
     setIsTransitioning(true);
     
     setTimeout(() => {
@@ -196,6 +235,7 @@ export default function Home() {
                 onClick={() => {
                   if (item === 'About') handlePageTransition('about');
                   if (item === 'Projects') handlePageTransition('projects');
+                  if (item === 'Contact') handlePageTransition('contact');
                 }}
                 className={`group relative text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light tracking-wide transition-all duration-500 hover:scale-110 hover:translate-x-4 ${
                   isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
@@ -401,7 +441,7 @@ export default function Home() {
                   <span>Développeur web passionné, actuellement étudiant à l&apos;</span>
                   <span className="inline-flex items-center gap-0 font-normal group/efrei relative min-w-[50px] sm:min-w-[60px]">
                     <span className="opacity-0 transition-all duration-500 ease-out group-hover/efrei:opacity-100 whitespace-nowrap absolute left-0 z-0">
-                      EFREI
+                      EFREI.
                     </span>
                     <Image 
                       src="/efreilogo.svg" 
@@ -412,7 +452,7 @@ export default function Home() {
                       style={{ display: 'inline-block', verticalAlign: 'middle' }}
                     />
                   </span>
-                  <span>. J&apos;adore créer des projets dynamiques et innovants, tout en garantissant des solutions modernes, optimisées, et une expérience utilisateur fluide.</span>
+                  <span>J&apos;adore créer des projets dynamiques et innovants, tout en garantissant des solutions modernes, optimisées, et une expérience utilisateur fluide.</span>
                 </p>
               </div>
 
@@ -889,6 +929,318 @@ export default function Home() {
                 >
                   Me contacter
                 </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PAGE CONTACT */}
+      {currentPage === 'contact' && (
+        <div className={`fixed inset-0 z-[150] overflow-auto ${
+          isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
+        } animate-fade-in`}>
+          <div className="min-h-screen p-6 sm:p-8 lg:p-12">
+            <div className="max-w-6xl mx-auto">
+              {/* Header */}
+              <div className="flex justify-between items-center mb-12">
+                <button
+                  onClick={() => handlePageTransition('home')}
+                  className={`text-2xl sm:text-3xl font-light transition-all hover:scale-105 hover:translate-x-2 group ${
+                    isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
+                  }`}
+                >
+                  <span className="inline-block transition-transform group-hover:-translate-x-2">←</span> Accueil
+                </button>
+                
+                <button
+                  onClick={handleToggle}
+                  className={`p-4 rounded-full transition-all hover:scale-110 ${
+                    isDark 
+                      ? 'bg-slate-800/50 text-yellow-300 hover:bg-slate-700/50' 
+                      : 'bg-white/50 text-slate-900 hover:bg-orange-100/50'
+                  }`}
+                >
+                  {isDark ? <Sun size={24} /> : <Moon size={24} />}
+                </button>
+              </div>
+
+              {/* Titre */}
+              <div className="mb-16 text-center animate-fade-in-up">
+                <h1 className={`text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-light mb-6 ${
+                  isDark ? 'text-white' : 'text-slate-900'
+                }`}>
+                  Restons en <span className={isDark ? 'text-blue-300' : 'text-orange-600'}>Contact</span>
+                </h1>
+                <p className={`text-xl sm:text-2xl lg:text-3xl font-light leading-relaxed ${
+                  isDark ? 'text-gray-300' : 'text-slate-700'
+                }`}>
+                  Une question ? Un projet ? N&apos;hésite pas à m&apos;écrire !
+                </p>
+              </div>
+
+              <div className="grid lg:grid-cols-2 gap-12 items-start">
+                {/* Formulaire de contact */}
+                <div className={`backdrop-blur-2xl p-8 sm:p-10 rounded-3xl border-2 ${
+                  isDark 
+                    ? 'bg-slate-800/40 border-purple-500/30' 
+                    : 'bg-white/40 border-orange-200/40'
+                } animate-fade-in-up animation-delay-200`}>
+                  <h2 className={`text-3xl sm:text-4xl font-light mb-6 ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>
+                    Envoie-moi un message
+                  </h2>
+                  
+                  <form onSubmit={handleSubmitContact} className="space-y-6">
+                    {/* Nom */}
+                    <div>
+                      <label htmlFor="name" className={`block text-sm font-light mb-2 ${
+                        isDark ? 'text-gray-300' : 'text-slate-700'
+                      }`}>
+                        Ton nom
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className={`w-full px-4 py-3 rounded-xl border-2 backdrop-blur-xl transition-all focus:scale-[1.02] focus:outline-none ${
+                          isDark 
+                            ? 'bg-slate-900/50 border-purple-500/30 text-white placeholder-gray-500 focus:border-purple-400/50' 
+                            : 'bg-white/50 border-orange-200/40 text-slate-900 placeholder-slate-400 focus:border-orange-300/60'
+                        }`}
+                        placeholder="John Doe"
+                        disabled={formStatus === 'sending'}
+                      />
+                    </div>
+
+                    {/* Email */}
+                    <div>
+                      <label htmlFor="email" className={`block text-sm font-light mb-2 ${
+                        isDark ? 'text-gray-300' : 'text-slate-700'
+                      }`}>
+                        Ton email
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className={`w-full px-4 py-3 rounded-xl border-2 backdrop-blur-xl transition-all focus:scale-[1.02] focus:outline-none ${
+                          isDark 
+                            ? 'bg-slate-900/50 border-purple-500/30 text-white placeholder-gray-500 focus:border-purple-400/50' 
+                            : 'bg-white/50 border-orange-200/40 text-slate-900 placeholder-slate-400 focus:border-orange-300/60'
+                        }`}
+                        placeholder="john@example.com"
+                        disabled={formStatus === 'sending'}
+                      />
+                    </div>
+
+                    {/* Message */}
+                    <div>
+                      <label htmlFor="message" className={`block text-sm font-light mb-2 ${
+                        isDark ? 'text-gray-300' : 'text-slate-700'
+                      }`}>
+                        Ton message
+                      </label>
+                      <textarea
+                        id="message"
+                        required
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        rows={6}
+                        className={`w-full px-4 py-3 rounded-xl border-2 backdrop-blur-xl transition-all focus:scale-[1.02] focus:outline-none resize-none ${
+                          isDark 
+                            ? 'bg-slate-900/50 border-purple-500/30 text-white placeholder-gray-500 focus:border-purple-400/50' 
+                            : 'bg-white/50 border-orange-200/40 text-slate-900 placeholder-slate-400 focus:border-orange-300/60'
+                        }`}
+                        placeholder="Dis-moi tout !"
+                        disabled={formStatus === 'sending'}
+                      />
+                    </div>
+
+                    {/* Message de statut */}
+                    {formMessage && (
+                      <div className={`p-4 rounded-xl border-2 animate-fade-in ${
+                        formStatus === 'success'
+                          ? isDark 
+                            ? 'bg-green-900/30 border-green-500/50 text-green-300' 
+                            : 'bg-green-100/50 border-green-400/50 text-green-700'
+                          : isDark
+                            ? 'bg-red-900/30 border-red-500/50 text-red-300'
+                            : 'bg-red-100/50 border-red-400/50 text-red-700'
+                      }`}>
+                        {formMessage}
+                      </div>
+                    )}
+
+                    {/* Bouton Submit */}
+                    <button
+                      type="submit"
+                      disabled={formStatus === 'sending'}
+                      className={`w-full px-8 py-4 rounded-xl text-lg font-light transition-all duration-300 flex items-center justify-center gap-2 ${
+                        formStatus === 'sending'
+                          ? isDark
+                            ? 'bg-slate-700/50 text-gray-400 cursor-not-allowed'
+                            : 'bg-gray-300/50 text-gray-500 cursor-not-allowed'
+                          : isDark 
+                            ? 'bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 border-2 border-blue-500/30 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/20' 
+                            : 'bg-orange-500/20 text-orange-600 hover:bg-orange-500/30 border-2 border-orange-500/30 hover:scale-105 hover:shadow-xl hover:shadow-orange-300/20'
+                      }`}
+                    >
+                      {formStatus === 'sending' ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-t-transparent rounded-full animate-spin" />
+                          Envoi en cours...
+                        </>
+                      ) : (
+                        <>
+                          Envoyer le message
+                          <Send size={20} />
+                        </>
+                      )}
+                    </button>
+                  </form>
+                </div>
+
+                {/* Informations de contact et réseaux sociaux */}
+                <div className="space-y-8">
+                  {/* Email direct */}
+                  <div className={`backdrop-blur-2xl p-8 rounded-3xl border-2 ${
+                    isDark 
+                      ? 'bg-slate-800/40 border-purple-500/30' 
+                      : 'bg-white/40 border-orange-200/40'
+                  } animate-fade-in-up animation-delay-400`}>
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className={`p-3 rounded-xl ${
+                        isDark ? 'bg-blue-500/20' : 'bg-orange-500/20'
+                      }`}>
+                        <Mail className={isDark ? 'text-blue-300' : 'text-orange-600'} size={24} />
+                      </div>
+                      <div>
+                        <h3 className={`text-xl font-light ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                          Email direct
+                        </h3>
+                        <a 
+                          href="mailto:pro.mael.dev@gmail.com"
+                          className={`text-sm transition-colors ${
+                            isDark ? 'text-blue-300 hover:text-blue-200' : 'text-orange-600 hover:text-orange-500'
+                          }`}
+                        >
+                          pro.mael.dev@gmail.com
+                        </a>
+                      </div>
+                    </div>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-slate-600'}`}>
+                      Tu peux aussi m&apos;envoyer un email directement
+                    </p>
+                  </div>
+
+                  {/* Réseaux sociaux */}
+                  <div className={`backdrop-blur-2xl p-8 rounded-3xl border-2 ${
+                    isDark 
+                      ? 'bg-slate-800/40 border-purple-500/30' 
+                      : 'bg-white/40 border-orange-200/40'
+                  } animate-fade-in-up animation-delay-600`}>
+                    <h3 className={`text-2xl font-light mb-6 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      Retrouve-moi sur
+                    </h3>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* LinkedIn */}
+                      <a
+                        href="https://www.linkedin.com/in/ma%C3%ABl-barbe-44a91b290/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
+                          isDark 
+                            ? 'bg-slate-900/50 border-blue-500/30 hover:border-blue-400/50 hover:shadow-xl hover:shadow-blue-500/20' 
+                            : 'bg-white/50 border-blue-400/40 hover:border-blue-500/60 hover:shadow-xl hover:shadow-blue-300/20'
+                        }`}
+                      >
+                        <Linkedin className={`transition-colors ${
+                          isDark ? 'text-blue-300 group-hover:text-blue-200' : 'text-blue-600 group-hover:text-blue-500'
+                        }`} size={32} />
+                        <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                          LinkedIn
+                        </span>
+                      </a>
+
+                      {/* GitHub */}
+                      <a
+                        href="https://github.com/Traxxouu"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
+                          isDark 
+                            ? 'bg-slate-900/50 border-purple-500/30 hover:border-purple-400/50 hover:shadow-xl hover:shadow-purple-500/20' 
+                            : 'bg-white/50 border-purple-400/40 hover:border-purple-500/60 hover:shadow-xl hover:shadow-purple-300/20'
+                        }`}
+                      >
+                        <Github className={`transition-colors ${
+                          isDark ? 'text-purple-300 group-hover:text-purple-200' : 'text-purple-600 group-hover:text-purple-500'
+                        }`} size={32} />
+                        <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                          GitHub
+                        </span>
+                      </a>
+
+                      {/* Instagram */}
+                      <a
+                        href="https://www.instagram.com/mael_barbe/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
+                          isDark 
+                            ? 'bg-slate-900/50 border-pink-500/30 hover:border-pink-400/50 hover:shadow-xl hover:shadow-pink-500/20' 
+                            : 'bg-white/50 border-pink-400/40 hover:border-pink-500/60 hover:shadow-xl hover:shadow-pink-300/20'
+                        }`}
+                      >
+                        <Instagram className={`transition-colors ${
+                          isDark ? 'text-pink-300 group-hover:text-pink-200' : 'text-pink-600 group-hover:text-pink-500'
+                        }`} size={32} />
+                        <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                          Instagram
+                        </span>
+                      </a>
+
+                      {/* Twitch */}
+                      <a
+                        href="https://www.twitch.tv/traxxou_"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
+                          isDark 
+                            ? 'bg-slate-900/50 border-violet-500/30 hover:border-violet-400/50 hover:shadow-xl hover:shadow-violet-500/20' 
+                            : 'bg-white/50 border-violet-400/40 hover:border-violet-500/60 hover:shadow-xl hover:shadow-violet-300/20'
+                        }`}
+                      >
+                        <SiTwitch className={`transition-colors ${
+                          isDark ? 'text-violet-300 group-hover:text-violet-200' : 'text-violet-600 group-hover:text-violet-500'
+                        }`} size={32} />
+                        <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                          Twitch
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Citation motivante */}
+                  <div className={`backdrop-blur-2xl p-8 rounded-3xl border-2 text-center ${
+                    isDark 
+                      ? 'bg-slate-800/40 border-purple-500/30' 
+                      : 'bg-white/40 border-orange-200/40'
+                  } animate-fade-in-up animation-delay-800`}>
+                    <p className={`text-xl sm:text-2xl font-light italic leading-relaxed ${
+                      isDark ? 'text-gray-300' : 'text-slate-700'
+                    }`}>
+                      &ldquo;Les meilleurs projets naissent souvent d&apos;une simple conversation&rdquo;
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
