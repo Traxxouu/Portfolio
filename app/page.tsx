@@ -1,8 +1,13 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Github, Linkedin, Moon, Sun } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Github, Linkedin, Moon, Sun, Cloud } from 'lucide-react';
 import Image from 'next/image';
+import { 
+  SiOpenjdk, SiPython, SiJavascript, SiTypescript, SiPhp, SiMysql,
+  SiReact, SiVuedotjs, SiNodedotjs, SiHtml5, SiCss3,
+  SiDocker, SiGithub, SiMongodb, SiMariadb, SiSalesforce
+} from 'react-icons/si';
 
 export default function Home() {
   const [isDark, setIsDark] = useState(false);
@@ -298,32 +303,372 @@ export default function Home() {
       {currentPage === 'about' && (
         <div className={`fixed inset-0 z-[150] overflow-auto ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
-        }`}>
-          <div className="min-h-screen flex flex-col items-center justify-center p-8">
-            <div className="max-w-4xl w-full">
-              <button
-                onClick={() => handlePageTransition('home')}
-                className={`mb-8 px-6 py-3 rounded-lg transition-all hover:scale-105 ${
-                  isDark 
-                    ? 'bg-slate-800 text-white border-2 border-purple-500/30 hover:bg-slate-700' 
-                    : 'bg-white text-slate-900 border-2 border-orange-200 hover:bg-orange-50'
-                }`}
-              >
-                ← Retour
-              </button>
+        } animate-fade-in`}>
+          <div className="min-h-screen p-6 sm:p-8 lg:p-12">
+            <div className="max-w-6xl mx-auto">
+              {/* Header avec bouton retour et toggle */}
+              <div className="flex justify-between items-center mb-12">
+                <button
+                  onClick={() => handlePageTransition('home')}
+                  className={`text-2xl sm:text-3xl font-light transition-all hover:scale-105 hover:translate-x-2 group ${
+                    isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
+                  }`}
+                >
+                  <span className="inline-block transition-transform group-hover:-translate-x-2">←</span> Retour
+                </button>
+                
+                {/* Toggle jour/nuit */}
+                <button
+                  onClick={handleToggle}
+                  className={`p-4 rounded-full transition-all hover:scale-110 ${
+                    isDark 
+                      ? 'bg-slate-800/50 text-yellow-300 hover:bg-slate-700/50' 
+                      : 'bg-white/50 text-slate-900 hover:bg-orange-100/50'
+                  }`}
+                  aria-label="Toggle theme"
+                >
+                  {isDark ? <Sun size={24} /> : <Moon size={24} />}
+                </button>
+              </div>
               
-              <h1 className={`text-6xl font-light mb-8 ${
-                isDark ? 'text-white' : 'text-slate-900'
-              }`}>
-                About Me
-              </h1>
-              
-              <div className={`text-xl leading-relaxed ${
-                isDark ? 'text-gray-300' : 'text-slate-700'
-              }`}>
-                <p className="mb-4">
-                  Contenu à venir...
+              {/* Header */}
+              <div className="mb-16 animate-fade-in-up">
+                <h1 className={`text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-light mb-6 ${
+                  isDark ? 'text-white' : 'text-slate-900'
+                }`}>
+                  Salut ! Je suis <span className={isDark ? 'text-blue-300' : 'text-orange-600'}>Maël</span>
+                </h1>
+                <p className={`text-xl sm:text-2xl lg:text-3xl font-light leading-relaxed flex flex-wrap items-center gap-2 ${
+                  isDark ? 'text-gray-300' : 'text-slate-700'
+                }`}>
+                  <span>Développeur web passionné, actuellement étudiant à l&apos;</span>
+                  <span className="inline-flex items-center gap-0 font-normal group/efrei relative min-w-[50px] sm:min-w-[60px]">
+                    <span className="opacity-0 transition-all duration-500 ease-out group-hover/efrei:opacity-100 whitespace-nowrap absolute left-0 z-0">
+                      EFREI
+                    </span>
+                    <Image 
+                      src="/efreilogo.svg" 
+                      alt="EFREI Logo" 
+                      width={50} 
+                      height={50} 
+                      className="inline-block transition-all duration-500 ease-out group-hover/efrei:translate-x-[80px] sm:group-hover/efrei:translate-x-[100px] relative z-10"
+                      style={{ display: 'inline-block', verticalAlign: 'middle' }}
+                    />
+                  </span>
+                  <span>. J&apos;adore créer des projets dynamiques et innovants, tout en garantissant des solutions modernes, optimisées, et une expérience utilisateur fluide.</span>
                 </p>
+              </div>
+
+              {/* Grid Layout pour Skills et Experience */}
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-16">
+                
+                {/* Hard Skills */}
+                <div className={`backdrop-blur-2xl p-8 rounded-3xl border-2 ${
+                  isDark 
+                    ? 'bg-slate-800/40 border-purple-500/30' 
+                    : 'bg-white/40 border-orange-200/40'
+                } animate-fade-in-up animation-delay-200`}>
+                  <h2 className={`text-3xl sm:text-4xl font-light mb-6 ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>
+                    Hard Skills
+                  </h2>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className={`text-xl font-light mb-3 ${
+                        isDark ? 'text-blue-300' : 'text-orange-600'
+                      }`}>Langages</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          { name: 'Java', Icon: SiOpenjdk },
+                          { name: 'Python', Icon: SiPython },
+                          { name: 'JavaScript', Icon: SiJavascript },
+                          { name: 'TypeScript', Icon: SiTypescript },
+                          { name: 'PHP', Icon: SiPhp },
+                          { name: 'SQL', Icon: SiMysql }
+                        ].map((skill) => (
+                          <span key={skill.name} className={`px-4 py-2 rounded-full text-sm flex items-center gap-2 ${
+                            isDark 
+                              ? 'bg-slate-700/50 text-gray-200' 
+                              : 'bg-white/60 text-slate-800'
+                          }`}>
+                            <skill.Icon className="w-4 h-4" />
+                            <span>{skill.name}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className={`text-xl font-light mb-3 ${
+                        isDark ? 'text-blue-300' : 'text-orange-600'
+                      }`}>Web & Frameworks</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          { name: 'React.js', Icon: SiReact },
+                          { name: 'Vue.js', Icon: SiVuedotjs },
+                          { name: 'Node.js', Icon: SiNodedotjs },
+                          { name: 'HTML', Icon: SiHtml5 },
+                          { name: 'CSS', Icon: SiCss3 }
+                        ].map((skill) => (
+                          <span key={skill.name} className={`px-4 py-2 rounded-full text-sm flex items-center gap-2 ${
+                            isDark 
+                              ? 'bg-slate-700/50 text-gray-200' 
+                              : 'bg-white/60 text-slate-800'
+                          }`}>
+                            <skill.Icon className="w-4 h-4" />
+                            <span>{skill.name}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className={`text-xl font-light mb-3 ${
+                        isDark ? 'text-blue-300' : 'text-orange-600'
+                      }`}>Outils & BDD</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          { name: 'Docker', Icon: SiDocker },
+                          { name: 'GitHub', Icon: SiGithub },
+                          { name: 'MongoDB', Icon: SiMongodb },
+                          { name: 'MariaDB', Icon: SiMariadb },
+                          { name: 'MySQL', Icon: SiMysql },
+                          { name: 'Azure', Icon: Cloud },
+                          { name: 'Salesforce', Icon: SiSalesforce }
+                        ].map((skill) => (
+                          <span key={skill.name} className={`px-4 py-2 rounded-full text-sm flex items-center gap-2 ${
+                            isDark 
+                              ? 'bg-slate-700/50 text-gray-200' 
+                              : 'bg-white/60 text-slate-800'
+                          }`}>
+                            <skill.Icon className="w-4 h-4" />
+                            <span>{skill.name}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Soft Skills */}
+                <div className={`backdrop-blur-2xl p-8 rounded-3xl border-2 ${
+                  isDark 
+                    ? 'bg-slate-800/40 border-purple-500/30' 
+                    : 'bg-white/40 border-orange-200/40'
+                } animate-fade-in-up animation-delay-400`}>
+                  <h2 className={`text-3xl sm:text-4xl font-light mb-6 ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>
+                    Soft Skills
+                  </h2>
+                  
+                  <div className={`space-y-4 text-lg ${
+                    isDark ? 'text-gray-300' : 'text-slate-700'
+                  }`}>
+                    <div className="flex items-start gap-3">
+                      <span className={isDark ? 'text-blue-300' : 'text-orange-600'}>•</span>
+                      <span>Autonomie & polyvalence</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className={isDark ? 'text-blue-300' : 'text-orange-600'}>•</span>
+                      <span>Esprit d&apos;équipe (PSE1 obtenu)</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className={isDark ? 'text-blue-300' : 'text-orange-600'}>•</span>
+                      <span>Excellente communication verbale</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className={isDark ? 'text-blue-300' : 'text-orange-600'}>•</span>
+                      <span>Souci du détail</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className={isDark ? 'text-blue-300' : 'text-orange-600'}>•</span>
+                      <span>Mobilité (Permis B)</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-8">
+                    <h3 className={`text-xl font-light mb-3 ${
+                      isDark ? 'text-blue-300' : 'text-orange-600'
+                    }`}>Langues</h3>
+                    <div className={`space-y-2 ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                      <p>🇫🇷 Français - Natif</p>
+                      <p>🇬🇧 Anglais - B1</p>
+                      <p>🇩🇪 Allemand - A2</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Experience - Style Edenred */}
+              <div className={`backdrop-blur-2xl p-8 sm:p-10 lg:p-12 rounded-3xl border-2 mb-12 relative overflow-hidden ${
+                isDark 
+                  ? 'bg-gradient-to-br from-green-950/40 to-slate-900/40 border-green-500/30' 
+                  : 'bg-gradient-to-br from-green-50/80 to-emerald-50/80 border-green-300/40'
+              } animate-fade-in-up animation-delay-600`}>
+                
+                {/* Logo Edenred en arrière-plan */}
+                <div className="absolute top-4 right-4 sm:top-6 sm:right-6 opacity-10">
+                  <Image 
+                    src="/edenredlogo.svg" 
+                    alt="Edenred Logo" 
+                    width={120} 
+                    height={120} 
+                    className="w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32"
+                  />
+                </div>
+
+                <div className="relative z-10">
+                  <h2 className={`text-3xl sm:text-4xl font-light mb-8 flex items-center gap-4 ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>
+                    <Image 
+                      src="/edenredlogo.svg" 
+                      alt="Edenred Logo" 
+                      width={50} 
+                      height={50} 
+                      className="w-10 h-10 sm:w-12 sm:h-12"
+                    />
+                    Expérience
+                  </h2>
+                  
+                  <div className={`space-y-6 p-6 sm:p-8 rounded-2xl ${
+                    isDark 
+                      ? 'bg-slate-900/30 border border-green-500/20' 
+                      : 'bg-white/50 border border-green-300/30'
+                  }`}>
+                    <div>
+                      <h3 className={`text-2xl sm:text-3xl font-normal mb-2 ${
+                        isDark ? 'text-green-400' : 'text-green-600'
+                      }`}>
+                        Stagiaire Développeur • Edenred France
+                      </h3>
+                      <p className={`text-sm sm:text-base mb-6 font-medium ${
+                        isDark ? 'text-green-300/80' : 'text-green-600/80'
+                      }`}>
+                        📍 Juin - Août 2024 (2 mois) • Malakoff, France
+                      </p>
+                      <ul className={`space-y-4 text-base sm:text-lg ${
+                        isDark ? 'text-gray-300' : 'text-slate-700'
+                      }`}>
+                        <li className="flex items-start gap-3">
+                          <span className={`text-xl ${isDark ? 'text-green-400' : 'text-green-600'}`}>▸</span>
+                          <span>Intégré à l&apos;équipe Salesforce <span className="font-semibold">(Redforce)</span> en environnement agile <span className="font-semibold">(SCRUM)</span></span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className={`text-xl ${isDark ? 'text-green-400' : 'text-green-600'}`}>▸</span>
+                          <span>Développement en <span className="font-semibold">Apex, SOQL, LWC, Node.js/TypeScript</span></span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className={`text-xl ${isDark ? 'text-green-400' : 'text-green-600'}`}>▸</span>
+                          <span>Réalisation d&apos;un système de <span className="font-semibold">contrôle qualité des données</span> et <span className="font-semibold">audit automatisé</span> (Azure DevOps & Einstein AI)</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Education & Interests */}
+              <div className="grid lg:grid-cols-2 gap-8">
+                <div className={`backdrop-blur-2xl p-8 rounded-3xl border-2 ${
+                  isDark 
+                    ? 'bg-slate-800/40 border-purple-500/30' 
+                    : 'bg-white/40 border-orange-200/40'
+                } animate-fade-in-up animation-delay-1000`}>
+                  <h2 className={`text-3xl sm:text-4xl font-light mb-6 ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>
+                    Formation
+                  </h2>
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className={`text-xl font-light ${
+                        isDark ? 'text-blue-300' : 'text-orange-600'
+                      }`}>
+                        Bachelor Développeur Web & Applications
+                      </h3>
+                      <p className={`${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                        EFREI, Paris • 2024 - 2027
+                      </p>
+                    </div>
+                    <div className="pt-4">
+                      <h3 className={`text-xl font-light ${
+                        isDark ? 'text-blue-300' : 'text-orange-600'
+                      }`}>
+                        Baccalauréat Général
+                      </h3>
+                      <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                        Spécialité Maths & SES
+                      </p>
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-slate-600'}`}>
+                        CNED : NSI (investissement personnel)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={`backdrop-blur-2xl p-8 rounded-3xl border-2 ${
+                  isDark 
+                    ? 'bg-slate-800/40 border-purple-500/30' 
+                    : 'bg-white/40 border-orange-200/40'
+                } animate-fade-in-up animation-delay-1000`}>
+                  <h2 className={`text-3xl sm:text-4xl font-light mb-6 ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>
+                    Centres d&apos;intérêt
+                  </h2>
+                  <div className={`space-y-3 ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                    <p>🏀 Sport : Basket, Judo, Ju-jitsu, Natation</p>
+                    <p>🎮 Jeux vidéo : Modding & création serveur GTA RP</p>
+                    <p>🔐 Cybersécurité</p>
+                    <p>💻 l’apprentissage autodidacte</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Contact */}
+              <div className={`mt-12 backdrop-blur-2xl p-8 rounded-3xl border-2 text-center ${
+                isDark 
+                  ? 'bg-slate-800/40 border-purple-500/30' 
+                  : 'bg-white/40 border-orange-200/40'
+              } animate-fade-in-up animation-delay-1200`}>
+                <h2 className={`text-3xl sm:text-4xl font-light mb-6 ${
+                  isDark ? 'text-white' : 'text-slate-900'
+                }`}>
+                  Contactez-moi
+                </h2>
+                <div className={`space-y-2 text-lg ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                  <p>📧 pro.mael.dev@gmail.com</p>
+                  <div className="flex justify-center gap-4 mt-6">
+                    <a 
+                      href="https://github.com/Traxxouu" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={`px-6 py-3 rounded-full transition-all hover:scale-105 ${
+                        isDark 
+                          ? 'bg-slate-700 text-white hover:bg-slate-600' 
+                          : 'bg-white text-slate-900 hover:bg-orange-50'
+                      }`}
+                    >
+                      GitHub
+                    </a>
+                    <a 
+                      href="https://www.linkedin.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={`px-6 py-3 rounded-full transition-all hover:scale-105 ${
+                        isDark 
+                          ? 'bg-slate-700 text-white hover:bg-slate-600' 
+                          : 'bg-white text-slate-900 hover:bg-orange-50'
+                      }`}
+                    >
+                      LinkedIn
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
