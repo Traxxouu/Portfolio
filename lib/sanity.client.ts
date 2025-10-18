@@ -71,3 +71,63 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 
   return await client.fetch(query, { slug });
 }
+
+export interface BlogPost {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  excerpt: string;
+  mainImage: SanityImageSource;
+  categories?: Array<{ title: string; _id: string }>;
+  author?: {
+    name: string;
+    image?: SanityImageSource;
+  };
+  publishedAt: string;
+  readTime: number;
+  featured?: boolean;
+  body: unknown[];
+  tags?: string[];
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+  };
+}
+
+export async function getBlogPosts(): Promise<BlogPost[]> {
+  const query = `*[_type == "blog"] | order(featured desc, publishedAt desc) {
+    _id,
+    title,
+    slug,
+    excerpt,
+    mainImage,
+    "categories": categories[]->{ title, _id },
+    "author": author->{ name, image },
+    publishedAt,
+    readTime,
+    featured,
+    tags
+  }`;
+
+  return await client.fetch(query);
+}
+
+export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  const query = `*[_type == "blog" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    excerpt,
+    mainImage,
+    "categories": categories[]->{ title, _id },
+    "author": author->{ name, image },
+    publishedAt,
+    readTime,
+    featured,
+    body,
+    tags,
+    seo
+  }`;
+
+  return await client.fetch(query, { slug });
+}

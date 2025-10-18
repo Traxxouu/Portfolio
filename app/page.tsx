@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Github, Linkedin, Moon, Sun, Cloud, ExternalLink, Instagram, Send, Mail, Download } from 'lucide-react';
+import { Github, Linkedin, Moon, Sun, Cloud, ExternalLink, Instagram, Send, Mail, Download, Calendar, Clock, Tag, BookOpen, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { getProjects, type Project } from '@/lib/sanity.client';
+import { getProjects, type Project, getBlogPosts, type BlogPost } from '@/lib/sanity.client';
 import { urlFor } from '@/sanity/lib/image';
 
 // Lazy load des icônes lourdes
@@ -33,8 +33,9 @@ export default function Home() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [relativeMousePosition, setRelativeMousePosition] = useState({ x: 0, y: 0 });
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [currentPage, setCurrentPage] = useState<'home' | 'about' | 'projects' | 'contact'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'about' | 'projects' | 'contact' | 'blog'>('home');
   const [projects, setProjects] = useState<Project[]>([]);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const titleRef = useRef<HTMLDivElement>(null);
   
@@ -110,8 +111,23 @@ export default function Home() {
       }
     };
 
+    const fetchBlogPosts = async () => {
+      try {
+        const data = await getBlogPosts();
+        setBlogPosts(data);
+      } catch (error) {
+        console.error('Erreur lors du chargement des articles de blog:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (currentPage === 'projects') {
       fetchProjects();
+    }
+    
+    if (currentPage === 'blog') {
+      fetchBlogPosts();
     }
   }, [currentPage]);
 
@@ -153,7 +169,7 @@ export default function Home() {
     }
   };
 
-  const handlePageTransition = (page: 'about' | 'home' | 'projects' | 'contact') => {
+  const handlePageTransition = (page: 'about' | 'home' | 'projects' | 'contact' | 'blog') => {
     setIsTransitioning(true);
     
     setTimeout(() => {
@@ -273,11 +289,12 @@ export default function Home() {
           </div>
 
           <nav className="flex flex-col items-center lg:items-start gap-3 lg:gap-4 animate-fade-in-up animation-delay-400">
-            {['About', 'Projects', 'Contact'].map((item, index) => (
+            {['About', 'Blog', 'Projects', 'Contact'].map((item, index) => (
               <button
                 key={item}
                 onClick={() => {
                   if (item === 'About') handlePageTransition('about');
+                  if (item === 'Blog') handlePageTransition('blog');
                   if (item === 'Projects') handlePageTransition('projects');
                   if (item === 'Contact') handlePageTransition('contact');
                 }}
@@ -1445,6 +1462,285 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PAGE BLOG */}
+      {currentPage === 'blog' && (
+        <div className={`fixed inset-0 z-[150] overflow-auto ${
+          isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
+        } animate-fade-in`}>
+          <div className="min-h-screen p-6 sm:p-8 lg:p-12">
+            <div className="max-w-7xl mx-auto">
+              {/* Header */}
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mb-12">
+                <button
+                  onClick={() => handlePageTransition('home')}
+                  className={`text-xl sm:text-2xl lg:text-3xl font-light transition-all hover:scale-105 hover:translate-x-2 group ${
+                    isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
+                  }`}
+                >
+                  <span className="inline-block transition-transform group-hover:-translate-x-2">←</span> Accueil
+                </button>
+                
+                <button
+                  onClick={handleToggle}
+                  aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
+                  className={`p-3 sm:p-4 rounded-full transition-all hover:scale-110 ${
+                    isDark 
+                      ? 'bg-slate-800/50 text-yellow-300 hover:bg-slate-700/50' 
+                      : 'bg-white/50 text-slate-900 hover:bg-orange-100/50'
+                  }`}
+                >
+                  {isDark ? <Sun size={24} /> : <Moon size={24} />}
+                </button>
+
+                <button
+                  onClick={() => handlePageTransition('projects')}
+                  className={`text-xl sm:text-2xl lg:text-3xl font-light transition-all hover:scale-105 hover:-translate-x-2 group ${
+                    isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
+                  }`}
+                >
+                  Projets <span className="inline-block transition-transform group-hover:translate-x-2">→</span>
+                </button>
+              </div>
+
+              {/* Titre */}
+              <div className="mb-16 text-center animate-fade-in-up">
+                <h1 className={`text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-light mb-6 ${
+                  isDark ? 'text-white' : 'text-slate-900'
+                }`}>
+                  <span className={isDark ? 'text-blue-300' : 'text-orange-600'}>Blog</span> & Réflexions
+                </h1>
+                <p className={`text-xl sm:text-2xl lg:text-3xl font-light leading-relaxed ${
+                  isDark ? 'text-gray-300' : 'text-slate-800'
+                }`}>
+                  Mes découvertes, apprentissages et expériences dans le monde du développement
+                </p>
+              </div>
+
+              {/* Contenu */}
+              {loading ? (
+                <div className="flex justify-center items-center min-h-[400px]">
+                  <div className={`text-xl sm:text-2xl font-light ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>
+                    Chargement des articles...
+                  </div>
+                </div>
+              ) : blogPosts.length === 0 ? (
+                <div className={`text-center py-20 backdrop-blur-2xl p-12 rounded-3xl border-2 ${
+                  isDark 
+                    ? 'bg-gradient-to-br from-blue-950/40 to-slate-900/40 border-blue-500/30' 
+                    : 'bg-gradient-to-br from-orange-100/60 to-white/60 border-orange-300/40'
+                } animate-fade-in-up`}>
+                  <BookOpen className={`w-24 h-24 mx-auto mb-6 ${
+                    isDark ? 'text-blue-300' : 'text-orange-600'
+                  }`} />
+                  <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-light mb-4 ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>
+                    Bientôt disponible
+                  </h2>
+                  <p className={`text-xl sm:text-2xl font-light ${
+                    isDark ? 'text-gray-300' : 'text-slate-800'
+                  }`}>
+                    Les premiers articles sont en cours de rédaction...
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {/* Article mis en avant */}
+                  {blogPosts.find(post => post.featured) && (
+                    <div className="mb-16 animate-fade-in-up">
+                      {(() => {
+                        const featuredPost = blogPosts.find(post => post.featured)!;
+                        return (
+                          <Link 
+                            href={`/blog/${featuredPost.slug.current}`}
+                            className={`block backdrop-blur-2xl p-8 lg:p-12 rounded-3xl border-2 transition-all duration-500 hover:scale-[1.02] group ${
+                              isDark 
+                                ? 'bg-gradient-to-br from-blue-950/60 to-purple-950/60 border-blue-500/40 hover:border-blue-400/60 shadow-2xl shadow-blue-500/20' 
+                                : 'bg-gradient-to-br from-orange-100/80 to-rose-100/80 border-orange-300/50 hover:border-orange-400/70 shadow-2xl shadow-orange-300/30'
+                            }`}
+                          >
+                            <div className="grid lg:grid-cols-2 gap-8 items-center">
+                              <div className="relative h-64 lg:h-80 rounded-2xl overflow-hidden">
+                                {featuredPost.mainImage && (
+                                  <Image
+                                    src={urlFor(featuredPost.mainImage).width(800).height(600).url()}
+                                    alt={featuredPost.title}
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                  />
+                                )}
+                                <div className={`absolute top-4 left-4 px-4 py-2 rounded-full text-sm font-light backdrop-blur-xl ${
+                                  isDark ? 'bg-blue-500/30 text-blue-200' : 'bg-orange-500/30 text-orange-800'
+                                }`}>
+                                  ⭐ Article mis en avant
+                                </div>
+                              </div>
+                              
+                              <div>
+                                <div className="flex flex-wrap gap-3 mb-4">
+                                  {featuredPost.categories?.slice(0, 2).map((category) => (
+                                    <span 
+                                      key={category._id}
+                                      className={`px-3 py-1 rounded-full text-sm font-light ${
+                                        isDark 
+                                          ? 'bg-blue-500/20 text-blue-300' 
+                                          : 'bg-orange-500/20 text-orange-700'
+                                      }`}
+                                    >
+                                      {category.title}
+                                    </span>
+                                  ))}
+                                </div>
+                                
+                                <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-light mb-4 ${
+                                  isDark ? 'text-white' : 'text-slate-900'
+                                }`}>
+                                  {featuredPost.title}
+                                </h2>
+                                
+                                <p className={`text-lg sm:text-xl font-light mb-6 leading-relaxed ${
+                                  isDark ? 'text-gray-300' : 'text-slate-800'
+                                }`}>
+                                  {featuredPost.excerpt}
+                                </p>
+                                
+                                <div className={`flex flex-wrap items-center gap-4 mb-6 text-sm font-light ${
+                                  isDark ? 'text-gray-400' : 'text-slate-600'
+                                }`}>
+                                  <div className="flex items-center gap-2">
+                                    <Calendar size={16} />
+                                    {new Date(featuredPost.publishedAt).toLocaleDateString('fr-FR', {
+                                      day: 'numeric',
+                                      month: 'long',
+                                      year: 'numeric'
+                                    })}
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <Clock size={16} />
+                                    {featuredPost.readTime} min de lecture
+                                  </div>
+                                </div>
+                                
+                                <div className={`inline-flex items-center gap-2 text-lg font-light transition-all duration-300 group-hover:gap-4 ${
+                                  isDark ? 'text-blue-300' : 'text-orange-600'
+                                }`}>
+                                  Lire l&apos;article
+                                  <ArrowRight size={20} className="transition-transform group-hover:translate-x-2" />
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })()}
+                    </div>
+                  )}
+
+                  {/* Grille des autres articles */}
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    {blogPosts.filter(post => !post.featured).map((post, index) => (
+                      <Link
+                        key={post._id}
+                        href={`/blog/${post.slug.current}`}
+                        className={`backdrop-blur-2xl p-6 rounded-2xl border-2 transition-all duration-500 hover:scale-105 hover:-translate-y-2 group animate-fade-in-up ${
+                          isDark 
+                            ? 'bg-gradient-to-br from-slate-900/60 to-slate-800/60 border-slate-700/50 hover:border-blue-500/50 shadow-xl hover:shadow-2xl hover:shadow-blue-500/20' 
+                            : 'bg-gradient-to-br from-white/70 to-orange-50/70 border-orange-200/40 hover:border-orange-400/60 shadow-xl hover:shadow-2xl hover:shadow-orange-300/30'
+                        }`}
+                        style={{ animationDelay: `${index * 100}ms` }}
+                      >
+                        {/* Image */}
+                        <div className="relative h-48 rounded-xl overflow-hidden mb-4">
+                          {post.mainImage && (
+                            <Image
+                              src={urlFor(post.mainImage).width(400).height(300).url()}
+                              alt={post.title}
+                              fill
+                              className="object-cover transition-transform duration-700 group-hover:scale-110"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            />
+                          )}
+                        </div>
+
+                        {/* Catégories */}
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {post.categories?.slice(0, 2).map((category) => (
+                            <span 
+                              key={category._id}
+                              className={`px-2 py-1 rounded-full text-xs font-light ${
+                                isDark 
+                                  ? 'bg-blue-500/20 text-blue-300' 
+                                  : 'bg-orange-500/20 text-orange-700'
+                              }`}
+                            >
+                              {category.title}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Titre */}
+                        <h3 className={`text-xl sm:text-2xl font-light mb-3 line-clamp-2 ${
+                          isDark ? 'text-white' : 'text-slate-900'
+                        }`}>
+                          {post.title}
+                        </h3>
+
+                        {/* Extrait */}
+                        <p className={`text-sm sm:text-base font-light mb-4 line-clamp-3 leading-relaxed ${
+                          isDark ? 'text-gray-300' : 'text-slate-800'
+                        }`}>
+                          {post.excerpt}
+                        </p>
+
+                        {/* Meta */}
+                        <div className={`flex items-center justify-between text-xs font-light ${
+                          isDark ? 'text-gray-400' : 'text-slate-600'
+                        }`}>
+                          <div className="flex items-center gap-2">
+                            <Calendar size={14} />
+                            {new Date(post.publishedAt).toLocaleDateString('fr-FR', {
+                              day: 'numeric',
+                              month: 'short'
+                            })}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Clock size={14} />
+                            {post.readTime} min
+                          </div>
+                        </div>
+
+                        {/* Tags (si présents) */}
+                        {post.tags && post.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-opacity-20" style={{
+                            borderColor: isDark ? '#60a5fa' : '#f97316'
+                          }}>
+                            {post.tags.slice(0, 3).map((tag, tagIndex) => (
+                              <span 
+                                key={tagIndex}
+                                className={`flex items-center gap-1 px-2 py-1 rounded text-xs font-light ${
+                                  isDark 
+                                    ? 'bg-slate-800/50 text-gray-400' 
+                                    : 'bg-white/50 text-slate-600'
+                                }`}
+                              >
+                                <Tag size={12} />
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
