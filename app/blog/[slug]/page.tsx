@@ -5,6 +5,7 @@ import { getBlogPostBySlug } from '@/lib/sanity.client';
 import { urlFor } from '@/sanity/lib/image';
 import { PortableText } from '@portabletext/react';
 import { Calendar, Clock, Tag, ArrowLeft } from 'lucide-react';
+import type { TypedObject } from '@portabletext/types';
 
 interface BlogPostPageProps {
   params: {
@@ -123,7 +124,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           prose-li:mb-2
           prose-img:rounded-xl prose-img:shadow-2xl"
         >
-          <PortableText value={post.body} />
+          <PortableText value={post.body as TypedObject[]} />
         </div>
 
         {/* Tags */}
