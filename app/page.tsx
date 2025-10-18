@@ -198,6 +198,7 @@ export default function Home() {
 
       <button
         onClick={handleToggle}
+        aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
         className={`fixed top-8 right-8 z-50 p-4 rounded-full backdrop-blur-xl border transition-all hover:scale-110 group ${
           isDark 
             ? 'bg-slate-800/50 border-slate-600/50 hover:bg-slate-700/60' 
@@ -308,6 +309,7 @@ export default function Home() {
                 href="https://github.com/Traxxouu"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Voir mon profil GitHub"
                 className={`p-3 backdrop-blur-xl rounded-xl border-2 transition-all duration-300 hover:scale-110 hover:-translate-y-1 ${
                   isDark 
                     ? 'bg-slate-800/40 border-purple-500/30 text-white hover:bg-slate-700/50 hover:border-purple-400/50 shadow-lg shadow-purple-500/10 hover:shadow-purple-500/30' 
@@ -320,6 +322,7 @@ export default function Home() {
                 href="https://www.linkedin.com/in/maelbarbe/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Voir mon profil LinkedIn"
                 className={`p-3 backdrop-blur-xl rounded-xl border-2 transition-all duration-300 hover:scale-110 hover:-translate-y-1 ${
                   isDark 
                     ? 'bg-slate-800/40 border-purple-500/30 text-white hover:bg-slate-700/50 hover:border-purple-400/50 shadow-lg shadow-purple-500/10 hover:shadow-purple-500/30' 
@@ -451,6 +454,7 @@ export default function Home() {
                 
                 <button
                   onClick={handleToggle}
+                  aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
                   className={`p-3 sm:p-4 rounded-full transition-all hover:scale-110 ${
                     isDark 
                       ? 'bg-slate-800/50 text-yellow-300 hover:bg-slate-700/50' 
@@ -882,6 +886,7 @@ export default function Home() {
                 
                 <button
                   onClick={handleToggle}
+                  aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
                   className={`p-3 sm:p-4 rounded-full transition-all hover:scale-110 ${
                     isDark 
                       ? 'bg-slate-800/50 text-yellow-300 hover:bg-slate-700/50' 
@@ -1103,6 +1108,7 @@ export default function Home() {
                 
                 <button
                   onClick={handleToggle}
+                  aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
                   className={`p-4 rounded-full transition-all hover:scale-110 ${
                     isDark 
                       ? 'bg-slate-800/50 text-yellow-300 hover:bg-slate-700/50' 
