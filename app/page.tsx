@@ -58,20 +58,43 @@ export default function Home() {
   }, [manualToggle]);
 
   useEffect(() => {
+    let rafId: number;
+    let lastCall = 0;
+    const throttleMs = 16; // ~60fps max
+    
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      const now = Date.now();
       
-      if (titleRef.current) {
-        const rect = titleRef.current.getBoundingClientRect();
-        setRelativeMousePosition({
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top
-        });
+      if (now - lastCall < throttleMs) {
+        return;
       }
+      
+      lastCall = now;
+      
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+      
+      rafId = requestAnimationFrame(() => {
+        setMousePosition({ x: e.clientX, y: e.clientY });
+        
+        if (titleRef.current) {
+          const rect = titleRef.current.getBoundingClientRect();
+          setRelativeMousePosition({
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+          });
+        }
+      });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+    };
   }, []);
 
   // Charger les projets depuis Sanity
@@ -148,10 +171,8 @@ export default function Home() {
         <div 
           className="fixed w-8 h-8 rounded-full pointer-events-none z-[100] border-2"
           style={{
-            left: `${mousePosition.x}px`,
-            top: `${mousePosition.y}px`,
-            transform: 'translate(-50%, -50%)',
-            transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
+            transform: `translate(${mousePosition.x - 16}px, ${mousePosition.y - 16}px)`,
+            willChange: 'transform',
             backgroundColor: isDark ? 'white' : 'black',
             borderColor: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.8)',
             boxShadow: isDark 
@@ -161,20 +182,16 @@ export default function Home() {
         ></div>
       )}
       
-      <div className="absolute inset-0 overflow-hidden will-change-transform gpu-accelerated">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {isDark ? (
           <>
-            <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-600 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-blob will-change-transform"></div>
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600 rounded-full mix-blend-screen filter blur-[120px] opacity-25 animate-blob animation-delay-2000 will-change-transform"></div>
-            <div className="absolute bottom-0 left-1/2 w-[550px] h-[550px] bg-pink-600 rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-blob animation-delay-4000 will-change-transform"></div>
-            <div className="absolute top-1/2 right-1/4 w-[400px] h-[400px] bg-violet-600 rounded-full mix-blend-screen filter blur-[120px] opacity-15 animate-blob animation-delay-6000 will-change-transform"></div>
+            <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-600 rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-blob"></div>
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600 rounded-full mix-blend-screen filter blur-[120px] opacity-15 animate-blob animation-delay-2000"></div>
           </>
         ) : (
           <>
-            <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-orange-300 rounded-full mix-blend-multiply filter blur-[120px] opacity-30 animate-blob will-change-transform"></div>
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-300 rounded-full mix-blend-multiply filter blur-[120px] opacity-25 animate-blob animation-delay-2000 will-change-transform"></div>
-            <div className="absolute bottom-0 left-1/2 w-[550px] h-[550px] bg-amber-300 rounded-full mix-blend-multiply filter blur-[120px] opacity-20 animate-blob animation-delay-4000 will-change-transform"></div>
-            <div className="absolute top-1/2 right-1/4 w-[400px] h-[400px] bg-orange-200 rounded-full mix-blend-multiply filter blur-[120px] opacity-15 animate-blob animation-delay-6000 will-change-transform"></div>
+            <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-orange-300 rounded-full mix-blend-multiply filter blur-[120px] opacity-20 animate-blob"></div>
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-300 rounded-full mix-blend-multiply filter blur-[120px] opacity-15 animate-blob animation-delay-2000"></div>
           </>
         )}
       </div>
