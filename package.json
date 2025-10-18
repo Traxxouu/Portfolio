@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@portabletext/react": "^4.0.3",
+    "@react-email/render": "^1.4.0",
+    "@sanity/code-input": "^6.0.3",
     "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.10.3",

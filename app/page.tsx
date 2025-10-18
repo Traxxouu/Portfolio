@@ -1,14 +1,16 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Github, Linkedin, Moon, Sun, Cloud, ExternalLink, Instagram, Send, Mail } from 'lucide-react';
+import { Github, Linkedin, Moon, Sun, Cloud, ExternalLink, Instagram, Send, Mail, Download } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { 
   SiOpenjdk, SiPython, SiJavascript, SiTypescript, SiPhp, SiMysql,
   SiReact, SiVuedotjs, SiNodedotjs, SiHtml5, SiCss3,
   SiDocker, SiGithub, SiMongodb, SiMariadb, SiSalesforce, SiTwitch
 } from 'react-icons/si';
 import { getProjects, type Project } from '@/lib/sanity.client';
+import { urlFor } from '@/sanity/lib/image';
 
 export default function Home() {
   const [isDark, setIsDark] = useState(false);
@@ -22,7 +24,13 @@ export default function Home() {
   const titleRef = useRef<HTMLDivElement>(null);
   
   // États pour le formulaire de contact
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ 
+    firstName: '', 
+    lastName: '', 
+    email: '', 
+    subject: '', 
+    message: '' 
+  });
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [formMessage, setFormMessage] = useState('');
 
@@ -91,7 +99,7 @@ export default function Home() {
       if (response.ok) {
         setFormStatus('success');
         setFormMessage('Message envoyé avec succès ! Je te répondrai très vite 🚀');
-        setFormData({ name: '', email: '', message: '' });
+        setFormData({ firstName: '', lastName: '', email: '', subject: '', message: '' });
         setTimeout(() => {
           setFormStatus('idle');
           setFormMessage('');
@@ -274,7 +282,7 @@ export default function Home() {
                 <Github className="w-6 h-6" />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/maelbarbe/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`p-3 backdrop-blur-xl rounded-xl border-2 transition-all duration-300 hover:scale-110 hover:-translate-y-1 ${
@@ -396,37 +404,35 @@ export default function Home() {
         } animate-fade-in`}>
           <div className="min-h-screen p-6 sm:p-8 lg:p-12">
             <div className="max-w-6xl mx-auto">
-              <div className="flex justify-between items-center mb-12">
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mb-12">
                 <button
                   onClick={() => handlePageTransition('home')}
-                  className={`text-2xl sm:text-3xl font-light transition-all hover:scale-105 hover:translate-x-2 group ${
+                  className={`text-xl sm:text-2xl lg:text-3xl font-light transition-all hover:scale-105 hover:translate-x-2 group ${
                     isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
                   }`}
                 >
                   <span className="inline-block transition-transform group-hover:-translate-x-2">←</span> Retour
                 </button>
                 
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => handlePageTransition('projects')}
-                    className={`text-2xl sm:text-3xl font-light transition-all hover:scale-105 hover:-translate-x-2 group ${
-                      isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
-                    }`}
-                  >
-                    Projets <span className="inline-block transition-transform group-hover:translate-x-2">→</span>
-                  </button>
+                <button
+                  onClick={handleToggle}
+                  className={`p-3 sm:p-4 rounded-full transition-all hover:scale-110 ${
+                    isDark 
+                      ? 'bg-slate-800/50 text-yellow-300 hover:bg-slate-700/50' 
+                      : 'bg-white/50 text-slate-900 hover:bg-orange-100/50'
+                  }`}
+                >
+                  {isDark ? <Sun size={24} /> : <Moon size={24} />}
+                </button>
 
-                  <button
-                    onClick={handleToggle}
-                    className={`p-4 rounded-full transition-all hover:scale-110 ${
-                      isDark 
-                        ? 'bg-slate-800/50 text-yellow-300 hover:bg-slate-700/50' 
-                        : 'bg-white/50 text-slate-900 hover:bg-orange-100/50'
-                    }`}
-                  >
-                    {isDark ? <Sun size={24} /> : <Moon size={24} />}
-                  </button>
-                </div>
+                <button
+                  onClick={() => handlePageTransition('projects')}
+                  className={`text-xl sm:text-2xl lg:text-3xl font-light transition-all hover:scale-105 hover:-translate-x-2 group ${
+                    isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
+                  }`}
+                >
+                  Projets <span className="inline-block transition-transform group-hover:translate-x-2">→</span>
+                </button>
               </div>
               
               <div className="mb-16 animate-fade-in-up">
@@ -436,7 +442,7 @@ export default function Home() {
                   Salut ! Je suis <span className={isDark ? 'text-blue-300' : 'text-orange-600'}>Maël</span>
                 </h1>
                 <p className={`text-xl sm:text-2xl lg:text-3xl font-light leading-relaxed flex flex-wrap items-center gap-2 ${
-                  isDark ? 'text-gray-300' : 'text-slate-700'
+                  isDark ? 'text-gray-300' : 'text-slate-800'
                 }`}>
                   <span>Développeur web passionné, actuellement étudiant à l&apos;</span>
                   <span className="inline-flex items-center gap-0 font-normal group/efrei relative min-w-[50px] sm:min-w-[60px]">
@@ -558,7 +564,7 @@ export default function Home() {
                   </h2>
                   
                   <div className={`space-y-4 text-lg ${
-                    isDark ? 'text-gray-300' : 'text-slate-700'
+                    isDark ? 'text-gray-300' : 'text-slate-800'
                   }`}>
                     <div className="flex items-start gap-3">
                       <span className={isDark ? 'text-blue-300' : 'text-orange-600'}>•</span>
@@ -586,7 +592,7 @@ export default function Home() {
                     <h3 className={`text-xl font-light mb-3 ${
                       isDark ? 'text-blue-300' : 'text-orange-600'
                     }`}>Langues</h3>
-                    <div className={`space-y-2 ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                    <div className={`space-y-2 ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                       <p>🇫🇷 Français - Natif</p>
                       <p>🇬🇧 Anglais - B1</p>
                       <p>🇩🇪 Allemand - A2</p>
@@ -642,7 +648,7 @@ export default function Home() {
                         📍 Juin - Août 2024 (2 mois) • Malakoff, France
                       </p>
                       <ul className={`space-y-4 text-base sm:text-lg ${
-                        isDark ? 'text-gray-300' : 'text-slate-700'
+                        isDark ? 'text-gray-300' : 'text-slate-800'
                       }`}>
                         <li className="flex items-start gap-3">
                           <span className={`text-xl ${isDark ? 'text-green-400' : 'text-green-600'}`}>▸</span>
@@ -680,7 +686,7 @@ export default function Home() {
                       }`}>
                         Bachelor Développeur Web & Applications
                       </h3>
-                      <p className={`${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                      <p className={`${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                         EFREI, Paris • 2024 - 2027
                       </p>
                     </div>
@@ -690,10 +696,10 @@ export default function Home() {
                       }`}>
                         Baccalauréat Général
                       </h3>
-                      <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                      <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                         Spécialité Maths & SES
                       </p>
-                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-slate-600'}`}>
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-slate-700'}`}>
                         CNED : NSI (investissement personnel)
                       </p>
                     </div>
@@ -710,7 +716,7 @@ export default function Home() {
                   }`}>
                     Centres d&apos;intérêt
                   </h2>
-                  <div className={`space-y-3 ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                  <div className={`space-y-3 ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                     <p>🏀 Sport : Basket, Judo, Ju-jitsu, Natation</p>
                     <p>🎮 Jeux vidéo : Modding & création serveur GTA RP</p>
                     <p>🔐 Cybersécurité</p>
@@ -719,7 +725,23 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="mt-12 flex justify-center gap-4">
+              {/* Bouton Contact */}
+              <div className="mt-12 flex justify-center">
+                <button
+                  onClick={() => handlePageTransition('contact')}
+                  className={`px-8 py-4 rounded-full text-lg sm:text-xl font-light transition-all hover:scale-105 flex items-center gap-3 ${
+                    isDark 
+                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-500 hover:to-purple-500 shadow-lg shadow-blue-500/30' 
+                      : 'bg-gradient-to-r from-orange-500 to-rose-500 text-white hover:from-orange-400 hover:to-rose-400 shadow-lg shadow-orange-500/30'
+                  }`}
+                >
+                  <Mail className="w-6 h-6" />
+                  Me contacter
+                </button>
+              </div>
+
+              {/* Réseaux sociaux */}
+              <div className="mt-8 flex flex-wrap justify-center gap-4">
                 <a 
                   href="https://github.com/Traxxouu" 
                   target="_blank" 
@@ -734,7 +756,7 @@ export default function Home() {
                   GitHub
                 </a>
                 <a 
-                  href="https://linkedin.com" 
+                  href="https://www.linkedin.com/in/maelbarbe/" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className={`px-6 py-3 rounded-full transition-all hover:scale-105 flex items-center gap-2 ${
@@ -745,6 +767,60 @@ export default function Home() {
                 >
                   <Linkedin className="w-5 h-5" />
                   LinkedIn
+                </a>
+                <a 
+                  href="https://www.instagram.com/maelsanst/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={`px-6 py-3 rounded-full transition-all hover:scale-105 flex items-center gap-2 ${
+                    isDark 
+                      ? 'bg-slate-700 text-white hover:bg-slate-600' 
+                      : 'bg-white text-slate-900 hover:bg-orange-50'
+                  }`}
+                >
+                  <Instagram className="w-5 h-5" />
+                  Instagram
+                </a>
+                <a 
+                  href="https://www.twitch.tv/traxxouu" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={`px-6 py-3 rounded-full transition-all hover:scale-105 flex items-center gap-2 ${
+                    isDark 
+                      ? 'bg-slate-700 text-white hover:bg-slate-600' 
+                      : 'bg-white text-slate-900 hover:bg-orange-50'
+                  }`}
+                >
+                  <SiTwitch className="w-5 h-5" />
+                  Twitch
+                </a>
+              </div>
+
+              {/* Section Télécharger CV */}
+              <div className={`mt-12 backdrop-blur-2xl p-8 rounded-3xl border-2 text-center ${
+                isDark 
+                  ? 'bg-gradient-to-br from-blue-950/40 to-slate-900/40 border-blue-500/30' 
+                  : 'bg-gradient-to-br from-blue-50/80 to-indigo-50/80 border-blue-300/40'
+              } animate-fade-in-up animation-delay-1200`}>
+                <h2 className={`text-2xl sm:text-3xl font-light mb-4 ${
+                  isDark ? 'text-white' : 'text-slate-900'
+                }`}>
+                  Télécharge mon CV
+                </h2>
+                <p className={`mb-6 ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
+                  Retrouve toutes mes compétences et expériences en un clic
+                </p>
+                <a 
+                  href="/NotelCvBarbeMaelB2DEVEnc3.pdf" 
+                  download="CV_Mael_Barbe.pdf"
+                  className={`inline-flex items-center gap-3 px-8 py-4 rounded-full text-lg font-light transition-all hover:scale-105 hover:shadow-2xl ${
+                    isDark 
+                      ? 'bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 border-2 border-blue-500/30 hover:shadow-blue-500/30' 
+                      : 'bg-blue-500/20 text-blue-600 hover:bg-blue-500/30 border-2 border-blue-500/30 hover:shadow-blue-300/30'
+                  }`}
+                >
+                  <Download className="w-5 h-5" />
+                  Télécharger mon CV (PDF)
                 </a>
               </div>
             </div>
@@ -759,25 +835,34 @@ export default function Home() {
         } animate-fade-in`}>
           <div className="min-h-screen p-6 sm:p-8 lg:p-12">
             <div className="max-w-7xl mx-auto">
-              <div className="flex justify-between items-center mb-12">
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mb-12">
                 <button
-                  onClick={() => handlePageTransition('about')}
-                  className={`text-2xl sm:text-3xl font-light transition-all hover:scale-105 hover:translate-x-2 group ${
+                  onClick={() => handlePageTransition('home')}
+                  className={`text-xl sm:text-2xl lg:text-3xl font-light transition-all hover:scale-105 hover:translate-x-2 group ${
                     isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
                   }`}
                 >
-                  <span className="inline-block transition-transform group-hover:-translate-x-2">←</span> About
+                  <span className="inline-block transition-transform group-hover:-translate-x-2">←</span> Accueil
                 </button>
                 
                 <button
                   onClick={handleToggle}
-                  className={`p-4 rounded-full transition-all hover:scale-110 ${
+                  className={`p-3 sm:p-4 rounded-full transition-all hover:scale-110 ${
                     isDark 
                       ? 'bg-slate-800/50 text-yellow-300 hover:bg-slate-700/50' 
                       : 'bg-white/50 text-slate-900 hover:bg-orange-100/50'
                   }`}
                 >
                   {isDark ? <Sun size={24} /> : <Moon size={24} />}
+                </button>
+
+                <button
+                  onClick={() => handlePageTransition('about')}
+                  className={`text-xl sm:text-2xl lg:text-3xl font-light transition-all hover:scale-105 hover:-translate-x-2 group ${
+                    isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
+                  }`}
+                >
+                  About <span className="inline-block transition-transform group-hover:translate-x-2">→</span>
                 </button>
               </div>
               
@@ -788,7 +873,7 @@ export default function Home() {
                   Mes <span className={isDark ? 'text-blue-300' : 'text-orange-600'}>Projets</span>
                 </h1>
                 <p className={`text-xl sm:text-2xl lg:text-3xl font-light leading-relaxed ${
-                  isDark ? 'text-gray-300' : 'text-slate-700'
+                  isDark ? 'text-gray-300' : 'text-slate-800'
                 }`}>
                   Une sélection de mes réalisations les plus significatives
                 </p>
@@ -820,25 +905,49 @@ export default function Home() {
                   {/* Grid de projets depuis Sanity */}
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {projects.map((project, index) => (
-                      <div 
+                      <Link
+                        href={`/projects/${project.slug.current}`}
                         key={project._id}
-                        className={`backdrop-blur-2xl p-6 rounded-3xl border-2 transition-all duration-500 hover:scale-105 hover:-translate-y-2 group will-change-transform ${
+                        className={`backdrop-blur-2xl p-6 rounded-3xl border-2 transition-all duration-500 hover:scale-105 hover:-translate-y-2 group will-change-transform cursor-pointer ${
                           isDark 
                             ? 'bg-slate-800/40 border-purple-500/30 hover:border-purple-400/50 hover:shadow-2xl hover:shadow-purple-500/20' 
                             : 'bg-white/40 border-orange-200/40 hover:border-orange-300/60 hover:shadow-2xl hover:shadow-orange-300/20'
                         } animate-fade-in-up`}
                         style={{ animationDelay: `${200 + index * 150}ms` }}
                       >
-                        <div className="w-full h-48 rounded-2xl mb-4 flex items-center justify-center bg-gradient-to-br transition-all duration-500 group-hover:scale-105 overflow-hidden"
-                          style={{
-                            backgroundImage: `linear-gradient(to bottom right, 
-                              ${isDark ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.3)'}, 
-                              ${isDark ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.3)'}
-                            )`
-                          }}
-                        >
-                          <span className="text-6xl transition-all duration-500 group-hover:scale-125 group-hover:rotate-6">{project.emoji}</span>
+                        {/* Image ou Emoji */}
+                        <div className="w-full h-48 rounded-2xl mb-4 relative overflow-hidden transition-all duration-500 group-hover:scale-105">
+                          {project.coverImage ? (
+                            <Image
+                              src={urlFor(project.coverImage).width(800).height(400).url()}
+                              alt={project.title}
+                              fill
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div 
+                              className="w-full h-full flex items-center justify-center bg-gradient-to-br"
+                              style={{
+                                backgroundImage: project.gradientFrom && project.gradientTo
+                                  ? `linear-gradient(to bottom right, 
+                                      ${isDark ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.3)'}, 
+                                      ${isDark ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.3)'}
+                                    )`
+                                  : `linear-gradient(to bottom right, 
+                                      ${isDark ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.3)'}, 
+                                      ${isDark ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.3)'}
+                                    )`
+                              }}
+                            >
+                              {project.emoji && (
+                                <span className="text-6xl transition-all duration-500 group-hover:scale-125 group-hover:rotate-6">
+                                  {project.emoji}
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </div>
+
                         <h3 className={`text-2xl font-light mb-2 transition-colors duration-300 ${isDark ? 'text-white group-hover:text-blue-300' : 'text-slate-900 group-hover:text-orange-600'}`}>
                           {project.title}
                         </h3>
@@ -852,28 +961,30 @@ export default function Home() {
                           {project.status === 'terminé' && (
                             <>
                               {project.liveUrl && (
-                                <a 
-                                  href={project.liveUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
+                                <span 
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    window.open(project.liveUrl, '_blank');
+                                  }}
                                   className={`px-4 py-2 rounded-full text-sm transition-all hover:scale-105 flex items-center gap-1 ${
                                     isDark ? 'bg-blue-500/20 text-blue-300 hover:bg-blue-500/30' : 'bg-orange-500/20 text-orange-600 hover:bg-orange-500/30'
                                   }`}
                                 >
                                   Démo <ExternalLink className="w-3 h-3" />
-                                </a>
+                                </span>
                               )}
                               {project.githubUrl && (
-                                <a 
-                                  href={project.githubUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
+                                <span 
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    window.open(project.githubUrl, '_blank');
+                                  }}
                                   className={`px-4 py-2 rounded-full text-sm transition-all hover:scale-105 flex items-center gap-1 ${
                                     isDark ? 'bg-purple-500/20 text-purple-300 hover:bg-purple-500/30' : 'bg-purple-500/20 text-purple-600 hover:bg-purple-500/30'
                                   }`}
                                 >
                                   GitHub <Github className="w-3 h-3" />
-                                </a>
+                                </span>
                               )}
                             </>
                           )}
@@ -892,7 +1003,7 @@ export default function Home() {
                             </span>
                           )}
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
 
@@ -919,8 +1030,8 @@ export default function Home() {
                 <p className={`text-lg mb-6 ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
                   N&apos;hésitez pas à me contacter pour en discuter !
                 </p>
-                <a 
-                  href="mailto:pro.mael.dev@gmail.com"
+                <button 
+                  onClick={() => handlePageTransition('contact')}
                   className={`inline-block px-8 py-4 rounded-full text-lg transition-all hover:scale-105 ${
                     isDark 
                       ? 'bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 border-2 border-blue-500/30' 
@@ -928,7 +1039,7 @@ export default function Home() {
                   }`}
                 >
                   Me contacter
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -973,7 +1084,7 @@ export default function Home() {
                   Restons en <span className={isDark ? 'text-blue-300' : 'text-orange-600'}>Contact</span>
                 </h1>
                 <p className={`text-xl sm:text-2xl lg:text-3xl font-light leading-relaxed ${
-                  isDark ? 'text-gray-300' : 'text-slate-700'
+                  isDark ? 'text-gray-300' : 'text-slate-800'
                 }`}>
                   Une question ? Un projet ? N&apos;hésite pas à m&apos;écrire !
                 </p>
@@ -993,33 +1104,59 @@ export default function Home() {
                   </h2>
                   
                   <form onSubmit={handleSubmitContact} className="space-y-6">
-                    {/* Nom */}
-                    <div>
-                      <label htmlFor="name" className={`block text-sm font-light mb-2 ${
-                        isDark ? 'text-gray-300' : 'text-slate-700'
-                      }`}>
-                        Ton nom
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className={`w-full px-4 py-3 rounded-xl border-2 backdrop-blur-xl transition-all focus:scale-[1.02] focus:outline-none ${
-                          isDark 
-                            ? 'bg-slate-900/50 border-purple-500/30 text-white placeholder-gray-500 focus:border-purple-400/50' 
-                            : 'bg-white/50 border-orange-200/40 text-slate-900 placeholder-slate-400 focus:border-orange-300/60'
-                        }`}
-                        placeholder="John Doe"
-                        disabled={formStatus === 'sending'}
-                      />
+                    {/* Prénom et Nom sur la même ligne */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Prénom */}
+                      <div>
+                        <label htmlFor="firstName" className={`block text-sm font-light mb-2 ${
+                          isDark ? 'text-gray-300' : 'text-slate-800'
+                        }`}>
+                          Prénom
+                        </label>
+                        <input
+                          type="text"
+                          id="firstName"
+                          required
+                          value={formData.firstName}
+                          onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                          className={`w-full px-4 py-3 rounded-xl border-2 backdrop-blur-xl transition-all focus:scale-[1.02] focus:outline-none ${
+                            isDark 
+                              ? 'bg-slate-900/50 border-purple-500/30 text-white placeholder-gray-500 focus:border-purple-400/50' 
+                              : 'bg-white/50 border-orange-200/40 text-slate-900 placeholder-slate-400 focus:border-orange-300/60'
+                          }`}
+                          placeholder="John"
+                          disabled={formStatus === 'sending'}
+                        />
+                      </div>
+
+                      {/* Nom */}
+                      <div>
+                        <label htmlFor="lastName" className={`block text-sm font-light mb-2 ${
+                          isDark ? 'text-gray-300' : 'text-slate-800'
+                        }`}>
+                          Nom
+                        </label>
+                        <input
+                          type="text"
+                          id="lastName"
+                          required
+                          value={formData.lastName}
+                          onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                          className={`w-full px-4 py-3 rounded-xl border-2 backdrop-blur-xl transition-all focus:scale-[1.02] focus:outline-none ${
+                            isDark 
+                              ? 'bg-slate-900/50 border-purple-500/30 text-white placeholder-gray-500 focus:border-purple-400/50' 
+                              : 'bg-white/50 border-orange-200/40 text-slate-900 placeholder-slate-400 focus:border-orange-300/60'
+                          }`}
+                          placeholder="D."
+                          disabled={formStatus === 'sending'}
+                        />
+                      </div>
                     </div>
 
                     {/* Email */}
                     <div>
                       <label htmlFor="email" className={`block text-sm font-light mb-2 ${
-                        isDark ? 'text-gray-300' : 'text-slate-700'
+                        isDark ? 'text-gray-300' : 'text-slate-800'
                       }`}>
                         Ton email
                       </label>
@@ -1039,10 +1176,33 @@ export default function Home() {
                       />
                     </div>
 
+                    {/* Objet */}
+                    <div>
+                      <label htmlFor="subject" className={`block text-sm font-light mb-2 ${
+                        isDark ? 'text-gray-300' : 'text-slate-800'
+                      }`}>
+                        Objet
+                      </label>
+                      <input
+                        type="text"
+                        id="subject"
+                        required
+                        value={formData.subject}
+                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                        className={`w-full px-4 py-3 rounded-xl border-2 backdrop-blur-xl transition-all focus:scale-[1.02] focus:outline-none ${
+                          isDark 
+                            ? 'bg-slate-900/50 border-purple-500/30 text-white placeholder-gray-500 focus:border-purple-400/50' 
+                            : 'bg-white/50 border-orange-200/40 text-slate-900 placeholder-slate-400 focus:border-orange-300/60'
+                        }`}
+                        placeholder="Sujet de ton message"
+                        disabled={formStatus === 'sending'}
+                      />
+                    </div>
+
                     {/* Message */}
                     <div>
                       <label htmlFor="message" className={`block text-sm font-light mb-2 ${
-                        isDark ? 'text-gray-300' : 'text-slate-700'
+                        isDark ? 'text-gray-300' : 'text-slate-800'
                       }`}>
                         Ton message
                       </label>
@@ -1134,7 +1294,7 @@ export default function Home() {
                         </a>
                       </div>
                     </div>
-                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-slate-600'}`}>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-slate-700'}`}>
                       Tu peux aussi m&apos;envoyer un email directement
                     </p>
                   </div>
@@ -1152,7 +1312,7 @@ export default function Home() {
                     <div className="grid grid-cols-2 gap-4">
                       {/* LinkedIn */}
                       <a
-                        href="https://www.linkedin.com/in/ma%C3%ABl-barbe-44a91b290/"
+                        href="https://www.linkedin.com/in/maelbarbe/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
@@ -1164,7 +1324,7 @@ export default function Home() {
                         <Linkedin className={`transition-colors ${
                           isDark ? 'text-blue-300 group-hover:text-blue-200' : 'text-blue-600 group-hover:text-blue-500'
                         }`} size={32} />
-                        <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                        <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                           LinkedIn
                         </span>
                       </a>
@@ -1183,14 +1343,14 @@ export default function Home() {
                         <Github className={`transition-colors ${
                           isDark ? 'text-purple-300 group-hover:text-purple-200' : 'text-purple-600 group-hover:text-purple-500'
                         }`} size={32} />
-                        <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                        <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                           GitHub
                         </span>
                       </a>
 
                       {/* Instagram */}
                       <a
-                        href="https://www.instagram.com/mael_barbe/"
+                        href="https://www.instagram.com/maelsanst/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
@@ -1202,14 +1362,14 @@ export default function Home() {
                         <Instagram className={`transition-colors ${
                           isDark ? 'text-pink-300 group-hover:text-pink-200' : 'text-pink-600 group-hover:text-pink-500'
                         }`} size={32} />
-                        <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                        <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                           Instagram
                         </span>
                       </a>
 
                       {/* Twitch */}
                       <a
-                        href="https://www.twitch.tv/traxxou_"
+                        href="https://www.twitch.tv/traxxouu"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
@@ -1221,7 +1381,7 @@ export default function Home() {
                         <SiTwitch className={`transition-colors ${
                           isDark ? 'text-violet-300 group-hover:text-violet-200' : 'text-violet-600 group-hover:text-violet-500'
                         }`} size={32} />
-                        <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-700'}`}>
+                        <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                           Twitch
                         </span>
                       </a>
@@ -1235,7 +1395,7 @@ export default function Home() {
                       : 'bg-white/40 border-orange-200/40'
                   } animate-fade-in-up animation-delay-800`}>
                     <p className={`text-xl sm:text-2xl font-light italic leading-relaxed ${
-                      isDark ? 'text-gray-300' : 'text-slate-700'
+                      isDark ? 'text-gray-300' : 'text-slate-800'
                     }`}>
                       &ldquo;Les meilleurs projets naissent souvent d&apos;une simple conversation&rdquo;
                     </p>

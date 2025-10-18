@@ -25,14 +25,134 @@ export const projectType = defineType({
       name: 'emoji',
       title: 'Emoji',
       type: 'string',
-      description: 'Un emoji pour représenter le projet (ex: 🚀)',
-      validation: (rule) => rule.required(),
+      description: 'Un emoji pour représenter le projet (ex: 🚀) - Optionnel si image fournie',
+    }),
+    defineField({
+      name: 'coverImage',
+      title: 'Image de couverture',
+      type: 'image',
+      description: 'Image principale du projet (recommandé : 1200x630px)',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Texte alternatif',
+          description: 'Important pour l\'accessibilité',
+        }
+      ],
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Description courte',
       type: 'text',
-      validation: (rule) => rule.required(),
+      description: 'Description affichée dans la liste des projets',
+      validation: (rule) => rule.required().max(200),
+    }),
+    defineField({
+      name: 'fullDescription',
+      title: 'Description complète',
+      type: 'array',
+      description: 'Contenu détaillé du projet (texte, images, code, etc.)',
+      of: [
+        { 
+          type: 'block',
+          styles: [
+            {title: 'Normal', value: 'normal'},
+            {title: 'Titre H2', value: 'h2'},
+            {title: 'Titre H3', value: 'h3'},
+            {title: 'Titre H4', value: 'h4'},
+            {title: 'Citation', value: 'blockquote'},
+          ],
+          lists: [
+            {title: 'Bullet', value: 'bullet'},
+            {title: 'Numérotée', value: 'number'}
+          ],
+          marks: {
+            decorators: [
+              {title: 'Gras', value: 'strong'},
+              {title: 'Italique', value: 'em'},
+              {title: 'Code', value: 'code'},
+            ],
+            annotations: [
+              {
+                name: 'link',
+                type: 'object',
+                title: 'Lien externe',
+                fields: [
+                  {
+                    name: 'href',
+                    type: 'url',
+                    title: 'URL',
+                    validation: (rule) => rule.uri({
+                      scheme: ['http', 'https', 'mailto', 'tel']
+                    })
+                  },
+                  {
+                    name: 'blank',
+                    type: 'boolean',
+                    title: 'Ouvrir dans un nouvel onglet',
+                    initialValue: true,
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Texte alternatif',
+            },
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Légende',
+            },
+            {
+              name: 'position',
+              type: 'string',
+              title: 'Position',
+              options: {
+                list: [
+                  {title: 'Centre', value: 'center'},
+                  {title: 'Gauche', value: 'left'},
+                  {title: 'Droite', value: 'right'},
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'center',
+            }
+          ]
+        },
+        {
+          type: 'code',
+          name: 'code',
+          title: 'Bloc de code',
+          options: {
+            language: 'javascript',
+            languageAlternatives: [
+              {title: 'JavaScript', value: 'javascript'},
+              {title: 'TypeScript', value: 'typescript'},
+              {title: 'Python', value: 'python'},
+              {title: 'Java', value: 'java'},
+              {title: 'HTML', value: 'html'},
+              {title: 'CSS', value: 'css'},
+              {title: 'JSON', value: 'json'},
+              {title: 'Bash', value: 'bash'},
+            ],
+            withFilename: true,
+          }
+        }
+      ],
     }),
     defineField({
       name: 'technologies',
@@ -55,18 +175,32 @@ export const projectType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'featured',
+      title: 'Projet mis en avant',
+      type: 'boolean',
+      description: 'Afficher ce projet en premier',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'tags',
+      }
+    }),
+    defineField({
       name: 'gradientFrom',
       title: 'Gradient (départ)',
       type: 'string',
-      description: 'Couleur Tailwind CSS (ex: blue-500)',
-      validation: (rule) => rule.required(),
+      description: 'Couleur Tailwind CSS (ex: blue-500) - Utilisé si pas d\'image',
     }),
     defineField({
       name: 'gradientTo',
       title: 'Gradient (arrivée)',
       type: 'string',
-      description: 'Couleur Tailwind CSS (ex: purple-500)',
-      validation: (rule) => rule.required(),
+      description: 'Couleur Tailwind CSS (ex: purple-500) - Utilisé si pas d\'image',
     }),
     defineField({
       name: 'order',
@@ -91,11 +225,13 @@ export const projectType = defineType({
       title: 'title',
       emoji: 'emoji',
       status: 'status',
+      media: 'coverImage',
     },
-    prepare({ title, emoji, status }) {
+    prepare({ title, emoji, status, media }) {
       return {
-        title: `${emoji} ${title}`,
+        title: emoji ? `${emoji} ${title}` : title,
         subtitle: status,
+        media,
       };
     },
   },

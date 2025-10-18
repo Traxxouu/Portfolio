@@ -5,10 +5,13 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
   try {
-    const { name, email, message } = await request.json();
+    const { firstName, lastName, email, subject, message } = await request.json();
+
+    const fullName = `${firstName} ${lastName}`;
+    console.log('📧 Tentative d\'envoi d\'email:', { fullName, email, subject });
 
     // Validation basique
-    if (!name || !email || !message) {
+    if (!firstName || !lastName || !email || !subject || !message) {
       return NextResponse.json(
         { error: 'Tous les champs sont requis' },
         { status: 400 }
@@ -20,15 +23,17 @@ export async function POST(request: Request) {
       from: 'Portfolio Contact <onboarding@resend.dev>', // Email vérifié de Resend
       to: ['pro.mael.dev@gmail.com'],
       replyTo: email, // Pour pouvoir répondre directement
-      subject: `Nouveau message de ${name} - Portfolio`,
+      subject: `${subject} - ${fullName}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
           <div style="background-color: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
             <h2 style="color: #333; margin-bottom: 20px;">Nouveau message depuis ton portfolio 🚀</h2>
             
             <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-              <p style="margin: 5px 0;"><strong style="color: #666;">Nom:</strong> ${name}</p>
+              <p style="margin: 5px 0;"><strong style="color: #666;">Prénom:</strong> ${firstName}</p>
+              <p style="margin: 5px 0;"><strong style="color: #666;">Nom:</strong> ${lastName}</p>
               <p style="margin: 5px 0;"><strong style="color: #666;">Email:</strong> ${email}</p>
+              <p style="margin: 5px 0;"><strong style="color: #666;">Objet:</strong> ${subject}</p>
             </div>
             
             <div style="background-color: #fff; border-left: 4px solid #4F46E5; padding: 15px; margin: 20px 0;">
@@ -46,9 +51,10 @@ export async function POST(request: Request) {
       `,
     });
 
+    console.log('✅ Email envoyé avec succès!', data);
     return NextResponse.json({ success: true, data });
   } catch (error) {
-    console.error('Erreur lors de l\'envoi:', error);
+    console.error('❌ Erreur lors de l\'envoi:', error);
     return NextResponse.json(
       { error: 'Erreur lors de l\'envoi du message' },
       { status: 500 }
