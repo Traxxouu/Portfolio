@@ -4,13 +4,28 @@ import { useState, useEffect, useRef } from 'react';
 import { Github, Linkedin, Moon, Sun, Cloud, ExternalLink, Instagram, Send, Mail, Download } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { 
-  SiOpenjdk, SiPython, SiJavascript, SiTypescript, SiPhp, SiMysql,
-  SiReact, SiVuedotjs, SiNodedotjs, SiHtml5, SiCss3,
-  SiDocker, SiGithub, SiMongodb, SiMariadb, SiSalesforce, SiTwitch
-} from 'react-icons/si';
+import dynamic from 'next/dynamic';
 import { getProjects, type Project } from '@/lib/sanity.client';
 import { urlFor } from '@/sanity/lib/image';
+
+// Lazy load des icônes lourdes
+const SiOpenjdk = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiOpenjdk })), { ssr: false });
+const SiPython = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiPython })), { ssr: false });
+const SiJavascript = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiJavascript })), { ssr: false });
+const SiTypescript = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiTypescript })), { ssr: false });
+const SiPhp = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiPhp })), { ssr: false });
+const SiMysql = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiMysql })), { ssr: false });
+const SiReact = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiReact })), { ssr: false });
+const SiVuedotjs = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiVuedotjs })), { ssr: false });
+const SiNodedotjs = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiNodedotjs })), { ssr: false });
+const SiHtml5 = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiHtml5 })), { ssr: false });
+const SiCss3 = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiCss3 })), { ssr: false });
+const SiDocker = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiDocker })), { ssr: false });
+const SiGithub = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiGithub })), { ssr: false });
+const SiMongodb = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiMongodb })), { ssr: false });
+const SiMariadb = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiMariadb })), { ssr: false });
+const SiSalesforce = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiSalesforce })), { ssr: false });
+const SiTwitch = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiTwitch })), { ssr: false });
 
 export default function Home() {
   const [isDark, setIsDark] = useState(false);
@@ -227,6 +242,9 @@ export default function Home() {
                   src={isDark ? "/profile-dark.jpg" : "/profile-light.jpg"}
                   alt="Maël Barbe"
                   fill
+                  sizes="(max-width: 640px) 192px, (max-width: 1024px) 224px, (max-width: 1280px) 288px, 320px"
+                  priority
+                  quality={85}
                   className="object-cover"
                 />
               </div>
@@ -919,9 +937,11 @@ export default function Home() {
                         <div className="w-full h-48 rounded-2xl mb-4 relative overflow-hidden transition-all duration-500 group-hover:scale-105">
                           {project.coverImage ? (
                             <Image
-                              src={urlFor(project.coverImage).width(800).height(400).url()}
+                              src={urlFor(project.coverImage).width(600).height(400).url()}
                               alt={project.title}
                               fill
+                              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                              loading="lazy"
                               className="object-cover"
                             />
                           ) : (
