@@ -181,11 +181,12 @@ export default function Home() {
   };
 
   return (
-    <div className={`fixed inset-0 overflow-hidden ${isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'} transition-all duration-1000 ease-in-out ${currentPage === 'home' ? 'cursor-none' : ''}`}>
+    <div className={`fixed inset-0 overflow-hidden ${isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'} transition-all duration-1000 ease-in-out ${currentPage === 'home' ? 'md:cursor-none' : ''}`}>
       
+      {/* Curseur personnalisé - Desktop uniquement */}
       {currentPage === 'home' && (
         <div 
-          className="fixed w-8 h-8 rounded-full pointer-events-none z-[100] border-2"
+          className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[100] border-2"
           style={{
             transform: `translate(${mousePosition.x - 16}px, ${mousePosition.y - 16}px)`,
             willChange: 'transform',
@@ -198,33 +199,39 @@ export default function Home() {
         ></div>
       )}
       
+      {/* Blobs animés - Réduits sur mobile pour performance */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {isDark ? (
           <>
-            <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-600 rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-blob"></div>
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600 rounded-full mix-blend-screen filter blur-[120px] opacity-15 animate-blob animation-delay-2000"></div>
+            <div className="absolute top-0 left-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-600 rounded-full mix-blend-screen filter blur-[100px] md:blur-[120px] opacity-15 md:opacity-20 animate-blob"></div>
+            <div className="absolute top-0 right-0 w-[350px] md:w-[500px] h-[350px] md:h-[500px] bg-purple-600 rounded-full mix-blend-screen filter blur-[100px] md:blur-[120px] opacity-10 md:opacity-15 animate-blob animation-delay-2000"></div>
           </>
         ) : (
           <>
-            <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-orange-300 rounded-full mix-blend-multiply filter blur-[120px] opacity-20 animate-blob"></div>
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-300 rounded-full mix-blend-multiply filter blur-[120px] opacity-15 animate-blob animation-delay-2000"></div>
+            <div className="absolute top-0 left-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-orange-300 rounded-full mix-blend-multiply filter blur-[100px] md:blur-[120px] opacity-15 md:opacity-20 animate-blob"></div>
+            <div className="absolute top-0 right-0 w-[350px] md:w-[500px] h-[350px] md:h-[500px] bg-rose-300 rounded-full mix-blend-multiply filter blur-[100px] md:blur-[120px] opacity-10 md:opacity-15 animate-blob animation-delay-2000"></div>
           </>
         )}
       </div>
 
+      {/* Bouton toggle thème - Optimisé pour mobile */}
       <button
         onClick={handleToggle}
         aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
-        className={`fixed top-8 right-8 z-50 p-4 rounded-full backdrop-blur-xl border transition-all hover:scale-110 group ${
+        className={`fixed top-6 right-6 md:top-8 md:right-8 z-50 
+          p-3 md:p-4 rounded-full backdrop-blur-xl border 
+          transition-all md:hover:scale-110 active:scale-95
+          touch-manipulation
+          group ${
           isDark 
-            ? 'bg-slate-800/50 border-slate-600/50 hover:bg-slate-700/60' 
-            : 'bg-white/50 border-orange-200/50 hover:bg-white/70'
+            ? 'bg-slate-800/50 border-slate-600/50 md:hover:bg-slate-700/60' 
+            : 'bg-white/50 border-orange-200/50 md:hover:bg-white/70'
         }`}
       >
         {isDark ? (
-          <Sun className={`w-6 h-6 text-yellow-300`} />
+          <Sun className={`w-5 h-5 md:w-6 md:h-6 text-yellow-300`} />
         ) : (
-          <Moon className={`w-6 h-6 text-slate-700`} />
+          <Moon className={`w-5 h-5 md:w-6 md:h-6 text-slate-700`} />
         )}
       </button>
 
@@ -243,8 +250,9 @@ export default function Home() {
               Full Stack Developer
             </span>
             
+            {/* Effet de révélation au survol - Desktop uniquement */}
             <div 
-              className="absolute inset-0 overflow-hidden pointer-events-none"
+              className="hidden md:block absolute inset-0 overflow-hidden pointer-events-none"
               style={{
                 clipPath: `circle(120px at ${relativeMousePosition.x}px ${relativeMousePosition.y}px)`
               }}
@@ -288,7 +296,8 @@ export default function Home() {
             </div>
           </div>
 
-          <nav className="flex flex-col items-center lg:items-start gap-3 lg:gap-4 animate-fade-in-up animation-delay-400">
+          {/* Navigation - Optimisée pour mobile avec zones tactiles élargies */}
+          <nav className="flex flex-col items-center lg:items-start gap-4 lg:gap-4 animate-fade-in-up animation-delay-400">
             {['About', 'Blog', 'Projects', 'Contact'].map((item, index) => (
               <button
                 key={item}
@@ -298,18 +307,21 @@ export default function Home() {
                   if (item === 'Projects') handlePageTransition('projects');
                   if (item === 'Contact') handlePageTransition('contact');
                 }}
-                className={`group relative text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light tracking-wide transition-all duration-500 hover:scale-110 hover:translate-x-4 ${
-                  isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
-                }`}
+                className={`group relative text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light tracking-wide 
+                  transition-all duration-500 
+                  md:hover:scale-110 md:hover:translate-x-4
+                  py-2 px-4 rounded-lg
+                  active:scale-95 touch-manipulation
+                  ${isDark ? 'text-white md:hover:text-blue-300 active:text-blue-300' : 'text-slate-900 md:hover:text-orange-600 active:text-orange-600'}`}
                 style={{ animationDelay: `${600 + index * 100}ms` }}
               >
-                <span className={`absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-500 blur-2xl ${
+                <span className={`absolute inset-0 rounded-lg opacity-0 md:group-hover:opacity-100 transition-all duration-500 blur-2xl ${
                   isDark ? 'bg-blue-500/30' : 'bg-orange-500/30'
                 }`}></span>
                 {item.split('').map((letter, i) => (
                   <span
                     key={i}
-                    className="inline-block relative z-10 transition-all duration-300 ease-out group-hover:scale-125 group-hover:-translate-y-2 group-hover:rotate-6"
+                    className="inline-block relative z-10 transition-all duration-300 ease-out md:group-hover:scale-125 md:group-hover:-translate-y-2 md:group-hover:rotate-6"
                     style={{ 
                       transitionDelay: `${i * 30}ms`,
                       transitionTimingFunction: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
@@ -459,23 +471,31 @@ export default function Home() {
         } animate-fade-in`}>
           <div className="min-h-screen p-6 sm:p-8 lg:p-12">
             <div className="max-w-6xl mx-auto">
+              {/* Navigation - Optimisée pour mobile */}
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mb-12">
                 <button
                   onClick={() => handlePageTransition('home')}
-                  className={`text-xl sm:text-2xl lg:text-3xl font-light transition-all hover:scale-105 hover:translate-x-2 group ${
-                    isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
+                  className={`text-xl sm:text-2xl lg:text-3xl font-light 
+                    transition-all md:hover:scale-105 md:hover:translate-x-2 
+                    active:scale-95 touch-manipulation
+                    py-2 px-4 rounded-lg
+                    group ${
+                    isDark ? 'text-white md:hover:text-blue-300 active:text-blue-300' : 'text-slate-900 md:hover:text-orange-600 active:text-orange-600'
                   }`}
                 >
-                  <span className="inline-block transition-transform group-hover:-translate-x-2">←</span> Retour
+                  <span className="inline-block transition-transform md:group-hover:-translate-x-2">←</span> Retour
                 </button>
                 
                 <button
                   onClick={handleToggle}
                   aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
-                  className={`p-3 sm:p-4 rounded-full transition-all hover:scale-110 ${
+                  className={`p-3 sm:p-4 rounded-full 
+                    transition-all md:hover:scale-110 active:scale-95
+                    touch-manipulation
+                    ${
                     isDark 
-                      ? 'bg-slate-800/50 text-yellow-300 hover:bg-slate-700/50' 
-                      : 'bg-white/50 text-slate-900 hover:bg-orange-100/50'
+                      ? 'bg-slate-800/50 text-yellow-300 md:hover:bg-slate-700/50' 
+                      : 'bg-white/50 text-slate-900 md:hover:bg-orange-100/50'
                   }`}
                 >
                   {isDark ? <Sun size={24} /> : <Moon size={24} />}
@@ -483,8 +503,12 @@ export default function Home() {
 
                 <button
                   onClick={() => handlePageTransition('projects')}
-                  className={`text-xl sm:text-2xl lg:text-3xl font-light transition-all hover:scale-105 hover:-translate-x-2 group ${
-                    isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
+                  className={`text-xl sm:text-2xl lg:text-3xl font-light 
+                    transition-all md:hover:scale-105 md:hover:-translate-x-2 
+                    active:scale-95 touch-manipulation
+                    py-2 px-4 rounded-lg
+                    group ${
+                    isDark ? 'text-white md:hover:text-blue-300 active:text-blue-300' : 'text-slate-900 md:hover:text-orange-600 active:text-orange-600'
                   }`}
                 >
                   Projets <span className="inline-block transition-transform group-hover:translate-x-2">→</span>
@@ -879,6 +903,54 @@ export default function Home() {
                   Télécharger mon CV (PDF)
                 </a>
               </div>
+
+              {/* Section Découvre mon Blog */}
+              <div className={`mt-12 backdrop-blur-2xl p-8 rounded-3xl border-2 overflow-hidden relative ${
+                isDark 
+                  ? 'bg-gradient-to-br from-purple-950/40 to-blue-950/40 border-purple-500/30' 
+                  : 'bg-gradient-to-br from-orange-50/80 to-rose-50/80 border-orange-300/40'
+              } animate-fade-in-up animation-delay-1400`}>
+                {/* Icône décorative */}
+                <div className={`absolute top-4 right-4 opacity-10 ${
+                  isDark ? 'text-purple-300' : 'text-orange-400'
+                }`}>
+                  <BookOpen size={80} />
+                </div>
+
+                <div className="relative z-10">
+                  <div className="flex items-center justify-center gap-3 mb-4">
+                    <BookOpen className={`w-8 h-8 ${
+                      isDark ? 'text-purple-300' : 'text-orange-600'
+                    }`} />
+                    <h2 className={`text-2xl sm:text-3xl font-light ${
+                      isDark ? 'text-white' : 'text-slate-900'
+                    }`}>
+                      Découvre mon blog
+                    </h2>
+                  </div>
+                  
+                  <p className={`mb-6 text-center ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
+                    Retrouve mes articles sur le développement web, mes astuces et retours d&apos;expérience
+                  </p>
+                  
+                  <div className="flex justify-center">
+                    <button 
+                      onClick={() => handlePageTransition('blog')}
+                      className={`inline-flex items-center gap-3 px-8 py-4 rounded-full text-lg font-light 
+                        transition-all md:hover:scale-105 md:hover:gap-4 active:scale-95
+                        touch-manipulation
+                        ${
+                        isDark 
+                          ? 'bg-purple-500/20 text-purple-300 md:hover:bg-purple-500/30 border-2 border-purple-500/30 md:hover:shadow-2xl md:hover:shadow-purple-500/30' 
+                          : 'bg-orange-500/20 text-orange-600 md:hover:bg-orange-500/30 border-2 border-orange-500/30 md:hover:shadow-2xl md:hover:shadow-orange-300/30'
+                      }`}
+                    >
+                      Voir tous les articles
+                      <ArrowRight className="w-5 h-5 transition-transform" />
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -891,23 +963,31 @@ export default function Home() {
         } animate-fade-in`}>
           <div className="min-h-screen p-6 sm:p-8 lg:p-12">
             <div className="max-w-7xl mx-auto">
+              {/* Navigation - Optimisée pour mobile */}
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mb-12">
                 <button
                   onClick={() => handlePageTransition('home')}
-                  className={`text-xl sm:text-2xl lg:text-3xl font-light transition-all hover:scale-105 hover:translate-x-2 group ${
-                    isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
+                  className={`text-xl sm:text-2xl lg:text-3xl font-light 
+                    transition-all md:hover:scale-105 md:hover:translate-x-2 
+                    active:scale-95 touch-manipulation
+                    py-2 px-4 rounded-lg
+                    group ${
+                    isDark ? 'text-white md:hover:text-blue-300 active:text-blue-300' : 'text-slate-900 md:hover:text-orange-600 active:text-orange-600'
                   }`}
                 >
-                  <span className="inline-block transition-transform group-hover:-translate-x-2">←</span> Accueil
+                  <span className="inline-block transition-transform md:group-hover:-translate-x-2">←</span> Accueil
                 </button>
                 
                 <button
                   onClick={handleToggle}
                   aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
-                  className={`p-3 sm:p-4 rounded-full transition-all hover:scale-110 ${
+                  className={`p-3 sm:p-4 rounded-full 
+                    transition-all md:hover:scale-110 active:scale-95
+                    touch-manipulation
+                    ${
                     isDark 
-                      ? 'bg-slate-800/50 text-yellow-300 hover:bg-slate-700/50' 
-                      : 'bg-white/50 text-slate-900 hover:bg-orange-100/50'
+                      ? 'bg-slate-800/50 text-yellow-300 md:hover:bg-slate-700/50' 
+                      : 'bg-white/50 text-slate-900 md:hover:bg-orange-100/50'
                   }`}
                 >
                   {isDark ? <Sun size={24} /> : <Moon size={24} />}
@@ -915,11 +995,15 @@ export default function Home() {
 
                 <button
                   onClick={() => handlePageTransition('about')}
-                  className={`text-xl sm:text-2xl lg:text-3xl font-light transition-all hover:scale-105 hover:-translate-x-2 group ${
-                    isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
+                  className={`text-xl sm:text-2xl lg:text-3xl font-light 
+                    transition-all md:hover:scale-105 md:hover:-translate-x-2 
+                    active:scale-95 touch-manipulation
+                    py-2 px-4 rounded-lg
+                    group ${
+                    isDark ? 'text-white md:hover:text-blue-300 active:text-blue-300' : 'text-slate-900 md:hover:text-orange-600 active:text-orange-600'
                   }`}
                 >
-                  About <span className="inline-block transition-transform group-hover:translate-x-2">→</span>
+                  About <span className="inline-block transition-transform md:group-hover:translate-x-2">→</span>
                 </button>
               </div>
               
@@ -965,15 +1049,21 @@ export default function Home() {
                       <Link
                         href={`/projects/${project.slug.current}`}
                         key={project._id}
-                        className={`backdrop-blur-2xl p-6 rounded-3xl border-2 transition-all duration-500 hover:scale-105 hover:-translate-y-2 group will-change-transform cursor-pointer ${
+                        className={`backdrop-blur-2xl p-6 rounded-3xl border-2 
+                          transition-all duration-500 
+                          md:hover:scale-105 md:hover:-translate-y-2 
+                          active:scale-95
+                          group will-change-transform cursor-pointer 
+                          touch-manipulation
+                          ${
                           isDark 
-                            ? 'bg-slate-800/40 border-purple-500/30 hover:border-purple-400/50 hover:shadow-2xl hover:shadow-purple-500/20' 
-                            : 'bg-white/40 border-orange-200/40 hover:border-orange-300/60 hover:shadow-2xl hover:shadow-orange-300/20'
+                            ? 'bg-slate-800/40 border-purple-500/30 md:hover:border-purple-400/50 md:hover:shadow-2xl md:hover:shadow-purple-500/20' 
+                            : 'bg-white/40 border-orange-200/40 md:hover:border-orange-300/60 md:hover:shadow-2xl md:hover:shadow-orange-300/20'
                         } animate-fade-in-up`}
                         style={{ animationDelay: `${200 + index * 150}ms` }}
                       >
                         {/* Image ou Emoji */}
-                        <div className="w-full h-48 rounded-2xl mb-4 relative overflow-hidden transition-all duration-500 group-hover:scale-105">
+                        <div className="w-full h-48 rounded-2xl mb-4 relative overflow-hidden transition-all duration-500 md:group-hover:scale-105">
                           {project.coverImage ? (
                             <Image
                               src={urlFor(project.coverImage).width(600).height(400).url()}
@@ -999,7 +1089,7 @@ export default function Home() {
                               }}
                             >
                               {project.emoji && (
-                                <span className="text-6xl transition-all duration-500 group-hover:scale-125 group-hover:rotate-6">
+                                <span className="text-6xl transition-all duration-500 md:group-hover:scale-125 md:group-hover:rotate-6">
                                   {project.emoji}
                                 </span>
                               )}
@@ -1076,6 +1166,54 @@ export default function Home() {
                 </>
               )}
 
+              {/* Section Découvre mon Blog */}
+              <div className={`mt-16 backdrop-blur-2xl p-8 rounded-3xl border-2 overflow-hidden relative ${
+                isDark 
+                  ? 'bg-gradient-to-br from-blue-950/40 to-purple-950/40 border-blue-500/30' 
+                  : 'bg-gradient-to-br from-blue-50/80 to-indigo-50/80 border-blue-300/40'
+              } animate-fade-in-up animation-delay-800`}>
+                {/* Icône décorative */}
+                <div className={`absolute top-4 right-4 opacity-10 ${
+                  isDark ? 'text-blue-300' : 'text-blue-400'
+                }`}>
+                  <BookOpen size={80} />
+                </div>
+
+                <div className="relative z-10 text-center">
+                  <div className="flex items-center justify-center gap-3 mb-4">
+                    <BookOpen className={`w-8 h-8 ${
+                      isDark ? 'text-blue-300' : 'text-blue-600'
+                    }`} />
+                    <h2 className={`text-2xl sm:text-3xl font-light ${
+                      isDark ? 'text-white' : 'text-slate-900'
+                    }`}>
+                      Découvre le processus de création
+                    </h2>
+                  </div>
+                  
+                  <p className={`mb-6 max-w-2xl mx-auto ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
+                    Retrouve sur mon blog les coulisses de mes projets, mes choix techniques et retours d&apos;expérience
+                  </p>
+                  
+                  <div className="flex justify-center">
+                    <button 
+                      onClick={() => handlePageTransition('blog')}
+                      className={`inline-flex items-center gap-3 px-8 py-4 rounded-full text-lg font-light 
+                        transition-all md:hover:scale-105 md:hover:gap-4 active:scale-95
+                        touch-manipulation
+                        ${
+                        isDark 
+                          ? 'bg-blue-500/20 text-blue-300 md:hover:bg-blue-500/30 border-2 border-blue-500/30 md:hover:shadow-2xl md:hover:shadow-blue-500/30' 
+                          : 'bg-blue-500/20 text-blue-600 md:hover:bg-blue-500/30 border-2 border-blue-500/30 md:hover:shadow-2xl md:hover:shadow-blue-300/30'
+                      }`}
+                    >
+                      Lire mes articles
+                      <ArrowRight className="w-5 h-5 transition-transform" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               <div className={`mt-16 backdrop-blur-2xl p-8 rounded-3xl border-2 text-center ${
                 isDark 
                   ? 'bg-slate-800/40 border-purple-500/30' 
@@ -1091,10 +1229,13 @@ export default function Home() {
                 </p>
                 <button 
                   onClick={() => handlePageTransition('contact')}
-                  className={`inline-block px-8 py-4 rounded-full text-lg transition-all hover:scale-105 ${
+                  className={`inline-block px-8 py-4 rounded-full text-lg 
+                    transition-all md:hover:scale-105 active:scale-95
+                    touch-manipulation
+                    ${
                     isDark 
-                      ? 'bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 border-2 border-blue-500/30' 
-                      : 'bg-orange-500/20 text-orange-600 hover:bg-orange-500/30 border-2 border-orange-500/30'
+                      ? 'bg-blue-500/20 text-blue-300 md:hover:bg-blue-500/30 border-2 border-blue-500/30' 
+                      : 'bg-orange-500/20 text-orange-600 md:hover:bg-orange-500/30 border-2 border-orange-500/30'
                   }`}
                 >
                   Me contacter
@@ -1112,24 +1253,31 @@ export default function Home() {
         } animate-fade-in`}>
           <div className="min-h-screen p-6 sm:p-8 lg:p-12">
             <div className="max-w-6xl mx-auto">
-              {/* Header */}
+              {/* Header - Optimisé pour mobile */}
               <div className="flex justify-between items-center mb-12">
                 <button
                   onClick={() => handlePageTransition('home')}
-                  className={`text-2xl sm:text-3xl font-light transition-all hover:scale-105 hover:translate-x-2 group ${
-                    isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
+                  className={`text-2xl sm:text-3xl font-light 
+                    transition-all md:hover:scale-105 md:hover:translate-x-2 
+                    active:scale-95 touch-manipulation
+                    py-2 px-4 rounded-lg
+                    group ${
+                    isDark ? 'text-white md:hover:text-blue-300 active:text-blue-300' : 'text-slate-900 md:hover:text-orange-600 active:text-orange-600'
                   }`}
                 >
-                  <span className="inline-block transition-transform group-hover:-translate-x-2">←</span> Accueil
+                  <span className="inline-block transition-transform md:group-hover:-translate-x-2">←</span> Accueil
                 </button>
                 
                 <button
                   onClick={handleToggle}
                   aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
-                  className={`p-4 rounded-full transition-all hover:scale-110 ${
+                  className={`p-3 sm:p-4 rounded-full 
+                    transition-all md:hover:scale-110 active:scale-95
+                    touch-manipulation
+                    ${
                     isDark 
-                      ? 'bg-slate-800/50 text-yellow-300 hover:bg-slate-700/50' 
-                      : 'bg-white/50 text-slate-900 hover:bg-orange-100/50'
+                      ? 'bg-slate-800/50 text-yellow-300 md:hover:bg-slate-700/50' 
+                      : 'bg-white/50 text-slate-900 md:hover:bg-orange-100/50'
                   }`}
                 >
                   {isDark ? <Sun size={24} /> : <Moon size={24} />}
@@ -1297,18 +1445,22 @@ export default function Home() {
                       </div>
                     )}
 
-                    {/* Bouton Submit */}
+                    {/* Bouton Submit - Optimisé pour mobile */}
                     <button
                       type="submit"
                       disabled={formStatus === 'sending'}
-                      className={`w-full px-8 py-4 rounded-xl text-lg font-light transition-all duration-300 flex items-center justify-center gap-2 ${
+                      className={`w-full px-8 py-4 rounded-xl text-lg font-light 
+                        transition-all duration-300 
+                        flex items-center justify-center gap-2
+                        active:scale-95 touch-manipulation
+                        ${
                         formStatus === 'sending'
                           ? isDark
                             ? 'bg-slate-700/50 text-gray-400 cursor-not-allowed'
                             : 'bg-gray-300/50 text-gray-500 cursor-not-allowed'
                           : isDark 
-                            ? 'bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 border-2 border-blue-500/30 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/20' 
-                            : 'bg-orange-500/20 text-orange-600 hover:bg-orange-500/30 border-2 border-orange-500/30 hover:scale-105 hover:shadow-xl hover:shadow-orange-300/20'
+                            ? 'bg-blue-500/20 text-blue-300 md:hover:bg-blue-500/30 border-2 border-blue-500/30 md:hover:scale-105 md:hover:shadow-xl md:hover:shadow-blue-500/20' 
+                            : 'bg-orange-500/20 text-orange-600 md:hover:bg-orange-500/30 border-2 border-orange-500/30 md:hover:scale-105 md:hover:shadow-xl md:hover:shadow-orange-300/20'
                       }`}
                     >
                       {formStatus === 'sending' ? (
@@ -1375,14 +1527,19 @@ export default function Home() {
                         href="https://www.linkedin.com/in/maelbarbe/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
+                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 
+                          transition-all duration-300 
+                          md:hover:scale-105 md:hover:-translate-y-1 
+                          active:scale-95
+                          touch-manipulation
+                          group ${
                           isDark 
-                            ? 'bg-slate-900/50 border-blue-500/30 hover:border-blue-400/50 hover:shadow-xl hover:shadow-blue-500/20' 
-                            : 'bg-white/50 border-blue-400/40 hover:border-blue-500/60 hover:shadow-xl hover:shadow-blue-300/20'
+                            ? 'bg-slate-900/50 border-blue-500/30 md:hover:border-blue-400/50 md:hover:shadow-xl md:hover:shadow-blue-500/20' 
+                            : 'bg-white/50 border-blue-400/40 md:hover:border-blue-500/60 md:hover:shadow-xl md:hover:shadow-blue-300/20'
                         }`}
                       >
                         <Linkedin className={`transition-colors ${
-                          isDark ? 'text-blue-300 group-hover:text-blue-200' : 'text-blue-600 group-hover:text-blue-500'
+                          isDark ? 'text-blue-300 md:group-hover:text-blue-200' : 'text-blue-600 md:group-hover:text-blue-500'
                         }`} size={32} />
                         <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                           LinkedIn
@@ -1394,14 +1551,19 @@ export default function Home() {
                         href="https://github.com/Traxxouu"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
+                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 
+                          transition-all duration-300 
+                          md:hover:scale-105 md:hover:-translate-y-1 
+                          active:scale-95
+                          touch-manipulation
+                          group ${
                           isDark 
-                            ? 'bg-slate-900/50 border-purple-500/30 hover:border-purple-400/50 hover:shadow-xl hover:shadow-purple-500/20' 
-                            : 'bg-white/50 border-purple-400/40 hover:border-purple-500/60 hover:shadow-xl hover:shadow-purple-300/20'
+                            ? 'bg-slate-900/50 border-purple-500/30 md:hover:border-purple-400/50 md:hover:shadow-xl md:hover:shadow-purple-500/20' 
+                            : 'bg-white/50 border-purple-400/40 md:hover:border-purple-500/60 md:hover:shadow-xl md:hover:shadow-purple-300/20'
                         }`}
                       >
                         <Github className={`transition-colors ${
-                          isDark ? 'text-purple-300 group-hover:text-purple-200' : 'text-purple-600 group-hover:text-purple-500'
+                          isDark ? 'text-purple-300 md:group-hover:text-purple-200' : 'text-purple-600 md:group-hover:text-purple-500'
                         }`} size={32} />
                         <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                           GitHub
@@ -1413,14 +1575,19 @@ export default function Home() {
                         href="https://www.instagram.com/maelsanst/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
+                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 
+                          transition-all duration-300 
+                          md:hover:scale-105 md:hover:-translate-y-1 
+                          active:scale-95
+                          touch-manipulation
+                          group ${
                           isDark 
-                            ? 'bg-slate-900/50 border-pink-500/30 hover:border-pink-400/50 hover:shadow-xl hover:shadow-pink-500/20' 
-                            : 'bg-white/50 border-pink-400/40 hover:border-pink-500/60 hover:shadow-xl hover:shadow-pink-300/20'
+                            ? 'bg-slate-900/50 border-pink-500/30 md:hover:border-pink-400/50 md:hover:shadow-xl md:hover:shadow-pink-500/20' 
+                            : 'bg-white/50 border-pink-400/40 md:hover:border-pink-500/60 md:hover:shadow-xl md:hover:shadow-pink-300/20'
                         }`}
                       >
                         <Instagram className={`transition-colors ${
-                          isDark ? 'text-pink-300 group-hover:text-pink-200' : 'text-pink-600 group-hover:text-pink-500'
+                          isDark ? 'text-pink-300 md:group-hover:text-pink-200' : 'text-pink-600 md:group-hover:text-pink-500'
                         }`} size={32} />
                         <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                           Instagram
@@ -1432,14 +1599,19 @@ export default function Home() {
                         href="https://www.twitch.tv/traxxouu"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
+                        className={`flex flex-col items-center gap-3 p-6 rounded-2xl border-2 
+                          transition-all duration-300 
+                          md:hover:scale-105 md:hover:-translate-y-1 
+                          active:scale-95
+                          touch-manipulation
+                          group ${
                           isDark 
-                            ? 'bg-slate-900/50 border-violet-500/30 hover:border-violet-400/50 hover:shadow-xl hover:shadow-violet-500/20' 
-                            : 'bg-white/50 border-violet-400/40 hover:border-violet-500/60 hover:shadow-xl hover:shadow-violet-300/20'
+                            ? 'bg-slate-900/50 border-violet-500/30 md:hover:border-violet-400/50 md:hover:shadow-xl md:hover:shadow-violet-500/20' 
+                            : 'bg-white/50 border-violet-400/40 md:hover:border-violet-500/60 md:hover:shadow-xl md:hover:shadow-violet-300/20'
                         }`}
                       >
                         <SiTwitch className={`transition-colors ${
-                          isDark ? 'text-violet-300 group-hover:text-violet-200' : 'text-violet-600 group-hover:text-violet-500'
+                          isDark ? 'text-violet-300 md:group-hover:text-violet-200' : 'text-violet-600 md:group-hover:text-violet-500'
                         }`} size={32} />
                         <span className={`text-sm font-light ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                           Twitch
@@ -1474,12 +1646,16 @@ export default function Home() {
         } animate-fade-in`}>
           <div className="min-h-screen p-6 sm:p-8 lg:p-12">
             <div className="max-w-7xl mx-auto">
-              {/* Header */}
+              {/* Header - Optimisé pour mobile */}
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mb-12">
                 <button
                   onClick={() => handlePageTransition('home')}
-                  className={`text-xl sm:text-2xl lg:text-3xl font-light transition-all hover:scale-105 hover:translate-x-2 group ${
-                    isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
+                  className={`text-xl sm:text-2xl lg:text-3xl font-light 
+                    transition-all md:hover:scale-105 md:hover:translate-x-2 
+                    active:scale-95 touch-manipulation
+                    py-2 px-4 rounded-lg
+                    group ${
+                    isDark ? 'text-white md:hover:text-blue-300 active:text-blue-300' : 'text-slate-900 md:hover:text-orange-600 active:text-orange-600'
                   }`}
                 >
                   <span className="inline-block transition-transform group-hover:-translate-x-2">←</span> Accueil
@@ -1560,10 +1736,13 @@ export default function Home() {
                         return (
                           <Link 
                             href={`/blog/${featuredPost.slug.current}`}
-                            className={`block backdrop-blur-2xl p-8 lg:p-12 rounded-3xl border-2 transition-all duration-500 hover:scale-[1.02] group ${
+                            className={`block backdrop-blur-2xl p-8 lg:p-12 rounded-3xl border-2 
+                              transition-all duration-500 md:hover:scale-[1.02] active:scale-[0.98]
+                              touch-manipulation
+                              group ${
                               isDark 
-                                ? 'bg-gradient-to-br from-blue-950/60 to-purple-950/60 border-blue-500/40 hover:border-blue-400/60 shadow-2xl shadow-blue-500/20' 
-                                : 'bg-gradient-to-br from-orange-100/80 to-rose-100/80 border-orange-300/50 hover:border-orange-400/70 shadow-2xl shadow-orange-300/30'
+                                ? 'bg-gradient-to-br from-blue-950/60 to-purple-950/60 border-blue-500/40 md:hover:border-blue-400/60 shadow-2xl shadow-blue-500/20' 
+                                : 'bg-gradient-to-br from-orange-100/80 to-rose-100/80 border-orange-300/50 md:hover:border-orange-400/70 shadow-2xl shadow-orange-300/30'
                             }`}
                           >
                             <div className="grid lg:grid-cols-2 gap-8 items-center">
@@ -1573,7 +1752,7 @@ export default function Home() {
                                     src={urlFor(featuredPost.mainImage).width(800).height(600).url()}
                                     alt={featuredPost.title}
                                     fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                    className="object-cover transition-transform duration-700 md:group-hover:scale-110"
                                     sizes="(max-width: 768px) 100vw, 50vw"
                                   />
                                 )}
@@ -1649,10 +1828,15 @@ export default function Home() {
                       <Link
                         key={post._id}
                         href={`/blog/${post.slug.current}`}
-                        className={`backdrop-blur-2xl p-6 rounded-2xl border-2 transition-all duration-500 hover:scale-105 hover:-translate-y-2 group animate-fade-in-up ${
+                        className={`backdrop-blur-2xl p-6 rounded-2xl border-2 
+                          transition-all duration-500 
+                          md:hover:scale-105 md:hover:-translate-y-2 
+                          active:scale-95
+                          touch-manipulation
+                          group animate-fade-in-up ${
                           isDark 
-                            ? 'bg-gradient-to-br from-slate-900/60 to-slate-800/60 border-slate-700/50 hover:border-blue-500/50 shadow-xl hover:shadow-2xl hover:shadow-blue-500/20' 
-                            : 'bg-gradient-to-br from-white/70 to-orange-50/70 border-orange-200/40 hover:border-orange-400/60 shadow-xl hover:shadow-2xl hover:shadow-orange-300/30'
+                            ? 'bg-gradient-to-br from-slate-900/60 to-slate-800/60 border-slate-700/50 md:hover:border-blue-500/50 shadow-xl md:hover:shadow-2xl md:hover:shadow-blue-500/20' 
+                            : 'bg-gradient-to-br from-white/70 to-orange-50/70 border-orange-200/40 md:hover:border-orange-400/60 shadow-xl md:hover:shadow-2xl md:hover:shadow-orange-300/30'
                         }`}
                         style={{ animationDelay: `${index * 100}ms` }}
                       >
@@ -1663,7 +1847,7 @@ export default function Home() {
                               src={urlFor(post.mainImage).width(400).height(300).url()}
                               alt={post.title}
                               fill
-                              className="object-cover transition-transform duration-700 group-hover:scale-110"
+                              className="object-cover transition-transform duration-700 md:group-hover:scale-110"
                               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                             />
                           )}
