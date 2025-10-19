@@ -467,22 +467,9 @@ export default function Home() {
 
       {/* Page About - identique à avant */}
       {currentPage === 'about' && (
-        <div className={`fixed inset-0 z-[150] overflow-auto md:cursor-none ${
+        <div className={`fixed inset-0 z-[150] overflow-auto cursor-crosshair ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
         } animate-fade-in`}>
-          {/* Curseur personnalisé - Desktop uniquement */}
-          <div 
-            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] border-2"
-            style={{
-              transform: `translate(${mousePosition.x - 16}px, ${mousePosition.y - 16}px)`,
-              willChange: 'transform',
-              backgroundColor: isDark ? 'white' : 'black',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.8)',
-              boxShadow: isDark 
-                ? '0 0 25px rgba(255, 255, 255, 0.4), 0 0 50px rgba(255, 255, 255, 0.2)' 
-                : '0 0 25px rgba(0, 0, 0, 0.4), 0 0 50px rgba(0, 0, 0, 0.2)'
-            }}
-          />
 
           <div className="min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
             <div className="max-w-6xl mx-auto">
@@ -973,22 +960,9 @@ export default function Home() {
 
       {/* Page Projects - Avec Sanity */}
       {currentPage === 'projects' && (
-        <div className={`fixed inset-0 z-[150] overflow-auto md:cursor-none ${
+        <div className={`fixed inset-0 z-[150] overflow-auto cursor-crosshair ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
         } animate-fade-in`}>
-          {/* Curseur personnalisé - Desktop uniquement */}
-          <div 
-            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] border-2"
-            style={{
-              transform: `translate(${mousePosition.x - 16}px, ${mousePosition.y - 16}px)`,
-              willChange: 'transform',
-              backgroundColor: isDark ? 'white' : 'black',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.8)',
-              boxShadow: isDark 
-                ? '0 0 25px rgba(255, 255, 255, 0.4), 0 0 50px rgba(255, 255, 255, 0.2)' 
-                : '0 0 25px rgba(0, 0, 0, 0.4), 0 0 50px rgba(0, 0, 0, 0.2)'
-            }}
-          />
 
           <div className="min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
             <div className="max-w-7xl mx-auto">
@@ -1277,22 +1251,9 @@ export default function Home() {
 
       {/* PAGE CONTACT */}
       {currentPage === 'contact' && (
-        <div className={`fixed inset-0 z-[150] overflow-auto md:cursor-none ${
+        <div className={`fixed inset-0 z-[150] overflow-auto cursor-crosshair ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
         } animate-fade-in`}>
-          {/* Curseur personnalisé - Desktop uniquement */}
-          <div 
-            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] border-2"
-            style={{
-              transform: `translate(${mousePosition.x - 16}px, ${mousePosition.y - 16}px)`,
-              willChange: 'transform',
-              backgroundColor: isDark ? 'white' : 'black',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.8)',
-              boxShadow: isDark 
-                ? '0 0 25px rgba(255, 255, 255, 0.4), 0 0 50px rgba(255, 255, 255, 0.2)' 
-                : '0 0 25px rgba(0, 0, 0, 0.4), 0 0 50px rgba(0, 0, 0, 0.2)'
-            }}
-          />
 
           <div className="min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
             <div className="max-w-6xl mx-auto">
@@ -1684,22 +1645,9 @@ export default function Home() {
 
       {/* PAGE BLOG */}
       {currentPage === 'blog' && (
-        <div className={`fixed inset-0 z-[150] overflow-auto md:cursor-none ${
+        <div className={`fixed inset-0 z-[150] overflow-auto cursor-crosshair ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
         } animate-fade-in`}>
-          {/* Curseur personnalisé - Desktop uniquement */}
-          <div 
-            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] border-2"
-            style={{
-              transform: `translate(${mousePosition.x - 16}px, ${mousePosition.y - 16}px)`,
-              willChange: 'transform',
-              backgroundColor: isDark ? 'white' : 'black',
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.8)',
-              boxShadow: isDark 
-                ? '0 0 25px rgba(255, 255, 255, 0.4), 0 0 50px rgba(255, 255, 255, 0.2)' 
-                : '0 0 25px rgba(0, 0, 0, 0.4), 0 0 50px rgba(0, 0, 0, 0.2)'
-            }}
-          />
 
           <div className="min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
             <div className="max-w-7xl mx-auto">
