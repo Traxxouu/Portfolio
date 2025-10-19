@@ -235,7 +235,8 @@ export default function Home() {
         )}
       </button>
 
-      <div className="relative h-full flex flex-col items-center justify-center px-6 sm:px-8 lg:px-12">
+      {/* Conteneur principal avec padding vertical pour éviter le contenu coupé */}
+      <div className="relative min-h-screen flex flex-col items-center justify-center px-6 sm:px-8 lg:px-12 py-20 sm:py-24 lg:py-28">
         
         <div ref={titleRef} className="text-center mb-8 lg:mb-12 animate-fade-in-up relative">
           <h1 className="font-serif leading-[0.8] tracking-tight relative">
@@ -469,7 +470,7 @@ export default function Home() {
         <div className={`fixed inset-0 z-[150] overflow-auto ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
         } animate-fade-in`}>
-          <div className="min-h-screen p-6 sm:p-8 lg:p-12">
+          <div className="min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
             <div className="max-w-6xl mx-auto">
               {/* Navigation - Optimisée pour mobile */}
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mb-12">
@@ -961,7 +962,7 @@ export default function Home() {
         <div className={`fixed inset-0 z-[150] overflow-auto ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
         } animate-fade-in`}>
-          <div className="min-h-screen p-6 sm:p-8 lg:p-12">
+          <div className="min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
             <div className="max-w-7xl mx-auto">
               {/* Navigation - Optimisée pour mobile */}
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mb-12">
@@ -1251,7 +1252,7 @@ export default function Home() {
         <div className={`fixed inset-0 z-[150] overflow-auto ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
         } animate-fade-in`}>
-          <div className="min-h-screen p-6 sm:p-8 lg:p-12">
+          <div className="min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
             <div className="max-w-6xl mx-auto">
               {/* Header - Optimisé pour mobile */}
               <div className="flex justify-between items-center mb-12">
@@ -1644,7 +1645,7 @@ export default function Home() {
         <div className={`fixed inset-0 z-[150] overflow-auto ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
         } animate-fade-in`}>
-          <div className="min-h-screen p-6 sm:p-8 lg:p-12">
+          <div className="min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
             <div className="max-w-7xl mx-auto">
               {/* Header - Optimisé pour mobile */}
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mb-12">
