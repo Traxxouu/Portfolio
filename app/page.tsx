@@ -39,6 +39,10 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const titleRef = useRef<HTMLDivElement>(null);
   
+  // États pour la notification de projet featured
+  const [notificationExpanded, setNotificationExpanded] = useState(true);
+  const [notificationVisible, setNotificationVisible] = useState(false);
+  
   // États pour le formulaire de contact
   const [formData, setFormData] = useState({ 
     firstName: '', 
@@ -98,7 +102,7 @@ export default function Home() {
     };
   }, []);
 
-  // Charger les projets depuis Sanity
+  // Charger les projets depuis Sanity (toujours pour la notification)
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -117,17 +121,35 @@ export default function Home() {
         setBlogPosts(data);
       } catch (error) {
         console.error('Erreur lors du chargement des articles de blog:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
-    if (currentPage === 'projects') {
+    // Charger les projets au démarrage (pour la notification sur home)
+    if (currentPage === 'home' || currentPage === 'projects') {
       fetchProjects();
     }
     
     if (currentPage === 'blog') {
       fetchBlogPosts();
+    }
+  }, [currentPage]);
+
+  // Gestion de l'animation de la notification - Affiche au retour sur home
+  useEffect(() => {
+    if (currentPage === 'home') {
+      // Affiche la notification dès le retour sur home
+      setNotificationVisible(true);
+      setNotificationExpanded(true);
+      
+      // Après 5 secondes, réduit la notification
+      const timer = setTimeout(() => {
+        setNotificationExpanded(false);
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    } else {
+      // Cache la notification sur les autres pages
+      setNotificationVisible(false);
     }
   }, [currentPage]);
 
@@ -181,7 +203,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`fixed inset-0 overflow-hidden ${isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'} transition-all duration-1000 ease-in-out ${currentPage === 'home' ? 'md:cursor-none' : ''}`}>
+    <div className={`fixed inset-0 overflow-y-auto overflow-x-hidden ${isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'} transition-all duration-1000 ease-in-out ${currentPage === 'home' ? 'md:cursor-none' : ''}`}>
       
       {/* Curseur personnalisé - Desktop uniquement */}
       {currentPage === 'home' && (
@@ -235,70 +257,117 @@ export default function Home() {
         )}
       </button>
 
-      {/* Notification Projet Featured - Desktop uniquement (lg:) */}
-      {!loading && projects.length > 0 && projects.find(p => p.featured) && (
-        <div className={`hidden lg:block fixed top-6 left-6 z-40 max-w-sm animate-fade-in-up`}>
+      {/* Notification Projet Featured - Desktop uniquement (lg:) avec animation */}
+      {notificationVisible && !loading && projects.length > 0 && projects.find(p => p.featured) && (
+        <div className={`hidden lg:block fixed top-6 left-6 z-40 transition-all duration-500 ${
+          notificationExpanded ? 'max-w-sm' : 'max-w-[80px]'
+        }`}>
           {(() => {
             const featuredProject = projects.find(p => p.featured)!;
             return (
               <Link
                 href={`/projects/${featuredProject.slug.current}`}
-                className={`block backdrop-blur-xl p-4 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
+                onClick={(e) => {
+                  // Si réduit, étendre au lieu de naviguer
+                  if (!notificationExpanded) {
+                    e.preventDefault();
+                    setNotificationExpanded(true);
+                  }
+                }}
+                className={`block backdrop-blur-xl rounded-2xl border-2 transition-all duration-500 hover:scale-105 hover:-translate-y-1 group overflow-hidden ${
+                  notificationExpanded ? 'p-4' : 'p-3'
+                } ${
                   isDark 
                     ? 'bg-slate-800/90 border-purple-500/50 hover:border-purple-400/70 shadow-2xl shadow-purple-500/20' 
                     : 'bg-white/90 border-orange-300/50 hover:border-orange-400/70 shadow-2xl shadow-orange-300/30'
                 }`}
               >
-                {/* Badge "Nouveau projet" */}
-                <div className="flex items-center gap-2 mb-2">
-                  <div className={`px-2 py-1 rounded-full text-xs font-light ${
-                    isDark ? 'bg-purple-500/20 text-purple-300' : 'bg-orange-500/20 text-orange-600'
-                  }`}>
-                    ✨ Nouveau projet
-                  </div>
-                </div>
-
-                {/* Contenu */}
-                <div className="flex gap-3">
-                  {/* Image ou Emoji */}
-                  {featuredProject.coverImage ? (
-                    <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
-                      <Image
-                        src={urlFor(featuredProject.coverImage).width(120).height(120).url()}
-                        alt={featuredProject.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        sizes="64px"
-                      />
+                {notificationExpanded ? (
+                  <>
+                    {/* Badge "Nouveau projet" */}
+                    <div className="flex items-center gap-2 mb-2 animate-fade-in">
+                      <div className={`px-2 py-1 rounded-full text-xs font-light ${
+                        isDark ? 'bg-purple-500/20 text-purple-300' : 'bg-orange-500/20 text-orange-600'
+                      }`}>
+                        ✨ Nouveau projet
+                      </div>
                     </div>
-                  ) : featuredProject.emoji && (
-                    <div className="w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-purple-500/10 to-blue-500/10">
-                      <span className="text-3xl">{featuredProject.emoji}</span>
+
+                    {/* Contenu étendu */}
+                    <div className="flex gap-3 animate-fade-in">
+                      {/* Image ou Emoji */}
+                      {featuredProject.coverImage ? (
+                        <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+                          <Image
+                            src={urlFor(featuredProject.coverImage).width(120).height(120).url()}
+                            alt={featuredProject.title}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            sizes="64px"
+                          />
+                        </div>
+                      ) : featuredProject.emoji && (
+                        <div className="w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-purple-500/10 to-blue-500/10">
+                          <span className="text-3xl">{featuredProject.emoji}</span>
+                        </div>
+                      )}
+
+                      {/* Texte */}
+                      <div className="flex-1 min-w-0">
+                        <h3 className={`font-light text-sm mb-1 truncate ${
+                          isDark ? 'text-white' : 'text-slate-900'
+                        }`}>
+                          {featuredProject.title}
+                        </h3>
+                        <p className={`text-xs line-clamp-2 ${
+                          isDark ? 'text-gray-400' : 'text-slate-600'
+                        }`}>
+                          {featuredProject.description}
+                        </p>
+                      </div>
                     </div>
-                  )}
 
-                  {/* Texte */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className={`font-light text-sm mb-1 truncate ${
-                      isDark ? 'text-white' : 'text-slate-900'
+                    {/* Indicateur "Voir plus" */}
+                    <div className={`mt-2 text-xs flex items-center gap-1 transition-all duration-300 group-hover:gap-2 animate-fade-in ${
+                      isDark ? 'text-purple-300' : 'text-orange-600'
                     }`}>
-                      {featuredProject.title}
-                    </h3>
-                    <p className={`text-xs line-clamp-2 ${
-                      isDark ? 'text-gray-400' : 'text-slate-600'
-                    }`}>
-                      {featuredProject.description}
-                    </p>
+                      Voir le projet
+                      <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </>
+                ) : (
+                  // Version réduite - Bouton icône uniquement
+                  <div className="flex items-center justify-center relative group">
+                    {featuredProject.coverImage ? (
+                      <div className="relative w-14 h-14 rounded-xl overflow-hidden">
+                        <Image
+                          src={urlFor(featuredProject.coverImage).width(80).height(80).url()}
+                          alt={featuredProject.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-110"
+                          sizes="56px"
+                        />
+                      </div>
+                    ) : featuredProject.emoji ? (
+                      <div className="w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br from-purple-500/10 to-blue-500/10">
+                        <span className="text-2xl">{featuredProject.emoji}</span>
+                      </div>
+                    ) : (
+                      <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
+                        isDark ? 'bg-purple-500/20' : 'bg-orange-500/20'
+                      }`}>
+                        <ArrowRight className={isDark ? 'text-purple-300' : 'text-orange-600'} size={24} />
+                      </div>
+                    )}
+                    
+                    {/* Badge minimal */}
+                    <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 ${
+                      isDark 
+                        ? 'bg-purple-500 border-slate-800' 
+                        : 'bg-orange-500 border-white'
+                    } animate-pulse`} />
                   </div>
-                </div>
-
-                {/* Indicateur "Voir plus" */}
-                <div className={`mt-2 text-xs flex items-center gap-1 transition-all duration-300 group-hover:gap-2 ${
-                  isDark ? 'text-purple-300' : 'text-orange-600'
-                }`}>
-                  Voir le projet
-                  <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
-                </div>
+                )}
               </Link>
             );
           })()}
@@ -306,7 +375,7 @@ export default function Home() {
       )}
 
       {/* Conteneur principal avec padding vertical pour éviter le contenu coupé */}
-      <div className="relative min-h-screen flex flex-col items-center justify-center px-6 sm:px-8 lg:px-12 py-20 sm:py-24 lg:py-28">
+      <div className="relative min-h-screen flex flex-col items-center justify-center px-6 sm:px-8 lg:px-12 py-20 sm:py-24 lg:py-28 pb-32">
         
         <div ref={titleRef} className="text-center mb-8 lg:mb-12 animate-fade-in-up relative">
           <h1 className="font-serif leading-[0.8] tracking-tight relative">
