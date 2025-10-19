@@ -203,7 +203,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`fixed inset-0 overflow-y-auto overflow-x-hidden ${isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'} transition-all duration-1000 ease-in-out ${currentPage === 'home' ? 'md:cursor-none' : ''}`}>
+    <div className={`fixed inset-0 ${currentPage === 'home' ? 'overflow-y-auto lg:overflow-hidden' : 'overflow-y-auto'} overflow-x-hidden ${isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'} transition-all duration-1000 ease-in-out ${currentPage === 'home' ? 'md:cursor-none' : ''}`}>
       
       {/* Curseur personnalisé - Desktop uniquement */}
       {currentPage === 'home' && (
@@ -374,17 +374,17 @@ export default function Home() {
         </div>
       )}
 
-      {/* Conteneur principal avec padding vertical pour éviter le contenu coupé */}
-      <div className="relative min-h-screen flex flex-col items-center justify-center px-6 sm:px-8 lg:px-12 py-20 sm:py-24 lg:py-28 pb-32">
+      {/* Conteneur principal - Desktop sans scroll, Mobile avec scroll */}
+      <div className="relative min-h-screen flex flex-col items-center justify-center px-6 sm:px-8 lg:px-12 py-20 sm:py-24 lg:py-16 pb-32 lg:pb-16">
         
-        <div ref={titleRef} className="text-center mb-8 lg:mb-12 animate-fade-in-up relative">
+        <div ref={titleRef} className="text-center mb-6 sm:mb-8 lg:mb-8 animate-fade-in-up relative">
           <h1 className="font-serif leading-[0.8] tracking-tight relative">
-            <span className={`block text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[12rem] 2xl:text-[14rem] font-light ${
+            <span className={`block text-6xl sm:text-7xl md:text-8xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-light ${
               isDark ? 'text-white' : 'text-slate-900'
             }`}>
               MAËL BARBE
             </span>
-            <span className={`block text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-light mt-2 lg:mt-4 ${
+            <span className={`block text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-light mt-2 lg:mt-3 ${
               isDark ? 'text-blue-300' : 'text-orange-600'
             }`}>
               Full Stack Developer
@@ -397,12 +397,12 @@ export default function Home() {
                 clipPath: `circle(120px at ${relativeMousePosition.x}px ${relativeMousePosition.y}px)`
               }}
             >
-              <span className={`block text-6xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[12rem] 2xl:text-[14rem] font-light ${
+              <span className={`block text-6xl sm:text-7xl md:text-8xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-light ${
                 isDark ? 'text-slate-900' : 'text-white'
               }`}>
                 MAËL BARBE
               </span>
-              <span className={`block text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-light mt-2 lg:mt-4 ${
+              <span className={`block text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-light mt-2 lg:mt-3 ${
                 isDark ? 'text-orange-600' : 'text-blue-300'
               }`}>
                 Full Stack Developer
@@ -411,7 +411,7 @@ export default function Home() {
           </h1>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16 xl:gap-24">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-6 sm:gap-8 lg:gap-12 xl:gap-16">
           
           <div className="animate-fade-in-scale animation-delay-200">
             <div className={`relative group backdrop-blur-2xl p-3 rounded-[2.5rem] border-2 transition-all hover:scale-105 ${
@@ -419,12 +419,12 @@ export default function Home() {
                 ? 'bg-slate-800/40 border-purple-500/30 shadow-2xl shadow-purple-500/20' 
                 : 'bg-white/40 border-orange-200/40 shadow-2xl shadow-orange-300/30'
             }`}>
-              <div className="relative w-48 h-48 sm:w-56 sm:h-56 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-[2rem] overflow-hidden">
+              <div className="relative w-48 h-48 sm:w-56 sm:h-56 lg:w-56 lg:h-56 xl:w-64 xl:h-64 rounded-[2rem] overflow-hidden">
                 <Image
                   src={isDark ? "/profile-dark.jpg" : "/profile-light.jpg"}
                   alt="Maël Barbe"
                   fill
-                  sizes="(max-width: 640px) 192px, (max-width: 1024px) 224px, (max-width: 1280px) 288px, 320px"
+                  sizes="(max-width: 640px) 192px, (max-width: 1024px) 224px, (max-width: 1280px) 256px, 256px"
                   priority
                   quality={85}
                   className="object-cover"
@@ -437,7 +437,7 @@ export default function Home() {
           </div>
 
           {/* Navigation - Optimisée pour mobile avec zones tactiles élargies */}
-          <nav className="flex flex-col items-center lg:items-start gap-4 lg:gap-4 animate-fade-in-up animation-delay-400">
+          <nav className="flex flex-col items-center lg:items-start gap-3 sm:gap-4 lg:gap-3 animate-fade-in-up animation-delay-400">
             {['About', 'Blog', 'Projects', 'Contact'].map((item, index) => (
               <button
                 key={item}
@@ -447,7 +447,7 @@ export default function Home() {
                   if (item === 'Projects') handlePageTransition('projects');
                   if (item === 'Contact') handlePageTransition('contact');
                 }}
-                className={`group relative text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light tracking-wide 
+                className={`group relative text-3xl sm:text-4xl lg:text-4xl xl:text-5xl font-light tracking-wide 
                   transition-all duration-500 
                   md:hover:scale-110 md:hover:translate-x-4
                   py-2 px-4 rounded-lg
@@ -473,7 +473,7 @@ export default function Home() {
               </button>
             ))}
 
-            <div className="flex gap-4 mt-6 animate-fade-in-up animation-delay-1000">
+            <div className="flex gap-3 sm:gap-4 mt-4 sm:mt-6 animate-fade-in-up animation-delay-1000">
               <a
                 href="https://github.com/Traxxouu"
                 target="_blank"
