@@ -235,6 +235,76 @@ export default function Home() {
         )}
       </button>
 
+      {/* Notification Projet Featured - Desktop uniquement (lg:) */}
+      {!loading && projects.length > 0 && projects.find(p => p.featured) && (
+        <div className={`hidden lg:block fixed top-6 left-6 z-40 max-w-sm animate-fade-in-up`}>
+          {(() => {
+            const featuredProject = projects.find(p => p.featured)!;
+            return (
+              <Link
+                href={`/projects/${featuredProject.slug.current}`}
+                className={`block backdrop-blur-xl p-4 rounded-2xl border-2 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group ${
+                  isDark 
+                    ? 'bg-slate-800/90 border-purple-500/50 hover:border-purple-400/70 shadow-2xl shadow-purple-500/20' 
+                    : 'bg-white/90 border-orange-300/50 hover:border-orange-400/70 shadow-2xl shadow-orange-300/30'
+                }`}
+              >
+                {/* Badge "Nouveau projet" */}
+                <div className="flex items-center gap-2 mb-2">
+                  <div className={`px-2 py-1 rounded-full text-xs font-light ${
+                    isDark ? 'bg-purple-500/20 text-purple-300' : 'bg-orange-500/20 text-orange-600'
+                  }`}>
+                    ✨ Nouveau projet
+                  </div>
+                </div>
+
+                {/* Contenu */}
+                <div className="flex gap-3">
+                  {/* Image ou Emoji */}
+                  {featuredProject.coverImage ? (
+                    <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+                      <Image
+                        src={urlFor(featuredProject.coverImage).width(120).height(120).url()}
+                        alt={featuredProject.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        sizes="64px"
+                      />
+                    </div>
+                  ) : featuredProject.emoji && (
+                    <div className="w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-purple-500/10 to-blue-500/10">
+                      <span className="text-3xl">{featuredProject.emoji}</span>
+                    </div>
+                  )}
+
+                  {/* Texte */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className={`font-light text-sm mb-1 truncate ${
+                      isDark ? 'text-white' : 'text-slate-900'
+                    }`}>
+                      {featuredProject.title}
+                    </h3>
+                    <p className={`text-xs line-clamp-2 ${
+                      isDark ? 'text-gray-400' : 'text-slate-600'
+                    }`}>
+                      {featuredProject.description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Indicateur "Voir plus" */}
+                <div className={`mt-2 text-xs flex items-center gap-1 transition-all duration-300 group-hover:gap-2 ${
+                  isDark ? 'text-purple-300' : 'text-orange-600'
+                }`}>
+                  Voir le projet
+                  <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
+                </div>
+              </Link>
+            );
+          })()}
+        </div>
+      )}
+
       {/* Conteneur principal avec padding vertical pour éviter le contenu coupé */}
       <div className="relative min-h-screen flex flex-col items-center justify-center px-6 sm:px-8 lg:px-12 py-20 sm:py-24 lg:py-28">
         
