@@ -467,9 +467,19 @@ export default function Home() {
 
       {/* Page About - identique à avant */}
       {currentPage === 'about' && (
-        <div className={`fixed inset-0 z-[150] overflow-auto ${
+        <div className={`fixed inset-0 z-[150] overflow-auto md:cursor-none ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
         } animate-fade-in`}>
+          {/* Curseur personnalisé - Desktop uniquement */}
+          <div 
+            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] mix-blend-difference bg-white transition-transform duration-100 ease-out"
+            style={{
+              left: `${mousePosition.x}px`,
+              top: `${mousePosition.y}px`,
+              transform: 'translate(-50%, -50%)'
+            }}
+          />
+
           <div className="min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
             <div className="max-w-6xl mx-auto">
               {/* Navigation - Optimisée pour mobile */}
@@ -959,9 +969,19 @@ export default function Home() {
 
       {/* Page Projects - Avec Sanity */}
       {currentPage === 'projects' && (
-        <div className={`fixed inset-0 z-[150] overflow-auto ${
+        <div className={`fixed inset-0 z-[150] overflow-auto md:cursor-none ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
         } animate-fade-in`}>
+          {/* Curseur personnalisé - Desktop uniquement */}
+          <div 
+            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] mix-blend-difference bg-white transition-transform duration-100 ease-out"
+            style={{
+              left: `${mousePosition.x}px`,
+              top: `${mousePosition.y}px`,
+              transform: 'translate(-50%, -50%)'
+            }}
+          />
+
           <div className="min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
             <div className="max-w-7xl mx-auto">
               {/* Navigation - Optimisée pour mobile */}
@@ -1249,9 +1269,19 @@ export default function Home() {
 
       {/* PAGE CONTACT */}
       {currentPage === 'contact' && (
-        <div className={`fixed inset-0 z-[150] overflow-auto ${
+        <div className={`fixed inset-0 z-[150] overflow-auto md:cursor-none ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
         } animate-fade-in`}>
+          {/* Curseur personnalisé - Desktop uniquement */}
+          <div 
+            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] mix-blend-difference bg-white transition-transform duration-100 ease-out"
+            style={{
+              left: `${mousePosition.x}px`,
+              top: `${mousePosition.y}px`,
+              transform: 'translate(-50%, -50%)'
+            }}
+          />
+
           <div className="min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
             <div className="max-w-6xl mx-auto">
               {/* Header - Optimisé pour mobile */}
@@ -1642,9 +1672,19 @@ export default function Home() {
 
       {/* PAGE BLOG */}
       {currentPage === 'blog' && (
-        <div className={`fixed inset-0 z-[150] overflow-auto ${
+        <div className={`fixed inset-0 z-[150] overflow-auto md:cursor-none ${
           isDark ? 'bg-slate-950' : 'bg-[#ece7c1]'
         } animate-fade-in`}>
+          {/* Curseur personnalisé - Desktop uniquement */}
+          <div 
+            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] mix-blend-difference bg-white transition-transform duration-100 ease-out"
+            style={{
+              left: `${mousePosition.x}px`,
+              top: `${mousePosition.y}px`,
+              transform: 'translate(-50%, -50%)'
+            }}
+          />
+
           <div className="min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
             <div className="max-w-7xl mx-auto">
               {/* Header - Optimisé pour mobile */}
