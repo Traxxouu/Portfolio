@@ -472,11 +472,15 @@ export default function Home() {
         } animate-fade-in`}>
           {/* Curseur personnalisé - Desktop uniquement */}
           <div 
-            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] mix-blend-difference bg-white transition-transform duration-100 ease-out"
+            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] border-2"
             style={{
-              left: `${mousePosition.x}px`,
-              top: `${mousePosition.y}px`,
-              transform: 'translate(-50%, -50%)'
+              transform: `translate(${mousePosition.x - 16}px, ${mousePosition.y - 16}px)`,
+              willChange: 'transform',
+              backgroundColor: isDark ? 'white' : 'black',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.8)',
+              boxShadow: isDark 
+                ? '0 0 25px rgba(255, 255, 255, 0.4), 0 0 50px rgba(255, 255, 255, 0.2)' 
+                : '0 0 25px rgba(0, 0, 0, 0.4), 0 0 50px rgba(0, 0, 0, 0.2)'
             }}
           />
 
@@ -974,11 +978,15 @@ export default function Home() {
         } animate-fade-in`}>
           {/* Curseur personnalisé - Desktop uniquement */}
           <div 
-            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] mix-blend-difference bg-white transition-transform duration-100 ease-out"
+            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] border-2"
             style={{
-              left: `${mousePosition.x}px`,
-              top: `${mousePosition.y}px`,
-              transform: 'translate(-50%, -50%)'
+              transform: `translate(${mousePosition.x - 16}px, ${mousePosition.y - 16}px)`,
+              willChange: 'transform',
+              backgroundColor: isDark ? 'white' : 'black',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.8)',
+              boxShadow: isDark 
+                ? '0 0 25px rgba(255, 255, 255, 0.4), 0 0 50px rgba(255, 255, 255, 0.2)' 
+                : '0 0 25px rgba(0, 0, 0, 0.4), 0 0 50px rgba(0, 0, 0, 0.2)'
             }}
           />
 
@@ -1274,11 +1282,15 @@ export default function Home() {
         } animate-fade-in`}>
           {/* Curseur personnalisé - Desktop uniquement */}
           <div 
-            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] mix-blend-difference bg-white transition-transform duration-100 ease-out"
+            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] border-2"
             style={{
-              left: `${mousePosition.x}px`,
-              top: `${mousePosition.y}px`,
-              transform: 'translate(-50%, -50%)'
+              transform: `translate(${mousePosition.x - 16}px, ${mousePosition.y - 16}px)`,
+              willChange: 'transform',
+              backgroundColor: isDark ? 'white' : 'black',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.8)',
+              boxShadow: isDark 
+                ? '0 0 25px rgba(255, 255, 255, 0.4), 0 0 50px rgba(255, 255, 255, 0.2)' 
+                : '0 0 25px rgba(0, 0, 0, 0.4), 0 0 50px rgba(0, 0, 0, 0.2)'
             }}
           />
 
@@ -1677,11 +1689,15 @@ export default function Home() {
         } animate-fade-in`}>
           {/* Curseur personnalisé - Desktop uniquement */}
           <div 
-            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] mix-blend-difference bg-white transition-transform duration-100 ease-out"
+            className="hidden md:block fixed w-8 h-8 rounded-full pointer-events-none z-[200] border-2"
             style={{
-              left: `${mousePosition.x}px`,
-              top: `${mousePosition.y}px`,
-              transform: 'translate(-50%, -50%)'
+              transform: `translate(${mousePosition.x - 16}px, ${mousePosition.y - 16}px)`,
+              willChange: 'transform',
+              backgroundColor: isDark ? 'white' : 'black',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.8)',
+              boxShadow: isDark 
+                ? '0 0 25px rgba(255, 255, 255, 0.4), 0 0 50px rgba(255, 255, 255, 0.2)' 
+                : '0 0 25px rgba(0, 0, 0, 0.4), 0 0 50px rgba(0, 0, 0, 0.2)'
             }}
           />
 
