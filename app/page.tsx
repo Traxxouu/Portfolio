@@ -54,6 +54,13 @@ export default function Home() {
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [formMessage, setFormMessage] = useState('');
 
+  // Détection du hash dans l'URL pour naviguer vers la bonne page
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash === 'projects' || hash === 'about' || hash === 'blog' || hash === 'contact') {
+      setCurrentPage(hash as 'home' | 'about' | 'projects' | 'contact' | 'blog');
+    }
+  }, []);
 
   useEffect(() => {
     if (!manualToggle) {

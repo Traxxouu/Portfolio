@@ -249,13 +249,13 @@ export default function ProjectPage() {
         <div className="max-w-5xl mx-auto px-6 py-8">
           <div className="flex justify-between items-center">
             <button
-              onClick={() => router.back()}
+              onClick={() => router.push('/#projects')}
               className={`flex items-center gap-2 text-lg transition-all hover:scale-105 ${
                 isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
               }`}
             >
               <ArrowLeft className="w-5 h-5" />
-              Retour
+              Retour aux projets
             </button>
             
             <button
