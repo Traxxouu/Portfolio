@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Maël Barbe - Développeur Web",
-  description: "Portfolio de Maël Barbe, développeur web passionné. Découvrez mes projets, compétences et expériences en développement web moderne.",
+  description: "Portfolio de Maël Barbe — développeur web Full Stack (React, Next.js, TypeScript). Découvrez mes projets, compétences et prestations : sites web, applications et UI modernes.",
   keywords: ["Maël Barbe", "Développeur Web", "Portfolio", "React", "Next.js", "TypeScript", "JavaScript"],
   authors: [{ name: "Maël Barbe" }],
   creator: "Maël Barbe",
@@ -27,13 +27,13 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: "https://maelbarbe.vercel.app",
     title: "Maël Barbe - Développeur Web",
-    description: "Portfolio de Maël Barbe, développeur web passionné",
+  description: "Portfolio de Maël Barbe — développeur web Full Stack (React, Next.js, TypeScript). Découvrez mes projets, compétences et prestations : sites web, applications et UI modernes.",
     siteName: "Maël Barbe Portfolio",
   },
   twitter: {
     card: "summary_large_image",
     title: "Maël Barbe - Développeur Web",
-    description: "Portfolio de Maël Barbe, développeur web passionné",
+  description: "Portfolio de Maël Barbe — développeur web Full Stack (React, Next.js, TypeScript). Découvrez mes projets, compétences et prestations : sites web, applications et UI modernes.",
   },
   robots: {
     index: true,
@@ -48,6 +48,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
+      <head>
+        {/* Meta description explicite pour le référencement - utilise la valeur définie dans `metadata` */}
+  <meta name="description" content={metadata.description ?? ""} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

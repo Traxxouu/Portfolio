@@ -829,11 +829,80 @@ export default function Home() {
                 </div>
               </div>
 
+              {/* Section YourWeb */}
+              <div className={`backdrop-blur-2xl p-8 sm:p-10 lg:p-12 rounded-3xl border-2 mb-12 relative overflow-hidden ${
+                isDark 
+                  ? 'bg-gradient-to-br from-blue-950/40 to-slate-900/40 border-blue-500/30' 
+                  : 'bg-gradient-to-br from-blue-50/80 to-sky-50/80 border-blue-300/40'
+              } animate-fade-in-up animation-delay-600`}>
+                
+                <div className="absolute top-4 right-4 sm:top-6 sm:right-6 opacity-10">
+                  <Image 
+                    src={isDark ? "/logoyourwebWhite.svg" : "/logoyourweb.svg"}
+                    alt="YourWeb Logo" 
+                    width={120} 
+                    height={120} 
+                    className="w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32"
+                  />
+                </div>
+
+                <div className="relative z-10">
+                  <h2 className={`text-3xl sm:text-4xl font-light mb-8 flex items-center gap-4 ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>
+                    <Image 
+                      src={isDark ? "/logoyourwebWhite.svg" : "/logoyourweb.svg"}
+                      alt="YourWeb Logo" 
+                      width={50} 
+                      height={50} 
+                      className="w-10 h-10 sm:w-12 sm:h-12"
+                    />
+                    Expériences Professionnelles
+                  </h2>
+                  
+                  <div className={`space-y-6 p-6 sm:p-8 rounded-2xl mb-8 ${
+                    isDark 
+                      ? 'bg-slate-900/30 border border-blue-500/20' 
+                      : 'bg-white/50 border border-blue-300/30'
+                  }`}>
+                    <div>
+                      <h3 className={`text-2xl sm:text-3xl font-normal mb-2 ${
+                        isDark ? 'text-blue-400' : 'text-blue-600'
+                      }`}>
+                        Fondateur & Développeur Web • <a href="https://yourweb.fr" target="_blank" rel="noopener noreferrer" className="hover:underline inline-flex items-center gap-1">YourWeb <ExternalLink className="w-4 h-4" /></a>
+                      </h3>
+                      <p className={`text-sm sm:text-base mb-4 font-medium ${
+                        isDark ? 'text-blue-300/80' : 'text-blue-600/80'
+                      }`}>
+                        📍 Novembre 2025 - Présent • SIREN: 993780485
+                      </p>
+                      <ul className={`space-y-4 text-base sm:text-lg ${
+                        isDark ? 'text-gray-300' : 'text-slate-800'
+                      }`}>
+                        <li className="flex items-start gap-3">
+                          <span className={`text-xl ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>▸</span>
+                          <span>Conception de <span className="font-semibold">sites vitrines et e-commerce</span> pour clients locaux (prospection B2B)</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className={`text-xl ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>▸</span>
+                          <span>Refonte complète de sites existants avec <span className="font-semibold">focus UX/UI</span></span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className={`text-xl ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>▸</span>
+                          <span>Intégration <span className="font-semibold">Stripe</span>, optimisation <span className="font-semibold">SEO</span> et solutions sur mesure</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Section Edenred */}
               <div className={`backdrop-blur-2xl p-8 sm:p-10 lg:p-12 rounded-3xl border-2 mb-12 relative overflow-hidden ${
                 isDark 
                   ? 'bg-gradient-to-br from-green-950/40 to-slate-900/40 border-green-500/30' 
                   : 'bg-gradient-to-br from-green-50/80 to-emerald-50/80 border-green-300/40'
-              } animate-fade-in-up animation-delay-600`}>
+              } animate-fade-in-up animation-delay-700`}>
                 
                 <div className="absolute top-4 right-4 sm:top-6 sm:right-6 opacity-10">
                   <Image 
@@ -856,7 +925,7 @@ export default function Home() {
                       height={50} 
                       className="w-10 h-10 sm:w-12 sm:h-12"
                     />
-                    Expérience
+                    Expériences Professionnelles
                   </h2>
                   
                   <div className={`space-y-6 p-6 sm:p-8 rounded-2xl ${
@@ -868,7 +937,7 @@ export default function Home() {
                       <h3 className={`text-2xl sm:text-3xl font-normal mb-2 ${
                         isDark ? 'text-green-400' : 'text-green-600'
                       }`}>
-                        Stagiaire Développeur • Edenred France
+                        Stagiaire Développeur • <a href="https://www.edenred.fr/" target="_blank" rel="noopener noreferrer" className="hover:underline inline-flex items-center gap-1">Edenred France <ExternalLink className="w-4 h-4" /></a>
                       </h3>
                       <p className={`text-sm sm:text-base mb-6 font-medium ${
                         isDark ? 'text-green-300/80' : 'text-green-600/80'
@@ -889,6 +958,63 @@ export default function Home() {
                         <li className="flex items-start gap-3">
                           <span className={`text-xl ${isDark ? 'text-green-400' : 'text-green-600'}`}>▸</span>
                           <span>Réalisation d&apos;un système de <span className="font-semibold">contrôle qualité des données</span> et <span className="font-semibold">audit automatisé</span> (Azure DevOps & Einstein AI)</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Section Projets Personnels */}
+              <div className={`backdrop-blur-2xl p-8 sm:p-10 lg:p-12 rounded-3xl border-2 mb-12 relative overflow-hidden ${
+                isDark 
+                  ? 'bg-gradient-to-br from-purple-950/40 to-slate-900/40 border-purple-500/30' 
+                  : 'bg-gradient-to-br from-purple-50/80 to-pink-50/80 border-purple-300/40'
+              } animate-fade-in-up animation-delay-800`}>
+                
+                <div className="relative z-10">
+                  <h2 className={`text-3xl sm:text-4xl font-light mb-8 ${
+                    isDark ? 'text-white' : 'text-slate-900'
+                  }`}>
+                    💡 Projets Personnels
+                  </h2>
+                  
+                  <div className={`space-y-6 p-6 sm:p-8 rounded-2xl ${
+                    isDark 
+                      ? 'bg-slate-900/30 border border-purple-500/20' 
+                      : 'bg-white/50 border border-purple-300/30'
+                  }`}>
+                    <div>
+                      <h3 className={`text-2xl sm:text-3xl font-normal mb-2 ${
+                        isDark ? 'text-purple-400' : 'text-purple-600'
+                      }`}>
+                        <Link href="/projects/dashboard-boulangerie-pro" className="hover:underline inline-flex items-center gap-1">
+                          SmartBiz AI - Dashboard Gestion Boulangerie <ArrowRight className="w-4 h-4" />
+                        </Link>
+                      </h3>
+                      <p className={`text-sm sm:text-base mb-6 font-medium ${
+                        isDark ? 'text-purple-300/80' : 'text-purple-600/80'
+                      }`}>
+                        Application de gestion intelligente pour boulangeries avec IA (Mistral)
+                      </p>
+                      <ul className={`space-y-4 text-base sm:text-lg ${
+                        isDark ? 'text-gray-300' : 'text-slate-800'
+                      }`}>
+                        <li className="flex items-start gap-3">
+                          <span className={`text-xl ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>▸</span>
+                          <span><span className="font-semibold">Full-stack :</span> Next.js 14, TypeScript, Prisma, Tailwind CSS, Supabase Auth</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className={`text-xl ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>▸</span>
+                          <span><span className="font-semibold">Features :</span> gestion stocks, recettes, production, analytics temps réel, insights IA</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className={`text-xl ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>▸</span>
+                          <span><span className="font-semibold">Monétisation :</span> intégration Stripe pour abonnements SaaS (Starter/Pro/Enterprise)</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className={`text-xl ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>▸</span>
+                          <span>Architecture scalable avec API routes, optimisations performances</span>
                         </li>
                       </ul>
                     </div>
