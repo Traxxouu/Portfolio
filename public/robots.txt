@@ -1,0 +1,14 @@
+# robots.txt pour maelbarbe.vercel.app
+
+# Permettre à tous les robots d'indexer tout le site
+User-agent: *
+Allow: /
+
+# Bloquer l'accès au studio Sanity (admin)
+Disallow: /studio/
+
+# Bloquer les fichiers sensibles
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://maelbarbe.vercel.app/sitemap.xml
