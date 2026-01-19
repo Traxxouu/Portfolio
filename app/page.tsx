@@ -7,6 +7,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { getProjects, type Project, getBlogPosts, type BlogPost } from '@/lib/sanity.client';
 import { urlFor } from '@/sanity/lib/image';
+import { Users, GitFork, Star } from 'lucide-react';
 
 // Lazy load des icônes lourdes
 const SiOpenjdk = dynamic(() => import('react-icons/si').then(mod => ({ default: mod.SiOpenjdk })), { ssr: false });
@@ -53,6 +54,14 @@ export default function Home() {
   });
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [formMessage, setFormMessage] = useState('');
+
+  // États pour les stats GitHub
+  const [githubStats, setGithubStats] = useState<{
+    followers: number;
+    following: number;
+    public_repos: number;
+  } | null>(null);
+  const [loadingGithub, setLoadingGithub] = useState(false);
 
   // Détection du hash dans l'URL pour naviguer vers la bonne page
   useEffect(() => {
@@ -159,6 +168,26 @@ export default function Home() {
       setNotificationVisible(false);
     }
   }, [currentPage]);
+
+  // Charger les stats GitHub
+  useEffect(() => {
+    const fetchGithubStats = async () => {
+      setLoadingGithub(true);
+      try {
+        const response = await fetch('/api/github-stats');
+        const data = await response.json();
+        if (!data.error) {
+          setGithubStats(data);
+        }
+      } catch (error) {
+        console.error('Erreur lors du chargement des stats GitHub:', error);
+      } finally {
+        setLoadingGithub(false);
+      }
+    };
+
+    fetchGithubStats();
+  }, []);
 
   const handleToggle = () => {
     setManualToggle(true);
@@ -480,33 +509,126 @@ export default function Home() {
               </button>
             ))}
 
-            <div className="flex gap-3 sm:gap-4 mt-4 sm:mt-6 animate-fade-in-up animation-delay-1000">
-              <a
-                href="https://github.com/Traxxouu"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Voir mon profil GitHub"
-                className={`p-3 backdrop-blur-xl rounded-xl border-2 transition-all duration-300 hover:scale-110 hover:-translate-y-1 ${
+            {/* Stats GitHub - Desktop et Mobile */}
+            <div className="flex flex-col gap-4 mt-4 sm:mt-6 animate-fade-in-up animation-delay-1000">
+              {/* Stats Card */}
+              {!loadingGithub && githubStats && (
+                <div className={`backdrop-blur-xl rounded-2xl border-2 p-4 transition-all duration-300 hover:scale-105 ${
                   isDark 
-                    ? 'bg-slate-800/40 border-purple-500/30 text-white hover:bg-slate-700/50 hover:border-purple-400/50 shadow-lg shadow-purple-500/10 hover:shadow-purple-500/30' 
-                    : 'bg-white/40 border-orange-200/40 text-slate-900 hover:bg-white/60 hover:border-orange-300/60 shadow-lg shadow-orange-300/20 hover:shadow-orange-300/40'
-                }`}
-              >
-                <Github className="w-6 h-6" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/maelbarbe/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Voir mon profil LinkedIn"
-                className={`p-3 backdrop-blur-xl rounded-xl border-2 transition-all duration-300 hover:scale-110 hover:-translate-y-1 ${
+                    ? 'bg-slate-800/40 border-purple-500/30 shadow-lg shadow-purple-500/10' 
+                    : 'bg-white/40 border-orange-200/40 shadow-lg shadow-orange-300/20'
+                }`}>
+                  <div className="grid grid-cols-3 gap-4">
+                    {/* Followers */}
+                    <div className="flex flex-col items-center">
+                      <div className={`p-2 rounded-lg mb-2 ${
+                        isDark ? 'bg-blue-500/20' : 'bg-blue-500/10'
+                      }`}>
+                        <Users className={`w-5 h-5 ${
+                          isDark ? 'text-blue-300' : 'text-blue-600'
+                        }`} />
+                      </div>
+                      <span className={`text-2xl font-light ${
+                        isDark ? 'text-white' : 'text-slate-900'
+                      }`}>
+                        {githubStats.followers}
+                      </span>
+                      <span className={`text-xs font-light ${
+                        isDark ? 'text-gray-400' : 'text-slate-600'
+                      }`}>
+                        Followers
+                      </span>
+                    </div>
+
+                    {/* Repos */}
+                    <div className="flex flex-col items-center">
+                      <div className={`p-2 rounded-lg mb-2 ${
+                        isDark ? 'bg-purple-500/20' : 'bg-purple-500/10'
+                      }`}>
+                        <GitFork className={`w-5 h-5 ${
+                          isDark ? 'text-purple-300' : 'text-purple-600'
+                        }`} />
+                      </div>
+                      <span className={`text-2xl font-light ${
+                        isDark ? 'text-white' : 'text-slate-900'
+                      }`}>
+                        {githubStats.public_repos}
+                      </span>
+                      <span className={`text-xs font-light ${
+                        isDark ? 'text-gray-400' : 'text-slate-600'
+                      }`}>
+                        Repos
+                      </span>
+                    </div>
+
+                    {/* Following */}
+                    <div className="flex flex-col items-center">
+                      <div className={`p-2 rounded-lg mb-2 ${
+                        isDark ? 'bg-pink-500/20' : 'bg-pink-500/10'
+                      }`}>
+                        <Star className={`w-5 h-5 ${
+                          isDark ? 'text-pink-300' : 'text-pink-600'
+                        }`} />
+                      </div>
+                      <span className={`text-2xl font-light ${
+                        isDark ? 'text-white' : 'text-slate-900'
+                      }`}>
+                        {githubStats.following}
+                      </span>
+                      <span className={`text-xs font-light ${
+                        isDark ? 'text-gray-400' : 'text-slate-600'
+                      }`}>
+                        Following
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Loading state */}
+              {loadingGithub && (
+                <div className={`backdrop-blur-xl rounded-2xl border-2 p-4 ${
                   isDark 
-                    ? 'bg-slate-800/40 border-purple-500/30 text-white hover:bg-slate-700/50 hover:border-purple-400/50 shadow-lg shadow-purple-500/10 hover:shadow-purple-500/30' 
-                    : 'bg-white/40 border-orange-200/40 text-slate-900 hover:bg-white/60 hover:border-orange-300/60 shadow-lg shadow-orange-300/20 hover:shadow-orange-300/40'
-                }`}
-              >
-                <Linkedin className="w-6 h-6" />
-              </a>
+                    ? 'bg-slate-800/40 border-purple-500/30' 
+                    : 'bg-white/40 border-orange-200/40'
+                }`}>
+                  <div className="flex justify-center items-center h-24">
+                    <div className={`w-6 h-6 border-2 border-t-transparent rounded-full animate-spin ${
+                      isDark ? 'border-blue-400' : 'border-orange-500'
+                    }`} />
+                  </div>
+                </div>
+              )}
+
+              {/* Social Links */}
+              <div className="flex gap-3 sm:gap-4">
+                <a
+                  href="https://github.com/Traxxouu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Voir mon profil GitHub"
+                  className={`p-3 backdrop-blur-xl rounded-xl border-2 transition-all duration-300 hover:scale-110 hover:-translate-y-1 ${
+                    isDark 
+                      ? 'bg-slate-800/40 border-purple-500/30 text-white hover:bg-slate-700/50 hover:border-purple-400/50 shadow-lg shadow-purple-500/10 hover:shadow-purple-500/30' 
+                      : 'bg-white/40 border-orange-200/40 text-slate-900 hover:bg-white/60 hover:border-orange-300/60 shadow-lg shadow-orange-300/20 hover:shadow-orange-300/40'
+                  }`}
+                >
+                  <Github className="w-6 h-6" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/maelbarbe/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Voir mon profil LinkedIn"
+                  className={`p-3 backdrop-blur-xl rounded-xl border-2 transition-all duration-300 hover:scale-110 hover:-translate-y-1 ${
+                    isDark 
+                      ? 'bg-slate-800/40 border-purple-500/30 text-white hover:bg-slate-700/50 hover:border-purple-400/50 shadow-lg shadow-purple-500/10 hover:shadow-purple-500/30' 
+                      : 'bg-white/40 border-orange-200/40 text-slate-900 hover:bg-white/60 hover:border-orange-300/60 shadow-lg shadow-orange-300/20 hover:shadow-orange-300/40'
+                  }`}
+                >
+                  <Linkedin className="w-6 h-6" />
+                </a>
+              </div>
             </div>
           </nav>
         </div>
