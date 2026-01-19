@@ -628,6 +628,31 @@ export default function Home() {
                 >
                   <Linkedin className="w-6 h-6" />
                 </a>
+                <a
+                  href="https://www.malt.fr/profile/maelbarbe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Voir mon profil Malt"
+                  className={`p-3 backdrop-blur-xl rounded-xl border-2 transition-all duration-300 hover:scale-110 hover:-translate-y-1 ${
+                    isDark 
+                      ? 'bg-slate-800/40 border-purple-500/30 text-white hover:bg-slate-700/50 hover:border-purple-400/50 shadow-lg shadow-purple-500/10 hover:shadow-purple-500/30' 
+                      : 'bg-white/40 border-orange-200/40 text-slate-900 hover:bg-white/60 hover:border-orange-300/60 shadow-lg shadow-orange-300/20 hover:shadow-orange-300/40'
+                  }`}
+                >
+                  {/* Logo Malt SVG inline */}
+                  <svg className="w-6 h-6" viewBox="0 0 50 50" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="25" cy="7" r="6"/>
+                    <circle cx="25" cy="43" r="6"/>
+                    <circle cx="7" cy="25" r="6"/>
+                    <circle cx="43" cy="25" r="6"/>
+                    <circle cx="12.3" cy="12.3" r="6"/>
+                    <circle cx="37.7" cy="37.7" r="6"/>
+                    <circle cx="12.3" cy="37.7" r="6"/>
+                    <circle cx="37.7" cy="12.3" r="6"/>
+                    <rect x="10" y="22" width="30" height="6" rx="3" transform="rotate(-45 25 25)"/>
+                    <rect x="10" y="22" width="30" height="6" rx="3" transform="rotate(45 25 25)"/>
+                  </svg>
+                </a>
               </div>
             </div>
           </nav>
@@ -1256,6 +1281,30 @@ export default function Home() {
                 >
                   <Instagram className="w-5 h-5" />
                   Instagram
+                </a>
+                <a 
+                  href="https://www.malt.fr/profile/maelbarbe" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={`px-6 py-3 rounded-full transition-all hover:scale-105 flex items-center gap-2 ${
+                    isDark 
+                      ? 'bg-slate-700 text-white hover:bg-slate-600' 
+                      : 'bg-white text-slate-900 hover:bg-orange-50'
+                  }`}
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 50 50" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="25" cy="7" r="6"/>
+                    <circle cx="25" cy="43" r="6"/>
+                    <circle cx="7" cy="25" r="6"/>
+                    <circle cx="43" cy="25" r="6"/>
+                    <circle cx="12.3" cy="12.3" r="6"/>
+                    <circle cx="37.7" cy="37.7" r="6"/>
+                    <circle cx="12.3" cy="37.7" r="6"/>
+                    <circle cx="37.7" cy="12.3" r="6"/>
+                    <rect x="10" y="22" width="30" height="6" rx="3" transform="rotate(-45 25 25)"/>
+                    <rect x="10" y="22" width="30" height="6" rx="3" transform="rotate(45 25 25)"/>
+                  </svg>
+                  Malt
                 </a>
                 <a 
                   href="https://www.twitch.tv/traxxouu" 
