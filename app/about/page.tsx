@@ -165,7 +165,7 @@ export default function AboutPage() {
                     Stagiaire Développeur • <a href="https://www.edenred.fr/" target="_blank" rel="noopener noreferrer" className="hover:underline inline-flex items-center gap-1">Edenred France <ExternalLink className="w-4 h-4" /></a>
                   </h3>
                   <p className={`text-sm sm:text-base mb-6 font-medium ${isDark ? 'text-green-300/80' : 'text-green-600/80'}`}>
-                    📍 Juin - Août 2024 (2 mois) • Malakoff, France
+                    📍 Juin - Août 2025 (2 mois) • Malakoff, France
                   </p>
                   <ul className={`space-y-4 text-base sm:text-lg ${isDark ? 'text-gray-300' : 'text-slate-800'}`}>
                     <li className="flex items-start gap-3"><span className={`text-xl ${isDark ? 'text-green-400' : 'text-green-600'}`}>▸</span><span>Intégré à l&apos;équipe Salesforce <span className="font-semibold">(Redforce)</span> en environnement agile <span className="font-semibold">(SCRUM)</span></span></li>
