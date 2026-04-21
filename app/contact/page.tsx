@@ -52,7 +52,7 @@ export default function ContactPage() {
 
       <div className="relative min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
         <div className="max-w-6xl mx-auto">
-          <SubPageNav backLabel="Accueil" backPath="/" />
+          <SubPageNav backLabel="Accueil" backPath="/" forwardLabel="About" forwardPath="/about" />
 
           {/* Titre */}
           <div className="mb-16 text-center animate-fade-in-up">

@@ -30,7 +30,7 @@ export default function ProjectsPage() {
 
       <div className="relative min-h-screen px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24">
         <div className="max-w-7xl mx-auto">
-          <SubPageNav backLabel="Accueil" backPath="/" forwardLabel="About" forwardPath="/about" />
+          <SubPageNav backLabel="Accueil" backPath="/" forwardLabel="Blog & Réflexions" forwardPath="/blog" />
           
           <div className="mb-16 animate-fade-in-up">
             <h1 className={`text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-light mb-6 ${isDark ? 'text-white' : 'text-slate-900'}`}>
