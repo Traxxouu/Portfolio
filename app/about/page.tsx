@@ -1,5 +1,6 @@
 'use client';
 
+import type { ReactElement } from 'react';
 import { Github, Linkedin, Instagram, ExternalLink, Mail, Download, Cloud, BookOpen, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,7 +10,7 @@ import { BackgroundBlobs } from '../components/BackgroundBlobs';
 import { SubPageNav } from '../components/SubPageNav';
 
 // Simple SVG icons au lieu de react-icons (qui charge un bundle entier)
-const icons: Record<string, () => JSX.Element> = {
+const icons: Record<string, () => ReactElement> = {
   Java: () => <span className="text-sm font-bold">☕</span>,
   Python: () => <span className="text-sm">🐍</span>,
   JavaScript: () => <span className="text-xs font-bold text-yellow-500">JS</span>,
