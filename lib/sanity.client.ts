@@ -72,6 +72,39 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
   return await client.fetch(query, { slug });
 }
 
+// Terminal Status
+export interface TerminalCommand {
+  name: string;
+  description: string;
+  output: string;
+}
+
+export interface TerminalStatus {
+  lastUpdate: string;
+  content: string;
+  serverName: string;
+  fileName: string;
+  welcomeMessage?: string;
+  commands?: TerminalCommand[];
+}
+
+export async function getTerminalStatus(): Promise<TerminalStatus | null> {
+  const query = `*[_type == "terminalStatus"][0] {
+    lastUpdate,
+    content,
+    serverName,
+    fileName,
+    welcomeMessage,
+    commands[] {
+      name,
+      description,
+      output
+    }
+  }`;
+
+  return await client.fetch(query);
+}
+
 export interface BlogPost {
   _id: string;
   title: string;

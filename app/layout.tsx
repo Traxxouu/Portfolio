@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from './components/ThemeProvider';
+import { TerminalButton } from './components/Terminal';
 
 const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -145,6 +146,7 @@ export default function RootLayout({
       >
         <ThemeProvider>
           {children}
+          <TerminalButton />
         </ThemeProvider>
       </body>
     </html>
