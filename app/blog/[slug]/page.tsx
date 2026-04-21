@@ -40,7 +40,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         {/* Bouton retour */}
         <div className="absolute top-8 left-8 z-10">
           <Link
-            href="/"
+            href="/blog"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full backdrop-blur-xl bg-slate-900/50 border border-slate-700/50 text-white hover:bg-slate-800/60 transition-all hover:scale-105"
           >
             <ArrowLeft size={20} />

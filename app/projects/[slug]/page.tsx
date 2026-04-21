@@ -233,13 +233,13 @@ export default function ProjectPage() {
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {isDark ? (
           <>
-            <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-600 rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-blob" />
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600 rounded-full mix-blend-screen filter blur-[120px] opacity-15 animate-blob animation-delay-2000" />
+            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-600 rounded-full mix-blend-screen filter blur-[80px] opacity-15 animate-blob" />
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-purple-600 rounded-full mix-blend-screen filter blur-[80px] opacity-10 animate-blob animation-delay-2000" />
           </>
         ) : (
           <>
-            <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-orange-300 rounded-full mix-blend-multiply filter blur-[120px] opacity-20 animate-blob" />
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-300 rounded-full mix-blend-multiply filter blur-[120px] opacity-15 animate-blob animation-delay-2000" />
+            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-orange-300 rounded-full mix-blend-multiply filter blur-[80px] opacity-15 animate-blob" />
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-rose-300 rounded-full mix-blend-multiply filter blur-[80px] opacity-10 animate-blob animation-delay-2000" />
           </>
         )}
       </div>
@@ -249,7 +249,7 @@ export default function ProjectPage() {
         <div className="max-w-5xl mx-auto px-6 py-8">
           <div className="flex justify-between items-center">
             <button
-              onClick={() => router.push('/#projects')}
+              onClick={() => router.push('/projects')}
               className={`flex items-center gap-2 text-lg transition-all hover:scale-105 ${
                 isDark ? 'text-white hover:text-blue-300' : 'text-slate-900 hover:text-orange-600'
               }`}
