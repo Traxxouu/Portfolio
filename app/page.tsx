@@ -17,7 +17,7 @@ export default function Home() {
   // GitHub stats — fetched after first paint
   const [githubStats, setGithubStats] = useState<{
     followers: number;
-    following: number;
+    total_stars: number;
     public_repos: number;
   } | null>(null);
 
@@ -138,7 +138,7 @@ export default function Home() {
                     {[
                       { icon: Users, value: githubStats.followers, label: 'Followers', color: isDark ? 'blue' : 'blue' },
                       { icon: GitFork, value: githubStats.public_repos, label: 'Repos', color: isDark ? 'purple' : 'purple' },
-                      { icon: Star, value: githubStats.following, label: 'Following', color: isDark ? 'pink' : 'pink' },
+                      { icon: Star, value: githubStats.total_stars, label: 'Stars', color: isDark ? 'pink' : 'pink' },
                     ].map(({ icon: Icon, value, label, color }) => (
                       <div key={label} className="flex flex-col items-center">
                         <div className={`p-1 rounded-lg mb-0.5 bg-${color}-500/${isDark ? '20' : '10'}`}>
