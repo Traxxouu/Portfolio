@@ -8,6 +8,26 @@ export const client = createClient({
   useCdn: true,
 });
 
+// Banner
+export interface Banner {
+  enabled: boolean;
+  text: string;
+  backgroundColor: string;
+  textColor: string;
+  link?: string;
+}
+
+export async function getBanner(): Promise<Banner | null> {
+  const query = `*[_type == "banner"][0] {
+    enabled,
+    text,
+    backgroundColor,
+    textColor,
+    link
+  }`;
+  return await client.fetch(query);
+}
+
 export interface Project {
   _id: string;
   title: string;

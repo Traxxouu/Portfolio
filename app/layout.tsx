@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from './components/ThemeProvider';
+import { BannerBar } from './components/Banner';
 
 const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -144,6 +145,7 @@ export default function RootLayout({
         style={{ fontFamily: 'var(--font-cormorant), serif' }}
       >
         <ThemeProvider>
+          <BannerBar />
           {children}
         </ThemeProvider>
       </body>
