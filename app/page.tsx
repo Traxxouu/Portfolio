@@ -22,25 +22,16 @@ export default function Home() {
   } | null>(null);
 
   useEffect(() => {
-    // Defer non-critical fetch so it doesn't block paint
-    const id = requestIdleCallback?.(() => {
+    const fetchStats = () => {
       fetch('/api/github-stats')
         .then(r => r.json())
         .then(data => { if (!data.error) setGithubStats(data); })
         .catch(() => {});
-    }) ?? setTimeout(() => {
-      fetch('/api/github-stats')
-        .then(r => r.json())
-        .then(data => { if (!data.error) setGithubStats(data); })
-        .catch(() => {});
-    }, 1000);
-
-    return () => {
-      if (typeof id === 'number') {
-        if (typeof cancelIdleCallback !== 'undefined') cancelIdleCallback(id);
-        else clearTimeout(id);
-      }
     };
+
+    // Defer fetch after first paint
+    const timeout = setTimeout(fetchStats, 1000);
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
