@@ -8,6 +8,7 @@ import { useTheme } from '../components/ThemeProvider';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { BackgroundBlobs } from '../components/BackgroundBlobs';
 import { SubPageNav } from '../components/SubPageNav';
+import { CertificationsSection } from '../components/Certifications';
 
 // Simple SVG icons au lieu de react-icons (qui charge un bundle entier)
 const icons: Record<string, () => ReactElement> = {
@@ -201,6 +202,9 @@ export default function AboutPage() {
               </div>
             </div>
           </div>
+
+          {/* Certifications & Badges */}
+          <CertificationsSection />
 
           {/* Formation + Centres d'intérêt */}
           <div className="grid lg:grid-cols-2 gap-8">
