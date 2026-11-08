@@ -25,7 +25,8 @@ export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
   const [p, all] = await Promise.all([getProjectBySlug(slug), getProjects()]);
   if (!p) notFound();
-  const img = projectImage(p, 2000, 1000);
+  const contain = p.coverFit === 'contain';
+  const img = contain ? projectImage(p, 2000) : projectImage(p, 2000, 1000);
   const others = all.filter((o) => o.slug.current !== slug).slice(0, 3);
 
   return (
@@ -78,7 +79,7 @@ export default async function ProjectPage({ params }: Props) {
         {img && (
           <div className="wrap">
             <div className="detail-cover cut">
-              <Image src={img} alt={p.title} fill priority sizes="(max-width: 1240px) 100vw, 1240px" className="cover" />
+              <Image src={img} alt={p.title} fill priority sizes="(max-width: 1240px) 100vw, 1240px" className={contain ? 'is-contain' : 'cover'} />
             </div>
           </div>
         )}

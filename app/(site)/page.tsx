@@ -167,7 +167,7 @@ export default async function Home() {
           />
           <div className="pgrid">
             {shown.map((p, i) => (
-              <ProjectCard key={p._id} p={p} index={i} large={i === 0} />
+              <ProjectCard key={p._id} p={p} index={i} />
             ))}
           </div>
         </div>

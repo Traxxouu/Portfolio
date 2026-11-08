@@ -46,6 +46,17 @@ export const projectType = defineType({
       ],
     }),
     defineField({
+      name: 'coverFit',
+      title: 'Affichage de l’image',
+      type: 'string',
+      description: '« En entier » pour les captures de sites : l’image n’est jamais coupée.',
+      options: { list: [
+        { title: 'Remplir le cadre (peut couper les bords)', value: 'cover' },
+        { title: 'Afficher en entier', value: 'contain' },
+      ], layout: 'radio' },
+      initialValue: 'cover',
+    }),
+    defineField({
       name: 'description',
       title: 'Description courte',
       type: 'text',
