@@ -127,6 +127,7 @@ export const FALLBACK_PROJECTS = [
     year: '2025',
     liveUrl: 'https://yourweb.fr',
     image: '/images/yourweb.webp',
+    coverFit: 'contain' as const,
   },
   {
     _id: 'orcalia',

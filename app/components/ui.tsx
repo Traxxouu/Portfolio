@@ -39,12 +39,14 @@ export function ArrowLink({ href, children, external }: { href: string; children
 const STATUS: Record<Project['status'], string> = { 'en-cours': 'En cours', terminé: 'Terminé', abandonné: 'Archivé' };
 
 export function ProjectCard({ p, index, large }: { p: Project; index: number; large?: boolean }) {
-  const img = projectImage(p, large ? 1400 : 900, large ? 820 : 620);
+  const contain = p.coverFit === 'contain';
+  // en mode "en entier", on ne recadre pas l'image côté Sanity non plus
+  const img = contain ? projectImage(p, 1000) : projectImage(p, 900, 563);
   return (
     <Link href={`/projects/${p.slug.current}`} className={`pcard reveal ${large ? 'pcard-large' : ''}`} style={{ transitionDelay: `${(index % 3) * 70}ms` }}>
-      <div className="pcard-media cut">
+      <div className={`pcard-media cut ${contain ? 'is-contain' : ''}`}>
         {img ? (
-          <Image src={img} alt={p.title} fill sizes={large ? '(max-width: 900px) 100vw, 60vw' : '(max-width: 900px) 100vw, 33vw'} className="pcard-img" />
+          <Image src={img} alt={p.title} fill sizes={large ? '(max-width: 900px) 100vw, 60vw' : '(max-width: 900px) 100vw, 33vw'} className={`pcard-img ${contain ? 'is-contain' : ''}`} />
         ) : (
           <div className="pcard-empty dots" />
         )}

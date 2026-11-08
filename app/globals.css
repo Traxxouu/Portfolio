@@ -290,19 +290,20 @@ a.banner-in:hover { text-decoration: underline; }
 
 /* ---------- cartes projets ---------- */
 .pgrid { display: grid; gap: clamp(1.5rem, 3vw, 2.2rem); }
-@media (min-width: 900px) {
-  .pgrid { grid-template-columns: 1.15fr 1fr; }
-  .pgrid .pcard-large { grid-row: span 2; display: flex; flex-direction: column; }
-  .pgrid .pcard-large .pcard-media { aspect-ratio: auto; flex: 1; min-height: 420px; }
-}
+@media (min-width: 700px) { .pgrid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .pgrid { grid-template-columns: repeat(3, 1fr); } }
 .pgrid-all { display: grid; gap: clamp(1.5rem, 3vw, 2.2rem); }
 @media (min-width: 700px) { .pgrid-all { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1100px) { .pgrid-all { grid-template-columns: repeat(3, 1fr); } }
 .pcard { display: grid; gap: 1.1rem; align-content: start; }
 .pcard-media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--panel); }
-.pcard-large .pcard-media { aspect-ratio: 16 / 11; }
+
 .pcard-img { object-fit: cover; transition: transform .6s cubic-bezier(.2,.8,.2,1), filter .4s; filter: saturate(.9); }
 .pcard:hover .pcard-img { transform: scale(1.045); filter: saturate(1.1); }
+/* image affichée en entier (captures de sites) */
+.pcard-img.is-contain, .detail-cover .is-contain { object-fit: contain; }
+.pcard-media.is-contain { background: var(--panel-2); }
+.pcard:hover .pcard-img.is-contain { transform: scale(1.02); }
 .pcard-empty { position: absolute; inset: 0; background-color: var(--red-deep); }
 .pcard-shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,5,5,.6), transparent 45%); }
 .pcard-n { position: absolute; top: .9rem; left: 1rem; color: var(--bone); }
@@ -311,7 +312,7 @@ a.banner-in:hover { text-decoration: underline; }
 .pcard-body { display: grid; gap: .6rem; }
 .pcard-body p { margin: 0; }
 .pcard-title { font-size: clamp(1.8rem, 3vw, 2.4rem); margin: 0; transition: color .2s; }
-.pcard-large .pcard-title { font-size: clamp(2.2rem, 4vw, 3.2rem); }
+
 .pcard:hover .pcard-title { color: var(--red); }
 .pcard-desc { color: var(--dim); max-width: 38rem; }
 .pcard-tags { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .2rem; }

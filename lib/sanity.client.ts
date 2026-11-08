@@ -85,12 +85,13 @@ export interface Project {
   tags?: string[];
   context?: string;
   year?: string;
+  coverFit?: 'cover' | 'contain';
   order: number;
   githubUrl?: string;
   liveUrl?: string;
 }
 
-const PROJECT_FIELDS = `_id, title, slug, coverImage, description, technologies, status, featured, tags, context, year, order, githubUrl, liveUrl`;
+const PROJECT_FIELDS = `_id, title, slug, coverImage, coverFit, description, technologies, status, featured, tags, context, year, order, githubUrl, liveUrl`;
 
 export async function getProjects(): Promise<Project[]> {
   const list = await safeFetch<Project[]>(`*[_type == "project"] | order(featured desc, order asc){ ${PROJECT_FIELDS} }`, {}, []);
