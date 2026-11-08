@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { getExperiences, getCertifications, getSettings, imageUrl } from '@/lib/sanity.client';
 import { PROFILE, STACK, parisToday } from '@/lib/content';
 import { Planning } from '../../components/Planning';
+import { Gallery } from '../../components/Gallery';
+import { PHOTOS } from '@/lib/photos';
 import { PageHero } from '../../components/PageHero';
 import { SectionHead } from '../../components/ui';
 
@@ -175,21 +177,8 @@ export default async function AboutPage() {
       {/* ---------- photos ---------- */}
       <section className="section">
         <div className="wrap">
-          <SectionHead n="E" label="Paris" jp="写真" title={<>Paris, par moi</>} intro="Quand je ne code pas, je photographie la ville. C’est d’ailleurs d’ici que vient l’univers du site." />
-          <div className="photos">
-            {[
-              ['/images/toits.webp', 'Toits du 9e arrondissement', '9e — Toits'],
-              ['/images/montmartre.webp', 'Rue graffée de Montmartre', '18e — Montmartre'],
-              ['/images/invalides.webp', 'Le dôme des Invalides la nuit', '7e — Invalides'],
-            ].map(([src, alt, cap], i) => (
-              <figure key={src} className="photo reveal" style={{ transitionDelay: `${i * 80}ms` }}>
-                <div className="photo-frame">
-                  <Image src={src} alt={alt} fill sizes="(max-width: 900px) 100vw, 33vw" className="cover" />
-                </div>
-                <figcaption className="label dim">{String(i + 1).padStart(2, '0')} · {cap}</figcaption>
-              </figure>
-            ))}
-          </div>
+          <SectionHead n="E" label="Paris" jp="写真" title={<>Paris, par moi</>} intro="Quand je ne code pas, je photographie la ville. C’est d’ici que vient l’univers du site. Clique sur une photo pour la voir en couleur." />
+          <Gallery photos={PHOTOS} />
         </div>
       </section>
     </>
