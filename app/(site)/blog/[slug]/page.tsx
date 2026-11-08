@@ -30,7 +30,7 @@ export default async function PostPage({ params }: Props) {
   return (
     <article>
       <header className="detail-head">
-        <div className="wrap">
+        <div className="wrap detail-col">
           <Link href="/blog" className="arrow-link label back">
             <span aria-hidden className="arrow">←</span>
             <span>Tout le blog</span>
@@ -56,7 +56,7 @@ export default async function PostPage({ params }: Props) {
           </div>
         </div>
       )}
-      <div className="wrap detail-body">
+      <div className="wrap detail-col detail-body">
         <PortableBody value={post.body} />
         <div className="post-end">
           <p className="label dim">Écrit par Maël Barbe</p>

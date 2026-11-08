@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { getSettings, getProjects, getExperiences, getBlogPosts, imageUrl } from '@/lib/sanity.client';
-import { PROFILE, STACK, currentModule } from '@/lib/content';
+import { PROFILE, STACK, currentModule, courseWeek } from '@/lib/content';
 import { SectionHead, ProjectCard, ArrowLink } from '../components/ui';
+import { GithubIcon } from '../components/icons';
 
 export const revalidate = 60;
 
@@ -13,6 +14,7 @@ export default async function Home() {
   const featured = projects.filter((p) => p.featured).slice(0, 3);
   const shown = featured.length >= 3 ? featured : projects.slice(0, 3);
   const mod = currentModule();
+  const { label: weekLabel, week } = courseWeek();
   const ticker = STACK.flatMap((g) => g.items.map((i) => i.name));
 
   return (
@@ -47,9 +49,12 @@ export default async function Home() {
               <span>Voir mes projets</span>
               <span aria-hidden className="arrow">→</span>
             </Link>
-            <Link href="/contact" className="btn btn-ghost">
-              <span>Me contacter</span>
-            </Link>
+            <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+              <span className="btn-ico"><GithubIcon /> GitHub</span>
+            </a>
+            <a href={PROFILE.cv} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+              <span>Mon CV ↓</span>
+            </a>
           </div>
           <p className="hero-status label">
             <span className="yellow blink">●</span> {settings.status}
@@ -73,43 +78,49 @@ export default async function Home() {
       {/* ================= AUJOURD'HUI ================= */}
       <section className="section">
         <div className="wrap">
-          <SectionHead n="01" label="Aujourd’hui" jp="現在" title={<>Là où j’en suis</>} intro="Ce qui m’occupe en ce moment, entre mon agence et l’école." />
+          <SectionHead n="01" label="Aujourd’hui" jp="現在" title={<>Là où j’en suis</>} intro="Ce qui m’occupe en ce moment : l’école, mes projets et ce que j’apprends." />
           <div className="now-grid">
-            <a href={PROFILE.yourweb} target="_blank" rel="noopener noreferrer" className="panel cut now-card now-yourweb reveal">
+            <div className="panel cut now-card now-main reveal">
               <div className="panel-in">
                 <div className="now-photo">
                   <Image src="/images/opera.webp" alt="Toits de Paris vers l’Opéra, photo de Maël" fill sizes="(max-width: 900px) 100vw, 50vw" className="now-photo-img" />
-                  <span className="label now-photo-tag">Paris 9e // Opéra</span>
+                  <span className="label now-photo-tag">Paris // EFREI</span>
                 </div>
                 <div className="now-body">
-                  <p className="label red">Entreprise · <span className="f-jp">会社</span></p>
-                  <h3 className="f-display now-title">Fondateur de YourWeb</h3>
-                  <p className="dim">
-                    Mon agence web pour les artisans, commerçants et TPE d’Île-de-France : sites vitrines, CMS, SEO local, automatisations et maintenance. Je gère tout, de la prospection à la mise en ligne.
-                  </p>
-                  <span className="arrow-link label">
-                    <span>yourweb.fr</span>
-                    <span aria-hidden className="arrow">↗</span>
-                  </span>
+                  <p className="label red">École · <span className="f-jp">学校</span></p>
+                  <h3 className="f-display now-title">Bachelor 3 · EFREI Paris</h3>
+                  <p className="dim">Développeur web &amp; applications, promo 2027.</p>
+                  {mod && (
+                    <div className="now-module">
+                      <p className="label yellow">{mod.state === 'en cours' ? '● Module en cours' : 'Prochain module'}</p>
+                      <p className="now-module-title">{mod.module.title}</p>
+                      <p className="label dim">
+                        {mod.state === 'en cours' ? `jusqu’au ${fmtDate(mod.module.end)}` : `à partir du ${fmtDate(mod.module.start)}`}
+                      </p>
+                    </div>
+                  )}
+                  <div className="week">
+                    <p className="label dim">{weekLabel}</p>
+                    <ol className="week-days">
+                      {week.map((d) => (
+                        <li key={d.date} className={d.courses.length ? 'has' : ''}>
+                          <span className="label">{new Date(d.date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' })}</span>
+                          <span className="week-title">{d.courses[0]?.title || 'Projets'}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                  <ArrowLink href="/about#planning">Voir mon planning</ArrowLink>
                 </div>
               </div>
-            </a>
+            </div>
 
             <div className="panel cut now-card reveal" style={{ transitionDelay: '80ms' }}>
               <div className="panel-in now-body">
-                <p className="label red">École · <span className="f-jp">学校</span></p>
-                <h3 className="f-display now-title">Bachelor 3 · EFREI Paris</h3>
-                <p className="dim">Développeur web &amp; applications, promo 2027.</p>
-                {mod && (
-                  <div className="now-module">
-                    <p className="label yellow">{mod.state === 'en cours' ? '● Module en cours' : 'Prochain module'}</p>
-                    <p className="now-module-title">{mod.module.title}</p>
-                    <p className="label dim">
-                      {mod.state === 'en cours' ? `jusqu’au ${fmtDate(mod.module.end)}` : `à partir du ${fmtDate(mod.module.start)}`}
-                    </p>
-                  </div>
-                )}
-                <ArrowLink href="/about#programme">Le programme de l’année</ArrowLink>
+                <p className="label red">En parallèle · <span className="f-jp">会社</span></p>
+                <h3 className="f-display now-title">YourWeb</h3>
+                <p className="dim">Je réalise aussi des sites et des outils pour des artisans et des TPE, sous ma micro-entreprise.</p>
+                <ArrowLink href="/projects/yourweb">Voir le projet</ArrowLink>
               </div>
             </div>
 
@@ -144,7 +155,15 @@ export default async function Home() {
             jp="計画"
             title={<>Ce que j’ai construit</>}
             intro="Une sélection de projets clients, de stages et de projets perso."
-            action={<ArrowLink href="/projects">Tous les projets</ArrowLink>}
+            action={
+              <div className="sec-actions">
+                <ArrowLink href="/projects">Tous les projets</ArrowLink>
+                <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="arrow-link label">
+                  <span className="btn-ico"><GithubIcon size={15} /> Mon GitHub</span>
+                  <span aria-hidden className="arrow">↗</span>
+                </a>
+              </div>
+            }
           />
           <div className="pgrid">
             {shown.map((p, i) => (

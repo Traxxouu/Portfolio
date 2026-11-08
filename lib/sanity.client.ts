@@ -94,7 +94,7 @@ const PROJECT_FIELDS = `_id, title, slug, coverImage, description, technologies,
 
 export async function getProjects(): Promise<Project[]> {
   const list = await safeFetch<Project[]>(`*[_type == "project"] | order(featured desc, order asc){ ${PROJECT_FIELDS} }`, {}, []);
-  return list.length ? list : (FALLBACK_PROJECTS as Project[]);
+  return list.length ? list : [...(FALLBACK_PROJECTS as Project[])].sort((a, b) => Number(!!b.featured) - Number(!!a.featured) || a.order - b.order);
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
