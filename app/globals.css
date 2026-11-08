@@ -204,7 +204,8 @@ a.banner-in:hover { text-decoration: underline; }
 
 /* ---------- navigation ---------- */
 .nav { position: sticky; top: 0; z-index: 50; height: var(--nav-h); border-bottom: 1px solid transparent; transition: background-color .25s, border-color .25s; }
-.nav.is-scrolled, .nav.is-open { background: rgba(5,5,5,.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-color: var(--line); }
+.nav.is-scrolled { background: rgba(5,5,5,.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-color: var(--line); }
+.nav.is-open { background: var(--black); backdrop-filter: none; -webkit-backdrop-filter: none; border-color: var(--line); }
 .nav-row { height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .nav-logo { display: flex; align-items: baseline; gap: .6rem; font-size: 1.35rem; position: relative; z-index: 2; }
 .nav-logo-jp { font-size: .7rem; color: var(--red); }
@@ -218,8 +219,9 @@ a.banner-in:hover { text-decoration: underline; }
 .nav-burger span { width: 20px; height: 2px; background: var(--bone); transition: transform .25s; }
 .nav.is-open .nav-burger span:first-child { transform: translateY(4.5px) rotate(45deg); }
 .nav.is-open .nav-burger span:last-child { transform: translateY(-4.5px) rotate(-45deg); }
-.nav-sheet { position: fixed; inset: 0; top: 0; background: var(--black); padding-top: calc(var(--nav-h) + 1.5rem); opacity: 0; visibility: hidden; transition: opacity .25s, visibility .25s; z-index: 1; overflow-y: auto; }
-.nav.is-open .nav-sheet { opacity: 1; visibility: visible; }
+.nav-sheet { position: fixed; inset: 0; background: var(--black); padding-top: calc(var(--nav-h) + 1.5rem); opacity: 0; visibility: hidden; transition: opacity .25s, visibility .25s; z-index: 49; overflow-y: auto; overscroll-behavior: contain; }
+.nav-sheet.is-open { opacity: 1; visibility: visible; }
+body.menu-open { overflow: hidden; }
 .nav-sheet-in { display: flex; flex-direction: column; min-height: calc(100svh - var(--nav-h) - 2rem); }
 .nav-sheet-link { display: grid; grid-template-columns: 2.6rem 1fr auto; align-items: baseline; gap: .8rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
 .nav-sheet-link .f-display { font-size: clamp(2.4rem, 11vw, 3.6rem); }
