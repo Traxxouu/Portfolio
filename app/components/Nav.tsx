@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { LINKS } from '@/lib/nav';
+import { PROFILE } from '@/lib/content';
+import { GithubIcon } from './icons';
 
 
 export function Nav() {
@@ -44,6 +46,12 @@ export function Nav() {
         </nav>
 
         <div className="nav-right">
+          <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="nav-icon" aria-label="Mon GitHub">
+            <GithubIcon size={19} />
+          </a>
+          <a href={PROFILE.cv} target="_blank" rel="noopener noreferrer" className="nav-cv label">
+            CV <span aria-hidden>↓</span>
+          </a>
           <Link href="/contact" className="btn btn-red nav-cta">
             <span>Me contacter</span>
             <span aria-hidden className="arrow">→</span>
@@ -65,6 +73,15 @@ export function Nav() {
             </Link>
           ))}
           <div className="nav-sheet-foot">
+            <div className="nav-sheet-btns">
+              <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" tabIndex={open ? 0 : -1}>
+                <span className="btn-ico"><GithubIcon /> GitHub</span>
+              </a>
+              <a href={PROFILE.cv} target="_blank" rel="noopener noreferrer" className="btn btn-red" tabIndex={open ? 0 : -1}>
+                <span>Mon CV</span>
+                <span aria-hidden className="arrow">↓</span>
+              </a>
+            </div>
             <a href="mailto:pro.mael.dev@gmail.com" className="label" tabIndex={open ? 0 : -1}>pro.mael.dev@gmail.com</a>
             <div className="hazard nav-sheet-hazard" />
           </div>

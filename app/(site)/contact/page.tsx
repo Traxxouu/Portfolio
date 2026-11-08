@@ -37,6 +37,10 @@ export default function ContactPage() {
               <a href={PROFILE.github} target="_blank" rel="noopener noreferrer">Traxxouu ↗</a>
             </li>
             <li>
+              <span className="label dim">CV</span>
+              <a href={PROFILE.cv} target="_blank" rel="noopener noreferrer">Télécharger (PDF) ↓</a>
+            </li>
+            <li>
               <span className="label dim">Agence</span>
               <a href={PROFILE.yourweb} target="_blank" rel="noopener noreferrer">yourweb.fr ↗</a>
             </li>

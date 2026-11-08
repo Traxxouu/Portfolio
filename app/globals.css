@@ -541,3 +541,23 @@ a:hover .ccard-img { transform: scale(1.03); }
 .plan-session-title { font-weight: 600; font-size: 1.05rem; }
 .plan-next { background: none; border: 0; border-bottom: 1px solid var(--red); cursor: pointer; font: inherit; }
 @media (max-width: 600px) { .plan-done { display: none; } }
+
+/* ---------- GitHub / CV ---------- */
+.btn-ico { display: inline-flex; align-items: center; gap: .55rem; }
+.nav-icon { width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--line-2); color: var(--bone); transition: color .2s, border-color .2s; }
+.nav-icon:hover { color: var(--red); border-color: var(--red); }
+.nav-cv { display: none; color: var(--bone); padding: .6rem .2rem; border-bottom: 1px solid var(--red); transition: color .2s; }
+.nav-cv:hover { color: var(--red); }
+@media (min-width: 900px) { .nav-cv { display: inline-block; } }
+.nav-sheet-btns { display: flex; flex-wrap: wrap; gap: .7rem; }
+.sec-actions { display: flex; flex-wrap: wrap; gap: 1.4rem; }
+.gh-cta { margin-top: clamp(3rem, 7vw, 5rem); }
+.gh-cta-in { padding: clamp(1.6rem, 4vw, 2.6rem); display: grid; gap: 1.6rem; align-items: center; }
+.gh-cta-in p { margin: 0; }
+.gh-cta-title { font-size: clamp(2rem, 4.5vw, 3.2rem); margin: .4rem 0 .5rem !important; }
+@media (min-width: 900px) { .gh-cta-in { grid-template-columns: 1fr auto; } }
+
+/* ---------- colonne de lecture centrée (projets / articles) ---------- */
+.detail-col { max-width: calc(52rem + var(--pad) * 2); }
+.detail-col .prose, .detail-col .post-end { max-width: none; }
+.detail-cover { max-width: 1100px; margin: 0 auto; }

@@ -33,6 +33,7 @@ export function Footer() {
         <div className="footer-col">
           <p className="label dim">Ailleurs</p>
           <a href={PROFILE.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a href={PROFILE.cv} target="_blank" rel="noopener noreferrer">Mon CV ↓</a>
           <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
           <a href={PROFILE.yourweb} target="_blank" rel="noopener noreferrer">YourWeb ↗</a>
           <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>

@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { getProjectBySlug, getProjects, projectImage } from '@/lib/sanity.client';
 import { PortableBody } from '../../../components/PortableBody';
 import { ProjectCard } from '../../../components/ui';
+import { GithubIcon } from '../../../components/icons';
 
 export const revalidate = 60;
 
@@ -25,13 +26,13 @@ export default async function ProjectPage({ params }: Props) {
   const [p, all] = await Promise.all([getProjectBySlug(slug), getProjects()]);
   if (!p) notFound();
   const img = projectImage(p, 2000, 1000);
-  const others = all.filter((o) => o.slug.current !== slug).slice(0, 2);
+  const others = all.filter((o) => o.slug.current !== slug).slice(0, 3);
 
   return (
     <>
       <article>
         <header className="detail-head">
-          <div className="wrap">
+          <div className="wrap detail-col">
             <Link href="/projects" className="arrow-link label back">
               <span aria-hidden className="arrow">←</span>
               <span>Tous les projets</span>
@@ -64,7 +65,7 @@ export default async function ProjectPage({ params }: Props) {
                     )}
                     {p.githubUrl && (
                       <a href={p.githubUrl} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
-                        <span>Code source ↗</span>
+                        <span className="btn-ico"><GithubIcon /> Code source ↗</span>
                       </a>
                     )}
                   </dd>
@@ -82,7 +83,7 @@ export default async function ProjectPage({ params }: Props) {
           </div>
         )}
 
-        <div className="wrap detail-body">
+        <div className="wrap detail-col detail-body">
           {p.fullDescription?.length ? (
             <PortableBody value={p.fullDescription} />
           ) : (

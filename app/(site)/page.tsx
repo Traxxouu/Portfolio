@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getSettings, getProjects, getExperiences, getBlogPosts, imageUrl } from '@/lib/sanity.client';
 import { PROFILE, STACK, currentModule, courseWeek } from '@/lib/content';
 import { SectionHead, ProjectCard, ArrowLink } from '../components/ui';
+import { GithubIcon } from '../components/icons';
 
 export const revalidate = 60;
 
@@ -48,9 +49,12 @@ export default async function Home() {
               <span>Voir mes projets</span>
               <span aria-hidden className="arrow">→</span>
             </Link>
-            <Link href="/contact" className="btn btn-ghost">
-              <span>Me contacter</span>
-            </Link>
+            <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+              <span className="btn-ico"><GithubIcon /> GitHub</span>
+            </a>
+            <a href={PROFILE.cv} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+              <span>Mon CV ↓</span>
+            </a>
           </div>
           <p className="hero-status label">
             <span className="yellow blink">●</span> {settings.status}
@@ -151,7 +155,15 @@ export default async function Home() {
             jp="計画"
             title={<>Ce que j’ai construit</>}
             intro="Une sélection de projets clients, de stages et de projets perso."
-            action={<ArrowLink href="/projects">Tous les projets</ArrowLink>}
+            action={
+              <div className="sec-actions">
+                <ArrowLink href="/projects">Tous les projets</ArrowLink>
+                <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className="arrow-link label">
+                  <span className="btn-ico"><GithubIcon size={15} /> Mon GitHub</span>
+                  <span aria-hidden className="arrow">↗</span>
+                </a>
+              </div>
+            }
           />
           <div className="pgrid">
             {shown.map((p, i) => (
