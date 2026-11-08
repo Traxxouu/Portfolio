@@ -1,14 +1,53 @@
-import { createClient } from 'next-sanity';
-import { SanityImageSource } from '@sanity/image-url/lib/types/types';
+import { createClient, type SanityClient } from 'next-sanity';
+import createImageUrlBuilder from '@sanity/image-url';
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
+import { EXPERIENCES, FALLBACK_PROJECTS, PROFILE, type Experience } from './content';
 
-export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-10-18',
-  useCdn: true,
-});
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '';
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
 
-// Banner
+export const client: SanityClient | null = projectId
+  ? createClient({
+      projectId,
+      dataset,
+      apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-10-18',
+      useCdn: true,
+    })
+  : null;
+
+const builder = projectId ? createImageUrlBuilder({ projectId, dataset }) : null;
+
+export function imageUrl(source: SanityImageSource | undefined, w = 1200, h?: number): string | null {
+  if (!source || !builder) return null;
+  let b = builder.image(source).width(w).auto('format').quality(80);
+  if (h) b = b.height(h).fit('crop');
+  return b.url();
+}
+
+// Toutes les requêtes passent par ici : jamais de crash si Sanity est vide ou injoignable
+async function safeFetch<T>(query: string, params: Record<string, unknown> = {}, fallback: T): Promise<T> {
+  if (!client) return fallback;
+  try {
+    const data = await client.fetch<T>(query, params, { next: { revalidate: 60 } });
+    return (data ?? fallback) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+/* ---------------- Réglages ---------------- */
+export type Settings = { pitch: string; status: string; focus: string[] };
+
+export async function getSettings(): Promise<Settings> {
+  const s = await safeFetch<Partial<Settings> | null>(`*[_type == "siteSettings"][0]{ pitch, status, focus }`, {}, null);
+  return {
+    pitch: s?.pitch || PROFILE.pitch,
+    status: s?.status || PROFILE.status,
+    focus: s?.focus?.length ? s.focus : PROFILE.focus,
+  };
+}
+
+/* ---------------- Bandeau ---------------- */
 export interface Banner {
   enabled: boolean;
   text: string;
@@ -18,169 +57,105 @@ export interface Banner {
 }
 
 export async function getBanner(): Promise<Banner | null> {
-  const query = `*[_type == "banner"][0] {
-    enabled,
-    text,
-    backgroundColor,
-    textColor,
-    link
-  }`;
-  return await client.fetch(query);
+  return safeFetch<Banner | null>(`*[_type == "banner"][0]{ enabled, text, backgroundColor, textColor, link }`, {}, null);
 }
 
+/* ---------------- Parcours ---------------- */
+export async function getExperiences(): Promise<Experience[]> {
+  const list = await safeFetch<Experience[]>(
+    `*[_type == "experience"] | order(order asc){ _id, title, org, kind, period, summary, tags, url }`,
+    {},
+    [],
+  );
+  return list.length ? list : EXPERIENCES;
+}
+
+/* ---------------- Projets ---------------- */
 export interface Project {
   _id: string;
   title: string;
   slug: { current: string };
-  emoji?: string;
   coverImage?: SanityImageSource;
+  image?: string; // image locale (contenu de repli)
   description: string;
   fullDescription?: unknown[];
   technologies: string[];
   status: 'en-cours' | 'terminé' | 'abandonné';
   featured?: boolean;
   tags?: string[];
-  gradientFrom?: string;
-  gradientTo?: string;
+  context?: string;
+  year?: string;
   order: number;
   githubUrl?: string;
   liveUrl?: string;
 }
 
-export async function getProjects(): Promise<Project[]> {
-  const query = `*[_type == "project"] | order(featured desc, order asc) {
-    _id,
-    title,
-    slug,
-    emoji,
-    coverImage,
-    description,
-    technologies,
-    status,
-    featured,
-    tags,
-    gradientFrom,
-    gradientTo,
-    order,
-    githubUrl,
-    liveUrl
-  }`;
+const PROJECT_FIELDS = `_id, title, slug, coverImage, description, technologies, status, featured, tags, context, year, order, githubUrl, liveUrl`;
 
-  return await client.fetch(query);
+export async function getProjects(): Promise<Project[]> {
+  const list = await safeFetch<Project[]>(`*[_type == "project"] | order(featured desc, order asc){ ${PROJECT_FIELDS} }`, {}, []);
+  return list.length ? list : (FALLBACK_PROJECTS as Project[]);
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
-  const query = `*[_type == "project" && slug.current == $slug][0] {
-    _id,
-    title,
-    slug,
-    emoji,
-    coverImage,
-    description,
-    fullDescription,
-    technologies,
-    status,
-    featured,
-    tags,
-    gradientFrom,
-    gradientTo,
-    order,
-    githubUrl,
-    liveUrl
-  }`;
-
-  return await client.fetch(query, { slug });
+  const p = await safeFetch<Project | null>(
+    `*[_type == "project" && slug.current == $slug][0]{ ${PROJECT_FIELDS}, fullDescription }`,
+    { slug },
+    null,
+  );
+  return p ?? ((FALLBACK_PROJECTS as Project[]).find((f) => f.slug.current === slug) || null);
 }
 
-// Certifications
+export function projectImage(p: Project, w = 1200, h?: number): string | null {
+  return imageUrl(p.coverImage, w, h) || p.image || null;
+}
+
+/* ---------------- Certifications ---------------- */
 export interface Certification {
   _id: string;
   name: string;
   issuer: string;
-  issuerLogo?: any;
+  issuerLogo?: SanityImageSource;
   issueDate: string;
   expiryDate?: string;
   credentialId?: string;
   credentialUrl?: string;
   skills?: string[];
-  media?: any;
+  media?: SanityImageSource;
   order: number;
 }
 
 export async function getCertifications(): Promise<Certification[]> {
-  const query = `*[_type == "certification"] | order(order asc, issueDate desc) {
-    _id,
-    name,
-    issuer,
-    issuerLogo,
-    issueDate,
-    expiryDate,
-    credentialId,
-    credentialUrl,
-    skills,
-    media,
-    order
-  }`;
-
-  return await client.fetch(query);
+  return safeFetch<Certification[]>(
+    `*[_type == "certification"] | order(order asc, issueDate desc){ _id, name, issuer, issuerLogo, issueDate, expiryDate, credentialId, credentialUrl, skills, media, order }`,
+    {},
+    [],
+  );
 }
 
+/* ---------------- Blog ---------------- */
 export interface BlogPost {
   _id: string;
   title: string;
   slug: { current: string };
   excerpt: string;
-  mainImage: SanityImageSource;
+  mainImage?: SanityImageSource;
   categories?: Array<{ title: string; _id: string }>;
-  author?: {
-    name: string;
-    image?: SanityImageSource;
-  };
+  author?: { name: string; image?: SanityImageSource };
   publishedAt: string;
   readTime: number;
   featured?: boolean;
-  body: unknown[];
+  body?: unknown[];
   tags?: string[];
-  seo?: {
-    metaTitle?: string;
-    metaDescription?: string;
-  };
+  seo?: { metaTitle?: string; metaDescription?: string };
 }
 
-export async function getBlogPosts(): Promise<BlogPost[]> {
-  const query = `*[_type == "blog"] | order(featured desc, publishedAt desc) {
-    _id,
-    title,
-    slug,
-    excerpt,
-    mainImage,
-    "categories": categories[]->{ title, _id },
-    "author": author->{ name, image },
-    publishedAt,
-    readTime,
-    featured,
-    tags
-  }`;
+const POST_FIELDS = `_id, title, slug, excerpt, mainImage, "categories": categories[]->{ title, _id }, "author": author->{ name, image }, publishedAt, readTime, featured, tags`;
 
-  return await client.fetch(query);
+export async function getBlogPosts(): Promise<BlogPost[]> {
+  return safeFetch<BlogPost[]>(`*[_type == "blog"] | order(featured desc, publishedAt desc){ ${POST_FIELDS} }`, {}, []);
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
-  const query = `*[_type == "blog" && slug.current == $slug][0] {
-    _id,
-    title,
-    slug,
-    excerpt,
-    mainImage,
-    "categories": categories[]->{ title, _id },
-    "author": author->{ name, image },
-    publishedAt,
-    readTime,
-    featured,
-    body,
-    tags,
-    seo
-  }`;
-
-  return await client.fetch(query, { slug });
+  return safeFetch<BlogPost | null>(`*[_type == "blog" && slug.current == $slug][0]{ ${POST_FIELDS}, body, seo }`, { slug }, null);
 }
