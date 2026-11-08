@@ -44,10 +44,10 @@ export function Nav() {
         </nav>
 
         <div className="nav-right">
-          <a href="https://yourweb.fr" target="_blank" rel="noopener noreferrer" className="btn btn-red nav-cta">
-            <span>YourWeb</span>
-            <span aria-hidden className="arrow">↗</span>
-          </a>
+          <Link href="/contact" className="btn btn-red nav-cta">
+            <span>Me contacter</span>
+            <span aria-hidden className="arrow">→</span>
+          </Link>
           <button className="nav-burger" aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'} aria-expanded={open} onClick={() => setOpen((o) => !o)}>
             <span />
             <span />

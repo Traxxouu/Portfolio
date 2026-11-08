@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { getExperiences, getCertifications, getSettings, imageUrl } from '@/lib/sanity.client';
-import { MODULES, PROFILE, STACK } from '@/lib/content';
+import { PROFILE, STACK, parisToday } from '@/lib/content';
+import { Planning } from '../../components/Planning';
 import { PageHero } from '../../components/PageHero';
 import { SectionHead } from '../../components/ui';
 
@@ -11,13 +12,10 @@ export const metadata: Metadata = {
   description: 'Parcours de Maël Barbe : YourWeb, stages chez Maison Asteria et Edenred, Bachelor à l’EFREI Paris, certifications.',
 };
 
-const month = (iso: string) => new Date(iso).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' });
-const day = (iso: string) => new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
 
 export default async function AboutPage() {
   const [experiences, certs, settings] = await Promise.all([getExperiences(), getCertifications(), getSettings()]);
-  const today = new Date().toISOString().slice(0, 10);
-  const modules = [...MODULES].sort((a, b) => a.start.localeCompare(b.start));
+  const today = parisToday();
 
   return (
     <>
@@ -28,7 +26,7 @@ export default async function AboutPage() {
         title="Parcours"
         intro={settings.pitch}
         image="/images/montmartre.webp"
-        meta={[PROFILE.location, 'EFREI · Promo 2027', 'Fondateur de YourWeb']}
+        meta={[PROFILE.location, 'EFREI · Promo 2027', 'Projets clients via YourWeb']}
       />
 
       {/* ---------- expériences ---------- */}
@@ -99,22 +97,12 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* ---------- programme ---------- */}
-      <section className="section" id="programme">
+      {/* ---------- planning ---------- */}
+      <section className="section" id="planning">
+        <span id="programme" />
         <div className="wrap">
-          <SectionHead n="B" label="Programme" jp="授業" title={<>Mon année à l’EFREI</>} intro="Les modules de ma troisième année de Bachelor développeur web, tirés de mon planning." />
-          <ol className="prog">
-            {modules.map((m, i) => {
-              const state = m.end < today ? 'done' : m.start <= today ? 'live' : 'next';
-              return (
-                <li key={m.title} className={`prog-item reveal is-${state}`} style={{ transitionDelay: `${(i % 4) * 50}ms` }}>
-                  <span className="label prog-date">{m.start === m.end ? day(m.start) : `${month(m.start)}`}</span>
-                  <span className="prog-title">{m.title}</span>
-                  <span className="label prog-state">{state === 'live' ? <><span className="blink">●</span> En cours</> : state === 'done' ? 'Terminé' : 'À venir'}</span>
-                </li>
-              );
-            })}
-          </ol>
+          <SectionHead n="B" label="Planning" jp="授業" title={<>Où j’en suis à l’EFREI</>} intro="Mes cours de troisième année, directement tirés de mon planning. Clique sur un jour pour voir le détail." />
+          <Planning today={today} />
         </div>
       </section>
 

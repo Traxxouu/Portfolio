@@ -12,8 +12,8 @@ export const PROFILE = {
   yourweb: 'https://yourweb.fr',
   cv: '/CV_Barbe_Mael.pdf',
   pitch:
-    "Je conçois et développe des sites et des applications web, du front au back. En parallèle de mon Bachelor à l'EFREI, je fais tourner YourWeb, mon agence web pour les artisans et commerces d'Île-de-France.",
-  status: 'Ouvert aux projets via YourWeb',
+    "Étudiant en 3e année à l'EFREI, je conçois et développe des sites et des applications web, du front au back : SaaS, outils internes, sites pour des clients.",
+  status: 'Ouvert aux projets et collaborations',
   focus: ['DevSecOps', 'Docker & CI/CD', 'AWS & sécurité'],
   languages: [
     { name: 'Français', level: 'Natif' },
@@ -118,15 +118,15 @@ export const FALLBACK_PROJECTS = [
     _id: 'yourweb',
     title: 'YourWeb',
     slug: { current: 'yourweb' },
-    description: "Mon agence web : plateforme Next.js avec devis, facturation, paiement Stripe et CMS, pensée pour les artisans et commerces.",
+    description: "Mon agence web pour artisans et TPE : site vitrine, devis, facturation et paiement Stripe, CMS et blog, assistant de qualification des demandes.",
     technologies: ['Next.js', 'Supabase', 'Stripe', 'Sanity', 'Resend'],
     status: 'en-cours' as const,
-    featured: true,
-    order: 1,
-    context: 'Entreprise',
+    featured: false,
+    order: 6,
+    context: 'Mon agence',
     year: '2025',
     liveUrl: 'https://yourweb.fr',
-    image: '/images/skyline.webp',
+    image: '/images/yourweb.webp',
   },
   {
     _id: 'orcalia',
@@ -148,7 +148,7 @@ export const FALLBACK_PROJECTS = [
     description: "Une API qui génère en direct les visuels de mon profil GitHub : terminal interactif, stats, Spotify, Faceit.",
     technologies: ['Node.js', 'SVG', 'Supabase', 'Vercel'],
     status: 'terminé' as const,
-    featured: false,
+    featured: true,
     order: 4,
     context: 'Projet perso',
     year: '2026',
@@ -196,3 +196,35 @@ export const FALLBACK_PROJECTS = [
     image: '/images/montmartre.webp',
   },
 ];
+
+// Semaine de cours à afficher sur l'accueil (la semaine en cours, ou la prochaine semaine avec des cours)
+import { COURSES } from './planning';
+export function parisToday(): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }).format(new Date());
+}
+export function courseWeek(today = parisToday()) {
+  const d = new Date(today + 'T12:00:00');
+  const monday = new Date(d);
+  // le week-end, on regarde déjà la semaine suivante
+  if (d.getDay() === 0 || d.getDay() === 6) monday.setDate(d.getDate() + (d.getDay() === 6 ? 2 : 1));
+  else monday.setDate(d.getDate() - (d.getDay() - 1));
+  const build = (m: Date) =>
+    Array.from({ length: 5 }, (_, i) => {
+      const x = new Date(m);
+      x.setDate(m.getDate() + i);
+      const key = x.toISOString().slice(0, 10);
+      return { date: key, courses: COURSES.filter((c) => c.date === key) };
+    });
+  let week = build(monday);
+  let label = 'Cette semaine';
+  if (!week.some((w) => w.courses.length)) {
+    const next = COURSES.find((c) => c.date > today);
+    if (next) {
+      const n = new Date(next.date + 'T12:00:00');
+      n.setDate(n.getDate() - ((n.getDay() + 6) % 7));
+      week = build(n);
+      label = 'Prochaine semaine de cours';
+    }
+  }
+  return { label, week };
+}

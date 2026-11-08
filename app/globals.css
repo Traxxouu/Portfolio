@@ -488,3 +488,56 @@ a:hover .ccard-img { transform: scale(1.03); }
 .form-done .panel-in { padding: 2rem; display: grid; gap: 1rem; }
 .form-done p { margin: 0; }
 .form-done-title { font-size: clamp(2rem, 4vw, 3rem); }
+
+/* ---------- semaine (accueil) ---------- */
+.week { display: grid; gap: .6rem; }
+.week p { margin: 0; }
+.week-days { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.week-days li { display: grid; grid-template-columns: 4.6rem 1fr; gap: .8rem; align-items: center; padding: .55rem .8rem; background: var(--panel); }
+.week-days li .label { color: var(--dim); font-size: .66rem; }
+.week-title { font-size: .92rem; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.week-days li.has .week-title { color: var(--bone); }
+.week-days li.has { box-shadow: inset 2px 0 0 var(--red); }
+@media (min-width: 900px) { .now-main { grid-row: span 2; } }
+@media (min-width: 1200px) { .now-grid { grid-template-columns: 1.4fr 1fr; } .now-main { grid-row: span 2; } }
+
+/* ---------- planning (parcours) ---------- */
+.plan { display: grid; gap: 1.6rem; }
+.plan-progress { display: grid; gap: .6rem; }
+.plan-progress-head, .plan-progress-foot { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.plan-bar { height: 10px; background: var(--panel-2); border: 1px solid var(--line-2); position: relative; overflow: hidden; }
+.plan-bar span { position: absolute; inset: 0 auto 0 0; background: repeating-linear-gradient(-45deg, var(--red) 0 6px, #b51216 6px 12px); }
+.plan-grid { display: grid; gap: 1.6rem; }
+@media (min-width: 1000px) { .plan-grid { grid-template-columns: 1.5fr 1fr; align-items: start; } }
+.plan-cal .panel-in { padding: clamp(1rem, 2.5vw, 1.6rem); }
+.plan-cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.plan-month { font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 0; text-transform: uppercase; }
+.plan-nav { width: 44px; height: 44px; background: var(--black); border: 1px solid var(--line-2); color: var(--bone); font-size: 1.1rem; cursor: pointer; transition: border-color .2s, color .2s; }
+.plan-nav:hover:not(:disabled) { border-color: var(--red); color: var(--red); }
+.plan-nav:disabled { opacity: .3; cursor: default; }
+.plan-week, .plan-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.plan-week { margin-bottom: 6px; }
+.plan-week span { text-align: center; font-size: .62rem; }
+.plan-day { position: relative; min-height: 46px; background: var(--black); border: 1px solid var(--line); color: var(--bone); padding: .35rem; display: flex; flex-direction: column; align-items: flex-start; gap: .25rem; cursor: pointer; text-align: left; font: inherit; transition: border-color .15s, background-color .15s; overflow: hidden; }
+.plan-day.is-empty { background: transparent; border-color: transparent; cursor: default; }
+.plan-day.is-we { background: transparent; }
+.plan-day.is-past { opacity: .5; }
+.plan-day:hover:not(.is-empty) { border-color: var(--line-2); background: var(--panel-2); }
+.plan-day.has { background: var(--panel-2); }
+.plan-day.is-today { border-color: var(--yellow); opacity: 1; }
+.plan-day.is-sel { border-color: var(--red); box-shadow: inset 0 0 0 1px var(--red); opacity: 1; }
+.plan-num { font-family: var(--font-mono), monospace; font-size: .74rem; font-weight: 700; }
+.plan-dot { width: 100%; height: 3px; }
+.plan-name { display: none; font-size: .66rem; line-height: 1.2; color: var(--dim); }
+@media (min-width: 700px) { .plan-day { min-height: 74px; } .plan-name { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } }
+.plan-legend { display: flex; flex-wrap: wrap; gap: .5rem 1.2rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.plan-legend-item { display: inline-flex; align-items: center; gap: .5rem; font-size: .8rem; color: var(--dim); }
+.plan-legend-item span { width: 10px; height: 10px; flex: none; }
+.plan-detail { display: grid; gap: .9rem; align-content: start; }
+.plan-detail p { margin: 0; }
+.plan-detail-day { font-size: clamp(1.8rem, 3.4vw, 2.6rem); text-transform: uppercase; }
+.plan-sessions { list-style: none; margin: 0; padding: 0; display: grid; gap: .7rem; }
+.plan-session { display: grid; gap: .25rem; padding: .9rem 1rem; background: var(--panel); border-left: 3px solid var(--red); }
+.plan-session-title { font-weight: 600; font-size: 1.05rem; }
+.plan-next { background: none; border: 0; border-bottom: 1px solid var(--red); cursor: pointer; font: inherit; }
+@media (max-width: 600px) { .plan-done { display: none; } }
