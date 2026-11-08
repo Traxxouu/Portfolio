@@ -25,7 +25,8 @@ export const projectType = defineType({
       name: 'emoji',
       title: 'Emoji',
       type: 'string',
-      description: 'Un emoji pour représenter le projet (ex: 🚀) - Optionnel si image fournie',
+      description: 'Plus utilisé par le nouveau design (garde plutôt une image de couverture).',
+      hidden: true,
     }),
     defineField({
       name: 'coverImage',
@@ -191,13 +192,26 @@ export const projectType = defineType({
       }
     }),
     defineField({
+      name: 'context',
+      title: 'Contexte',
+      type: 'string',
+      description: 'Ex : Projet YourWeb, Stage Maison Asteria, Projet EFREI, Perso',
+    }),
+    defineField({
+      name: 'year',
+      title: 'Année',
+      type: 'string',
+    }),
+    defineField({
       name: 'gradientFrom',
+      hidden: true,
       title: 'Gradient (départ)',
       type: 'string',
       description: 'Couleur Tailwind CSS (ex: blue-500) - Utilisé si pas d\'image',
     }),
     defineField({
       name: 'gradientTo',
+      hidden: true,
       title: 'Gradient (arrivée)',
       type: 'string',
       description: 'Couleur Tailwind CSS (ex: purple-500) - Utilisé si pas d\'image',
