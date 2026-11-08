@@ -21,7 +21,8 @@ export function Nav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
   useEffect(() => {
-    document.documentElement.style.overflow = open ? 'hidden' : '';
+    // pas de blocage du scroll sur <html> : ça casse la barre collante (et le menu sur iOS)
+    document.body.classList.toggle('menu-open', open);
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -30,6 +31,7 @@ export function Nav() {
   const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 
   return (
+    <>
     <header className={`nav ${scrolled ? 'is-scrolled' : ''} ${open ? 'is-open' : ''}`}>
       <div className="wrap nav-row">
         <Link href="/" className="nav-logo" aria-label="Maël Barbe, accueil">
@@ -56,14 +58,16 @@ export function Nav() {
             <span>Me contacter</span>
             <span aria-hidden className="arrow">→</span>
           </Link>
-          <button className="nav-burger" aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'} aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+          <button className="nav-burger" aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'} aria-expanded={open} aria-controls="menu-mobile" onClick={() => setOpen((o) => !o)}>
             <span />
             <span />
           </button>
         </div>
       </div>
 
-      <div className="nav-sheet" aria-hidden={!open}>
+    </header>
+
+      <div className={`nav-sheet ${open ? 'is-open' : ''}`} aria-hidden={!open} id="menu-mobile">
         <div className="wrap nav-sheet-in">
           {LINKS.map((l) => (
             <Link key={l.href} href={l.href} className={`nav-sheet-link ${isActive(l.href) ? 'is-active' : ''}`} tabIndex={open ? 0 : -1}>
@@ -87,6 +91,6 @@ export function Nav() {
           </div>
         </div>
       </div>
-    </header>
+    </>
   );
 }
